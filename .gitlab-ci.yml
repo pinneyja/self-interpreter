@@ -1,0 +1,22 @@
+default:
+  image: python:3.9
+
+stages:
+  - build
+  - test
+
+before_script:
+  - echo "put common things here"
+
+build:
+  stage: build
+  script:
+    - python -V
+    - python3 -V
+    - pip list
+    - echo "put build here"
+
+test:
+  stage: test
+  script:
+    - echo "put testing here"
