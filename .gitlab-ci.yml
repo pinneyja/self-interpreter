@@ -19,4 +19,8 @@ build:
 test:
   stage: test
   script:
-    - echo "put testing here"
+    - wget https://bootstrap.pypa.io/pip/3.5/get-pip.py
+    - python3 get-pip.py --user
+    - python3 -m pip install pytest
+    - python3 -m pip install ply
+    - pytest
