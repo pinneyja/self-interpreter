@@ -1,4 +1,4 @@
-import random, sys
+import random
 from parsing.Parser import *
 from parsing.nodes.IntegerNode import *
 
