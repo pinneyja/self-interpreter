@@ -13,7 +13,7 @@ def test_empty_object():
 
 	interpreted_result = interpreter.interpret(parser_result)
 
-	assert str(interpreted_result) == "Object:{}"
+	assert str(interpreted_result) == "SelfObject:{}"
 
 def test_simple_object():
 	interpreter = Interpreter()
@@ -23,7 +23,7 @@ def test_simple_object():
 
 	interpreted_result = interpreter.interpret(parser_result)
 
-	assert str(interpreted_result) == "Object:{Slot:{name='x', value={IntObject: (value='4')}, isImmutable='True'},}"
+	assert str(interpreted_result) == "SelfObject:{SelfSlot:{name='x', value={SelfInteger: (value='4')}, isImmutable='True'},}"
 
 def test_complicated_object():
 	interpreter = Interpreter()
@@ -33,4 +33,4 @@ def test_complicated_object():
 
 	interpreted_result = interpreter.interpret(parser_result)
 
-	assert str(interpreted_result) == "Object:{Slot:{name='x', value={IntObject: (value='4')}, isImmutable='True'},Slot:{name='y', value={Object:{Slot:{name='z', value={IntObject: (value='4')}, isImmutable='True'},}}, isImmutable='False'},}"
+	assert str(interpreted_result) == "SelfObject:{SelfSlot:{name='x', value={SelfInteger: (value='4')}, isImmutable='True'},SelfSlot:{name='y', value={SelfObject:{SelfSlot:{name='z', value={SelfInteger: (value='4')}, isImmutable='True'},}}, isImmutable='False'},}"

@@ -1,5 +1,5 @@
-from interpreting.objects.Object import *
-from interpreting.objects.Slot import *
+from interpreting.objects.SelfObject import *
+from interpreting.objects.SelfSlot import *
 
 class RegularObjectNode:
 	def __init__(self, slot_list=[]):
@@ -12,4 +12,4 @@ class RegularObjectNode:
 		interpreted_slot_list = {}
 		for s in self.slot_list:
 			interpreted_slot_list[s.name] = s.interpret(environment)
-		return Object(interpreted_slot_list)
+		return SelfObject(interpreted_slot_list)

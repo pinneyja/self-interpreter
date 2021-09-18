@@ -1,4 +1,4 @@
-from interpreting.objects.IntObject import IntObject
+from interpreting.objects.SelfInteger import SelfInteger
 
 class IntegerNode:
 	def __init__(self, value):
@@ -8,4 +8,4 @@ class IntegerNode:
 		return "Integer: {}".format(self.value)
 
 	def interpret(self, environment):
-		return IntObject(self.value)
+		return SelfInteger(self.value)

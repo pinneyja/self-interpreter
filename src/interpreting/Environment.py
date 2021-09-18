@@ -1,5 +1,5 @@
-from interpreting.objects.Object import *
+from interpreting.objects.SelfObject import *
 
-class Environment(Object):
+class Environment(SelfObject):
 	def __init__(self, slots = {}):
 		super().__init__(slots)
