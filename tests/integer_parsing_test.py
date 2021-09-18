@@ -8,7 +8,7 @@ def test_parses_random_number():
 
 	for i in range(100):
 		number = random.randint(-9999999, 9999999)
-		print(number)
+
 		node = IntegerNode(number)
 		parserNode = parser.parse(str(number))
 

@@ -1,4 +1,4 @@
-from interpreting.objects.Slot import *
+from interpreting.objects.SelfSlot import *
 
 class DataSlotNode:
 	def __init__(self, name, operator = None, expression = None):
@@ -11,6 +11,6 @@ class DataSlotNode:
 
 	def interpret(self, environment):
 		if (not self.expression):
-			return Slot(self.name)
+			return SelfSlot(self.name)
 		else:
-			return Slot(self.name, self.expression.interpret(environment), self.operator == "=")
+			return SelfSlot(self.name, self.expression.interpret(environment), self.operator == "=")
