@@ -8,3 +8,5 @@ class SelfSlot:
 		return "SelfSlot:{{name='{}', value={{{}}}, isImmutable='{}'}}".format(
 			self.name, self.value, self.isImmutable
 		)
+	def get_value(self):
+		return self.value

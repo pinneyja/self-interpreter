@@ -1,7 +1,7 @@
 import random
 from parsing.nodes.IntegerNode import *
 from interpreting.Environment import *
-from src.Interpreter import *
+from interpreting.Interpreter import *
 
 
 def test_interprets_random_number():

@@ -4,6 +4,8 @@ from parsing.nodes.DataSlotNode import *
 import ply.lex as lex
 import ply.yacc as yacc
 
+from parsing.nodes.UnaryMessageNode import UnaryMessageNode
+
 class Parser:
 	def __init__(self):
 		self.lexer = lex.lex(module = self)
@@ -41,8 +43,17 @@ class Parser:
 		'expression : INTEGER'
 		p[0] = IntegerNode(p[1])
 
-	def p_expression_regular_object(self, p):
-		'expression : regular-object'
+	def p_expression(self, p):
+		'''expression : regular-object
+					  | unary-message'''
+		p[0] = p[1]
+
+	def p_unary_message(self, p):
+		'unary-message : expression message'
+		p[0] = UnaryMessageNode(p[1], p[2])
+
+	def p_message(self, p):
+		'message : IDENTIFIER'
 		p[0] = p[1]
 
 	def p_regular_object_empty(self, p):

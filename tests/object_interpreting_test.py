@@ -2,7 +2,7 @@ from parsing.nodes.RegularObjectNode import *
 from parsing.nodes.DataSlotNode import *
 from parsing.nodes.IntegerNode import *
 from interpreting.Environment import *
-from src.Interpreter import *
+from interpreting.Interpreter import *
 
 
 def test_empty_object():
