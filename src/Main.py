@@ -1,4 +1,4 @@
-from Interpreter import *
+from interpreting.Interpreter import *
 from parsing.Parser import *
 
 

@@ -6,7 +6,7 @@ class RegularObjectNode:
 		self.slot_list = slot_list
 
 	def __str__(self):
-		return "RegularObject: slot-list='{}'".format(list(map(str, self.slot_list)))
+		return "RegularObject: (slot-list={})".format(list(map(str, self.slot_list)))
 
 	def interpret(self, environment):
 		interpreted_slot_list = {}

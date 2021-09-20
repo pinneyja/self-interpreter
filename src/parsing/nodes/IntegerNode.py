@@ -5,7 +5,7 @@ class IntegerNode:
 		self.value = value
 
 	def __str__(self):
-		return "Integer: {}".format(self.value)
+		return "Integer: ('{}')".format(self.value)
 
 	def interpret(self, environment):
 		return SelfInteger(self.value)
