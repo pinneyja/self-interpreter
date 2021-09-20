@@ -1,4 +1,3 @@
-
 class UnaryMessageNode:
 	
 	def __init__(self, expression, message):
