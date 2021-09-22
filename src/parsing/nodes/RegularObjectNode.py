@@ -9,7 +9,7 @@ class RegularObjectNode:
 		return "RegularObject: (slot-list={})".format(list(map(str, self.slot_list)))
 
 	def interpret(self, environment):
-		interpreted_slot_list = {}
+		interpreted_slot_list = OrderedDict()
 		for s in self.slot_list:
 			interpreted_slot_list[s.name] = s.interpret(environment)
 		return SelfObject(interpreted_slot_list)
