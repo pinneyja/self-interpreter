@@ -13,4 +13,4 @@ def test_interprets_random_number():
 		parser_result = IntegerNode(number)
 		interpreted_result = interpreter.interpret(parser_result)
 
-		assert str(interpreted_result) == "SelfInteger: (value='{}')".format(number)
+		assert str(interpreted_result) == str(SelfInteger(number))

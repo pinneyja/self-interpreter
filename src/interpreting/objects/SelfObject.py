@@ -1,7 +1,8 @@
+from typing import OrderedDict
 from .SelfException import *
 
 class SelfObject:
-	def __init__(self, slots = {}):
+	def __init__(self, slots = OrderedDict()):
 		self.slots = slots
 
 	def __str__(self):
