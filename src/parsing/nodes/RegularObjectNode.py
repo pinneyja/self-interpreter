@@ -1,5 +1,4 @@
 from interpreting.objects.SelfObject import *
-from interpreting.objects.SelfSlot import *
 
 class RegularObjectNode:
 	def __init__(self, slot_list=[], code=None):
@@ -9,8 +8,8 @@ class RegularObjectNode:
 	def __str__(self):
 		return "RegularObject: (slot-list={} code={{{}}})".format(list(map(str, self.slot_list)), self.code)
 
-	def interpret(self):
+	def interpret(self, context):
 		interpreted_slot_list = OrderedDict()
 		for s in self.slot_list:
-			interpreted_slot_list[s.name] = s.interpret()
+			interpreted_slot_list[s.name] = s.interpret(context)
 		return SelfObject(interpreted_slot_list, self.code)
