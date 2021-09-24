@@ -10,4 +10,7 @@ class SelfSlot:
 		)
 
 	def get_value(self):
-		return self.value
+		if self.value.code:
+			return self.value.code.interpret()
+		else:
+			return self.value

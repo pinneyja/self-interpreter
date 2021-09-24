@@ -1,14 +1,13 @@
 from parsing.nodes.RegularObjectNode import *
 from parsing.nodes.DataSlotNode import *
 from parsing.nodes.IntegerNode import *
-from interpreting.Environment import *
 from interpreting.Interpreter import *
 
 
 def test_empty_object():
+	# ()
 	interpreter = Interpreter()
 
-	environment = Environment()
 	parser_result = RegularObjectNode()
 	expected_result = SelfObject()
 
@@ -17,9 +16,9 @@ def test_empty_object():
 	assert str(interpreted_result) == str(expected_result)
 
 def test_simple_object():
+	# (|x = 4|)
 	interpreter = Interpreter()
 
-	environment = Environment()
 	parser_result = RegularObjectNode([DataSlotNode("x", "=", IntegerNode(4))])
 	slot_list = {}
 	slot_list["x"] = SelfSlot("x", SelfInteger('4'), isImmutable=True)
@@ -30,9 +29,9 @@ def test_simple_object():
 	assert str(interpreted_result) == str(expected_result)
 
 def test_complicated_object():
+	# (|x = 4. y <- (|z = 4|)|)
 	interpreter = Interpreter()
 
-	environment = Environment()
 	parser_result = RegularObjectNode([DataSlotNode("x", "=", IntegerNode(4)), DataSlotNode("y", "<-", RegularObjectNode([DataSlotNode("z", "=", IntegerNode(4))]))])
 	slot_list = {}
 	slot_list["x"] = SelfSlot("x", SelfInteger('4'), isImmutable=True)
