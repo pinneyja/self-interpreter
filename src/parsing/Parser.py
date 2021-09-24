@@ -53,8 +53,12 @@ class Parser:
 			p[0] = p[2]
 
 	def p_unary_message(self, p):
-		'unary-message : expression message'
-		p[0] = UnaryMessageNode(p[1], p[2])
+		'''unary-message : expression message
+						 | message'''
+		if(len(p) == 3):
+			p[0] = UnaryMessageNode(p[1], p[2])
+		else:
+			p[0] = UnaryMessageNode(None, p[1])
 
 	def p_message(self, p):
 		'message : IDENTIFIER'
