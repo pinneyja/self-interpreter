@@ -9,8 +9,8 @@ class DataSlotNode:
 	def __str__(self):
 		return "DataSlot: (name='{}' operator='{}' expression='{}')".format(self.name, self.operator, self.expression)
 
-	def interpret(self, environment):
+	def interpret(self):
 		if (not self.expression):
 			return SelfSlot(self.name)
 		else:
-			return SelfSlot(self.name, self.expression.interpret(environment), self.operator == "=")
+			return SelfSlot(self.name, self.expression.interpret(), self.operator == "=")

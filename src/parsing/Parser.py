@@ -45,8 +45,12 @@ class Parser:
 
 	def p_expression(self, p):
 		'''expression : regular-object
-					  | unary-message'''
-		p[0] = p[1]
+					  | unary-message
+					  | LPAREN expression RPAREN'''
+		if (len(p) == 2):
+			p[0] = p[1]
+		else:
+			p[0] = p[2]
 
 	def p_unary_message(self, p):
 		'unary-message : expression message'
@@ -57,24 +61,29 @@ class Parser:
 		p[0] = p[1]
 
 	def p_regular_object_empty(self, p):
-		'''regular-object : LPAREN RPAREN
-						  | LPAREN PIPE PIPE RPAREN'''
+		'regular-object : LPAREN RPAREN'
 		p[0] = RegularObjectNode()
 
 	def p_regular_object_slotted(self, p):
-		'regular-object : LPAREN PIPE slot-list PIPE RPAREN'
-		p[0] = RegularObjectNode(p[3])
+		'''regular-object : LPAREN PIPE slot-list PIPE RPAREN
+						  | LPAREN PIPE slot-list PIPE code RPAREN'''
+		if(len(p) == 6):
+			p[0] = RegularObjectNode(p[3])
+		else:
+			p[0] = RegularObjectNode(p[3], p[5])
 
 	def p_slot_list(self, p):
-		'''slot-list : slot PERIOD slot-list 
-					 | slot PERIOD
-					 | slot'''
+		'''slot-list : slot PERIOD slot-list
+					 | slot
+					 | '''
 		if(len(p) == 4):
 			new_slot_list = p[3]
 			new_slot_list.insert(0, p[1])
 			p[0] = new_slot_list
-		else:
+		elif(len(p) == 2):
 			p[0] = [p[1]]
+		else:
+			p[0] = []
 
 	def p_slot(self, p):
 		'slot : data-slot'
@@ -91,6 +100,10 @@ class Parser:
 
 	def p_slot_name(self, p):
 		'slot-name : IDENTIFIER'
+		p[0] = p[1]
+
+	def p_code(self, p):
+		'code : expression'
 		p[0] = p[1]
 
 	def p_error(self, p):

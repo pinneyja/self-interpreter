@@ -7,6 +7,5 @@ class UnaryMessageNode:
 	def __str__(self):
 		return "UnaryMessage: (expression={} message='{}')".format(self.expression, self.message)
 
-	def interpret(self, environment):
-		return self.expression.interpret(environment).pass_unary_message(self.message)
-
+	def interpret(self):
+		return self.expression.interpret().pass_unary_message(self.message)

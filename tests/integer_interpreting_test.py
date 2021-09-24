@@ -1,6 +1,5 @@
 import random
 from parsing.nodes.IntegerNode import *
-from interpreting.Environment import *
 from interpreting.Interpreter import *
 
 
