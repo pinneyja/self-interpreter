@@ -17,3 +17,8 @@ class SelfObject:
 		if (not message in self.slots):
 			return SelfException("Lookup error")
 		return self.slots[message].get_value()
+
+	def pass_binary_message(self, message, arg):
+		if (not message in self.slots):
+			return SelfException("Lookup error")
+		return self.slots[message].get_value()
