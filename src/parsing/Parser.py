@@ -1,10 +1,11 @@
 from parsing.nodes.IntegerNode import *
 from parsing.nodes.RegularObjectNode import *
 from parsing.nodes.DataSlotNode import *
+from parsing.nodes.BinarySlotNode import *
+from parsing.nodes.UnaryMessageNode import *
+from parsing.nodes.BinaryMessageNode import *
 import ply.lex as lex
 import ply.yacc as yacc
-
-from parsing.nodes.UnaryMessageNode import UnaryMessageNode
 
 class Parser:
 	def __init__(self):
@@ -18,7 +19,7 @@ class Parser:
 	# Tokens
 
 	tokens = ('INTEGER','LPAREN','RPAREN','PIPE','PERIOD','LARROW','EQUAL',
-			'IDENTIFIER')
+			'IDENTIFIER', 'OPERATOR')
 
 	t_LPAREN = r'\('
 	t_RPAREN = r'\)'
@@ -27,6 +28,7 @@ class Parser:
 	t_LARROW = r'<-'
 	t_EQUAL = r'='
 	t_IDENTIFIER = r'[a-z_][a-zA-Z0-9_]*'
+	t_OPERATOR = r'[!@#$%^&*+~/?>,;\'\\]+'
 
 	def t_INTEGER(self, t):
 		r'-?\d+'
@@ -37,6 +39,13 @@ class Parser:
 		print("Illegal character {}".format(t.value[0]))
 		t.lexer.skip(1)
 
+	# Precedence Rules
+
+	precedence = (
+		('left', 'OPERATOR'),
+		('nonassoc', 'IDENTIFIER')
+	)
+
 	# Productions
 
 	def p_expression_integer(self, p):
@@ -46,11 +55,20 @@ class Parser:
 	def p_expression(self, p):
 		'''expression : regular-object
 					  | unary-message
-					  | LPAREN expression RPAREN'''
+					  | LPAREN expression RPAREN
+					  | binary-message'''
 		if (len(p) == 2):
 			p[0] = p[1]
 		else:
 			p[0] = p[2]
+
+	def p_binary_message(self, p):
+		'''binary-message : expression OPERATOR expression
+						  | OPERATOR expression'''
+		if (len(p) == 4):
+			p[0] = BinaryMessageNode(p[1], p[2], p[3])
+		else:
+			p[0] = BinaryMessageNode(None, p[1], p[2])
 
 	def p_unary_message(self, p):
 		'''unary-message : expression message
@@ -90,7 +108,8 @@ class Parser:
 			p[0] = []
 
 	def p_slot(self, p):
-		'slot : data-slot'
+		'''slot : data-slot
+				| binary-slot'''
 		p[0] = p[1]
 
 	def p_data_slot(self, p):
@@ -101,6 +120,14 @@ class Parser:
 			p[0] = DataSlotNode(p[1], p[2], p[3])
 		else:
 			p[0] = DataSlotNode(p[1])
+
+	def p_binary_slot(self, p):
+		'''binary-slot : OPERATOR EQUAL regular-object
+					   | OPERATOR IDENTIFIER EQUAL regular-object'''
+		if(len(p) == 4):
+			p[0] = BinarySlotNode(p[1], p[3])
+		else:
+			p[0] = BinarySlotNode(p[1], p[4], p[2])
 
 	def p_slot_name(self, p):
 		'slot-name : IDENTIFIER'
