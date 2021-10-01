@@ -8,8 +8,8 @@ def test_parse_object_with_only_code():
 	parser = Parser()
 
 	empty_object = RegularObjectNode([], RegularObjectNode([DataSlotNode("x", "=", IntegerNode(5))], None))
-	parsed_empty = parser.parse("(||(|x=5|))")
-	parsed_empty_pipe = parser.parse("(| |(|x=5|))")
+	parsed_empty = parser.parse("(| |(|x=5|))")
+	parsed_empty_pipe = parser.parse("(| | (|x=5|))")
 	
 	assert str(empty_object) == str(parsed_empty)
 	assert str(empty_object) == str(parsed_empty_pipe)

@@ -14,7 +14,7 @@ class Parser:
 
 	# Ignored characters
 
-	t_ignore = " \t"
+	t_ignore = " \t\n"
 
 	# Tokens
 
@@ -24,11 +24,12 @@ class Parser:
 	t_LPAREN = r'\('
 	t_RPAREN = r'\)'
 	t_PIPE = r'\|'
-	t_PERIOD = r'.'
+	t_PERIOD = r'\.'
 	t_LARROW = r'<-'
 	t_EQUAL = r'='
 	t_IDENTIFIER = r'[a-z_][a-zA-Z0-9_]*'
-	t_OPERATOR = r'[!@#$%^&*+~/?>,;\'\\]+'
+	operators = r"!@#$%^&*+~\/?>,;'\\"
+	t_OPERATOR = r'[\|' + operators + r']{2,}|[' + operators + r']'
 
 	def t_INTEGER(self, t):
 		r'-?\d+'
@@ -71,16 +72,12 @@ class Parser:
 			p[0] = BinaryMessageNode(None, p[1], p[2])
 
 	def p_unary_message(self, p):
-		'''unary-message : expression message
-						 | message'''
+		'''unary-message : expression IDENTIFIER
+						 | IDENTIFIER'''
 		if(len(p) == 3):
 			p[0] = UnaryMessageNode(p[1], p[2])
 		else:
 			p[0] = UnaryMessageNode(None, p[1])
-
-	def p_message(self, p):
-		'message : IDENTIFIER'
-		p[0] = p[1]
 
 	def p_regular_object_empty(self, p):
 		'regular-object : LPAREN RPAREN'
@@ -138,7 +135,7 @@ class Parser:
 		p[0] = p[1]
 
 	def p_error(self, p):
-		print("Syntax error at {}".format(p.value))
+		print("Syntax error at '{}'".format(p.value))
 
 	def parse(self, string):
 		return self.parser.parse(string)
