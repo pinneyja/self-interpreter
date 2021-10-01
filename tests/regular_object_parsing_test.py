@@ -9,12 +9,10 @@ def test_parses_empty_object():
 
 	empty_object = RegularObjectNode()
 	parsed_empty = parser.parse("()")
-	parsed_empty_pipe = parser.parse("(||)")
-	parsed_empty_pipe2 = parser.parse("(| |)")
+	parsed_empty_pipe = parser.parse("(| |)")
 	
 	assert str(empty_object) == str(parsed_empty)
 	assert str(empty_object) == str(parsed_empty_pipe)
-	assert str(empty_object) == str(parsed_empty_pipe2)
 
 def test_parses_one_number_slot():
 	parser = Parser()
