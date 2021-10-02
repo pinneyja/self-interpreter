@@ -1,0 +1,2 @@
+class SelfParsingError(Exception):
+	pass
