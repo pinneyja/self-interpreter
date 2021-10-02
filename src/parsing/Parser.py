@@ -1,9 +1,12 @@
 from parsing.nodes.IntegerNode import *
+from parsing.nodes.StringNode import *
 from parsing.nodes.RegularObjectNode import *
 from parsing.nodes.DataSlotNode import *
 from parsing.nodes.BinarySlotNode import *
 from parsing.nodes.UnaryMessageNode import *
 from parsing.nodes.BinaryMessageNode import *
+from parsing.ParsingUtils import *
+from parsing.SelfParsingError import *
 import ply.lex as lex
 import ply.yacc as yacc
 
@@ -19,7 +22,7 @@ class Parser:
 	# Tokens
 
 	tokens = ('INTEGER','LPAREN','RPAREN','PIPE','PERIOD','LARROW','EQUAL',
-			'IDENTIFIER', 'OPERATOR')
+			'IDENTIFIER', 'OPERATOR', "STRING")
 
 	t_LPAREN = r'\('
 	t_RPAREN = r'\)'
@@ -28,8 +31,9 @@ class Parser:
 	t_LARROW = r'<-'
 	t_EQUAL = r'='
 	t_IDENTIFIER = r'[a-z_][a-zA-Z0-9_]*'
-	operators = r"!@#$%^&*+~\/?>,;'\\"
+	operators = r"!@#$%^&*+~\/?>,;\\"
 	t_OPERATOR = r'[\|' + operators + r']{2,}|[' + operators + r']'
+	t_STRING = r'\'([^\\\']|\\[tbnfrva0\\\'"?]|\\x[0-9a-fA-F]{2}|\\d[0-9]{3}|\\o[0-7]{3})*\''
 
 	def t_INTEGER(self, t):
 		r'-?\d+'
@@ -37,8 +41,7 @@ class Parser:
 		return t
 
 	def t_error(self, t):
-		print("Illegal character {}".format(t.value[0]))
-		t.lexer.skip(1)
+		raise SelfParsingError(f'at token: \'{t.value[0]}\'')
 
 	# Precedence Rules
 
@@ -49,19 +52,30 @@ class Parser:
 
 	# Productions
 
-	def p_expression_integer(self, p):
-		'expression : INTEGER'
-		p[0] = IntegerNode(p[1])
-
 	def p_expression(self, p):
-		'''expression : regular-object
+		'''expression : constant
 					  | unary-message
-					  | LPAREN expression RPAREN
-					  | binary-message'''
+					  | binary-message
+					  | LPAREN expression RPAREN'''
 		if (len(p) == 2):
 			p[0] = p[1]
 		else:
 			p[0] = p[2]
+
+	def p_constant_regular_object(self, p):
+		'constant : regular-object'
+		p[0] = p[1]
+
+	def p_constant_integer(self, p):
+		'constant : INTEGER'
+		p[0] = IntegerNode(p[1])
+
+	def p_constant_string(self, p):
+		'constant : STRING'
+		s = p[1][1:-1]
+		s = convert_d_and_o_escapes_to_x(s)
+		s = remove_backslash_from_backslash_question_mark(s)
+		p[0] = StringNode(raw_string_to_normal_string(s))
 
 	def p_binary_message(self, p):
 		'''binary-message : expression OPERATOR expression
@@ -135,7 +149,7 @@ class Parser:
 		p[0] = p[1]
 
 	def p_error(self, p):
-		print("Syntax error at '{}'".format(p.value))
+		raise SelfParsingError(f'at token: \'{p.value if p else None}\'')
 
 	def parse(self, string):
 		return self.parser.parse(string)

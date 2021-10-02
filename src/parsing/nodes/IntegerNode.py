@@ -1,4 +1,4 @@
-from interpreting.objects.SelfInteger import SelfInteger
+from interpreting.objects.SelfInteger import *
 
 class IntegerNode:
 	def __init__(self, value):
