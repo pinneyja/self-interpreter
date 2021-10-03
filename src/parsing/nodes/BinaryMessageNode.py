@@ -9,6 +9,6 @@ class BinaryMessageNode:
 
 	def interpret(self, context):
 		if self.expression:
-			return self.expression.interpret(context).pass_binary_message(self.message, self.arg_expression)
+			return self.expression.interpret(context).pass_binary_message(self.message, self.arg_expression.interpret(context))
 		else:
 			return context.pass_binary_message(self.message, self.arg_expression)

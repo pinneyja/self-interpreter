@@ -1,3 +1,5 @@
+import copy
+
 class SelfSlot:
 	def __init__(self, name, value=None, isImmutable=False):
 		self.name = name
@@ -9,8 +11,11 @@ class SelfSlot:
 			self.name, self.value, self.isImmutable
 		)
 
-	def get_value(self):
+	def get_value(self, arg=None):
 		if self.value.code:
-			return self.value.code.interpret(self.value)
+			clone = copy.deepcopy(self.value)
+			for key in clone.arg_slots:
+				clone.slots[key] = SelfSlot(key, arg)
+			return self.value.code.interpret(clone)
 		else:
 			return self.value
