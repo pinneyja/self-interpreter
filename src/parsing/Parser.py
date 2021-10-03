@@ -5,6 +5,7 @@ from parsing.nodes.DataSlotNode import *
 from parsing.nodes.BinarySlotNode import *
 from parsing.nodes.UnaryMessageNode import *
 from parsing.nodes.BinaryMessageNode import *
+from parsing.nodes.ArgumentSlotNode import *
 from parsing.ParsingUtils import *
 from parsing.SelfParsingError import *
 import ply.lex as lex
@@ -22,7 +23,7 @@ class Parser:
 	# Tokens
 
 	tokens = ('INTEGER','LPAREN','RPAREN','PIPE','PERIOD','LARROW','EQUAL',
-			'IDENTIFIER', 'OPERATOR', "STRING")
+			'IDENTIFIER', 'OPERATOR', 'COLON', 'STRING')
 
 	t_LPAREN = r'\('
 	t_RPAREN = r'\)'
@@ -31,6 +32,7 @@ class Parser:
 	t_LARROW = r'<-'
 	t_EQUAL = r'='
 	t_IDENTIFIER = r'[a-z_][a-zA-Z0-9_]*'
+	t_COLON = r':'
 	operators = r"!@#$%^&*+~\/?>,;\\"
 	t_OPERATOR = r'[\|' + operators + r']{2,}|[' + operators + r']'
 	t_STRING = r'\'([^\\\']|\\[tbnfrva0\\\'"?]|\\x[0-9a-fA-F]{2}|\\d[0-9]{3}|\\o[0-7]{3})*\''
@@ -120,7 +122,8 @@ class Parser:
 
 	def p_slot(self, p):
 		'''slot : data-slot
-				| binary-slot'''
+				| binary-slot
+				| argument-slot'''
 		p[0] = p[1]
 
 	def p_data_slot(self, p):
@@ -139,6 +142,10 @@ class Parser:
 			p[0] = BinarySlotNode(p[1], p[3])
 		else:
 			p[0] = BinarySlotNode(p[1], p[4], p[2])
+
+	def p_argument_slot(self, p):
+		'argument-slot : COLON IDENTIFIER'
+		p[0] = ArgumentSlotNode(p[2])
 
 	def p_slot_name(self, p):
 		'slot-name : IDENTIFIER'
