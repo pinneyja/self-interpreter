@@ -31,3 +31,10 @@ def test_parse_object_with_code_inside_of_object_with_code():
 	parsed = parser.parse("(|x=(| | 1)| 2)")
 
 	assert str(parsed) == str(object_with_nested_method_objects)
+
+def test_parse_object_with_keyword_method_slot():
+	parser = Parser()
+
+	reg_object1 = RegularObjectNode([ KeywordSlotNode(["x:", "Y:"], RegularObjectNode([], IntegerNode(5)), ["x1", "y1"]) ])
+	parsed_object = parser.parse("(|x: x1 Y: y1 = (| | 5)|)")
+	assert str(reg_object1) == str(parsed_object)

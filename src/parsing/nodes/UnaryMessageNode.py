@@ -1,5 +1,8 @@
-class UnaryMessageNode:
+from .Node import Node
+
+class UnaryMessageNode(Node):
 	def __init__(self, expression, message):
+		super().__init__()
 		self.expression = expression
 		self.message = message
 

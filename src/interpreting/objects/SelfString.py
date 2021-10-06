@@ -3,8 +3,12 @@ from .SelfObject import *
 from interpreting.objects.SelfByteVector import *
 
 class SelfString(SelfObject):
-	def __init__(self, value, slots = OrderedDict()):
+	def __init__(self, value, slots = None):
+		if slots is None:
+			slots = OrderedDict()
+
 		super().__init__(slots)
+
 		self.value = value
 		self.byte_vector = SelfByteVector(value)
 

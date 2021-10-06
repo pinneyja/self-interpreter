@@ -1,7 +1,9 @@
 from interpreting.objects.SelfSlot import *
+from .Node import Node
 
-class BinarySlotNode:
+class BinarySlotNode(Node):
 	def __init__(self, name, expression, arg_name = None):
+		super().__init__()
 		self.name = name
 		self.expression = expression
 		self.arg_name = arg_name

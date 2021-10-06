@@ -1,6 +1,7 @@
 from interpreting.objects.SelfSlot import *
+from .Node import Node
 
-class ArgumentSlotNode:
+class ArgumentSlotNode(Node):
 
 	def __init__(self, name):
 		self.name = name

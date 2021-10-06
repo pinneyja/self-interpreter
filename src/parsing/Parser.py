@@ -3,6 +3,8 @@ from parsing.nodes.StringNode import *
 from parsing.nodes.RegularObjectNode import *
 from parsing.nodes.DataSlotNode import *
 from parsing.nodes.BinarySlotNode import *
+from parsing.nodes.KeywordSlotNode import *
+from parsing.nodes.KeywordMessageNode import *
 from parsing.nodes.UnaryMessageNode import *
 from parsing.nodes.BinaryMessageNode import *
 from parsing.nodes.ArgumentSlotNode import *
@@ -23,7 +25,7 @@ class Parser:
 	# Tokens
 
 	tokens = ('INTEGER','LPAREN','RPAREN','PIPE','PERIOD','LARROW','EQUAL',
-			'IDENTIFIER', 'OPERATOR', 'COLON', 'STRING')
+			'IDENTIFIER', 'SMALL_KEYWORD', 'CAP_KEYWORD', 'OPERATOR', 'COLON', 'STRING')
 
 	t_LPAREN = r'\('
 	t_RPAREN = r'\)'
@@ -32,6 +34,8 @@ class Parser:
 	t_LARROW = r'<-'
 	t_EQUAL = r'='
 	t_IDENTIFIER = r'[a-z_][a-zA-Z0-9_]*'
+	t_SMALL_KEYWORD = r'[a-z_][a-zA-Z0-9_]*:'
+	t_CAP_KEYWORD = r'[A-Z][a-zA-Z0-9_]*:'
 	t_COLON = r':'
 	operators = r"!@#$%^&*+~\/?>,;\\"
 	t_OPERATOR = r'[\|' + operators + r']{2,}|[' + operators + r']'
@@ -48,6 +52,9 @@ class Parser:
 	# Precedence Rules
 
 	precedence = (
+		('right', 'LOWER'),
+		('right', 'HIGHER'),
+		('right', 'SMALL_KEYWORD', 'CAP_KEYWORD'),
 		('left', 'OPERATOR'),
 		('nonassoc', 'IDENTIFIER')
 	)
@@ -57,13 +64,22 @@ class Parser:
 	def p_expression(self, p):
 		'''expression : constant
 					  | unary-message
+					  | LPAREN expression RPAREN
 					  | binary-message
-					  | LPAREN expression RPAREN'''
+					  | keyword-message'''
 		if (len(p) == 2):
 			p[0] = p[1]
 		else:
 			p[0] = p[2]
 
+	def p_unary_message(self, p):
+		'''unary-message : expression IDENTIFIER
+						 | IDENTIFIER'''
+		if(len(p) == 3):
+			p[0] = UnaryMessageNode(p[1], p[2])
+		else:
+			p[0] = UnaryMessageNode(None, p[1])
+			
 	def p_constant_regular_object(self, p):
 		'constant : regular-object'
 		p[0] = p[1]
@@ -87,13 +103,29 @@ class Parser:
 		else:
 			p[0] = BinaryMessageNode(None, p[1], p[2])
 
-	def p_unary_message(self, p):
-		'''unary-message : expression IDENTIFIER
-						 | IDENTIFIER'''
-		if(len(p) == 3):
-			p[0] = UnaryMessageNode(p[1], p[2])
+	def p_keyword_message(self, p):
+		'''keyword-message : expression SMALL_KEYWORD expression cap-keyword-expression-list
+						   | SMALL_KEYWORD expression cap-keyword-expression-list'''
+		if(len(p) == 5):
+			p[4][0].insert(0, p[2])
+			p[4][1].insert(0, p[3])
+			p[0] = KeywordMessageNode(p[1], p[4][0], p[4][1])
 		else:
-			p[0] = UnaryMessageNode(None, p[1])
+			p[3][0].insert(0, p[1])
+			p[3][1].insert(0, p[2])
+			p[0] = KeywordMessageNode(None, p[3][0], p[3][1])
+
+	def p_cap_keyword_expression_list(self, p):
+		'''cap-keyword-expression-list : CAP_KEYWORD expression cap-keyword-expression-list %prec LOWER
+				       				   | %prec HIGHER'''
+		if(len(p) == 4):
+			keyword_list = p[3][0]
+			value_list = p[3][1]
+			keyword_list.insert(0, p[1])
+			value_list.insert(0, p[2])
+			p[0] = [keyword_list, value_list]
+		else:
+			p[0] = [[],[]]
 
 	def p_regular_object_empty(self, p):
 		'regular-object : LPAREN RPAREN'
@@ -123,6 +155,7 @@ class Parser:
 	def p_slot(self, p):
 		'''slot : data-slot
 				| binary-slot
+				| keyword-slot
 				| argument-slot'''
 		p[0] = p[1]
 
@@ -143,6 +176,39 @@ class Parser:
 		else:
 			p[0] = BinarySlotNode(p[1], p[4], p[2])
 
+	def p_keyword_slot(self, p):
+		'''keyword-slot : SMALL_KEYWORD cap-keyword-list EQUAL regular-object
+						| SMALL_KEYWORD IDENTIFIER cap-keyword-id-list EQUAL regular-object'''
+		if(len(p) == 5):
+			p[2].insert(0, p[1])
+			p[0] = KeywordSlotNode(p[2], p[4])
+		else:
+			p[3][0].insert(0, p[1])
+			p[3][1].insert(0, p[2])
+			p[0] = KeywordSlotNode(p[3][0], p[5], p[3][1])
+
+	def p_cap_keyword_list(self, p):
+		'''cap-keyword-list : CAP_KEYWORD cap-keyword-list
+							| '''
+		if(len(p) == 3):
+			keyword_list = p[2]
+			keyword_list.insert(0, p[1])
+			p[0] = keyword_list
+		else:
+			p[0] = []
+
+	def p_cap_keyword_id_list(self, p):
+		'''cap-keyword-id-list : CAP_KEYWORD IDENTIFIER cap-keyword-id-list
+								| '''
+		if(len(p) == 4):
+			keyword_list = p[3][0]
+			arg_list = p[3][1]
+			keyword_list.insert(0, p[1])
+			arg_list.insert(0, p[2])
+			p[0] = [keyword_list, arg_list]
+		else:
+			p[0] = [[],[]]
+			
 	def p_argument_slot(self, p):
 		'argument-slot : COLON IDENTIFIER'
 		p[0] = ArgumentSlotNode(p[2])
