@@ -2,7 +2,13 @@ from typing import OrderedDict
 from .SelfException import *
 
 class SelfObject:
-	def __init__(self, slots = OrderedDict(), arg_slots = OrderedDict(), code = None):
+	def __init__(self, slots = None, arg_slots = None, code = None):
+		if slots is None:
+			slots = OrderedDict()
+		
+		if arg_slots is None:
+			arg_slots = OrderedDict()
+			 
 		self.slots = slots
 		self.arg_slots = arg_slots
 		self.code = code
@@ -26,3 +32,8 @@ class SelfObject:
 		if (not message in self.slots):
 			return SelfException("Lookup error")
 		return self.slots[message].get_value(arg)
+
+	def pass_keyword_message(self, message, arg_dict):
+		if (not message in self.slots):
+			return SelfException("Lookup error")
+		return self.slots[message].call_keyword_method(arg_dict)

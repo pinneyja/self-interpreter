@@ -1,10 +1,14 @@
+from typing import OrderedDict
+from interpreting.objects.SelfException import SelfException
 import copy
+from interpreting.objects.SelfObject import SelfObject
 
 class SelfSlot:
-	def __init__(self, name, value=None, isImmutable=False):
+	def __init__(self, name, value=None, isImmutable=False, keyword_list=None):
 		self.name = name
-		self.value = value
+		self.value:SelfObject = value
 		self.isImmutable = isImmutable
+		self.keyword_list = keyword_list
 
 	def __str__(self):
 		return "SelfSlot:{{name='{}', value={{{}}}, isImmutable='{}'}}".format(
@@ -19,3 +23,17 @@ class SelfSlot:
 			return self.value.code.interpret(clone)
 		else:
 			return self.value
+
+	def call_keyword_method(self, arg_dict):
+		if not self.keyword_list:
+			return SelfException("Not a keyword slot")
+
+		if len(self.keyword_list) != len(self.value.arg_slots):
+			print(self.keyword_list, self.value.arg_slots)
+			return SelfException("Invalid number of argument slots")
+			
+		clone = copy.deepcopy(self.value)
+		for i in range(len(self.keyword_list)):
+			clone.slots[list(self.value.arg_slots.keys())[i]] = arg_dict[self.keyword_list[i]] 
+
+		return self.value.code.interpret(clone)

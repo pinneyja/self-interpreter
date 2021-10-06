@@ -1,13 +1,19 @@
 from interpreting.objects.SelfObject import *
+from .Node import Node
 from parsing.nodes.ArgumentSlotNode import *
 
-class RegularObjectNode:
-	def __init__(self, slot_list=[], code=None):
+class RegularObjectNode(Node):
+	def __init__(self, slot_list=None, code=None):		
+		super().__init__()
+
+		if slot_list is None:
+			slot_list = []
+
 		self.slot_list = slot_list
 		self.code = code
 
 	def __str__(self):
-		return "RegularObject: (slot-list={} code={{{}}})".format(list(map(str, self.slot_list)), self.code)
+		return f"RegularObject: (slot-list={self.slot_list} code={{{self.code}}})"
 
 	def interpret(self, context):
 		interpreted_slot_list = OrderedDict()

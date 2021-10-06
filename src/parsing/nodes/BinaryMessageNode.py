@@ -1,5 +1,8 @@
-class BinaryMessageNode:
+from .Node import Node
+
+class BinaryMessageNode(Node):
 	def __init__(self, expression, message, arg_expression):
+		super().__init__()
 		self.expression = expression
 		self.message = message
 		self.arg_expression = arg_expression
