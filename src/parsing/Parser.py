@@ -2,6 +2,7 @@ from parsing.nodes.IntegerNode import *
 from parsing.nodes.StringNode import *
 from parsing.nodes.RegularObjectNode import *
 from parsing.nodes.DataSlotNode import *
+from parsing.nodes.ParentSlotNode import *
 from parsing.nodes.BinarySlotNode import *
 from parsing.nodes.KeywordSlotNode import *
 from parsing.nodes.KeywordMessageNode import *
@@ -25,7 +26,8 @@ class Parser:
 	# Tokens
 
 	tokens = ('INTEGER','LPAREN','RPAREN','PIPE','PERIOD','LARROW','EQUAL',
-			'IDENTIFIER', 'SMALL_KEYWORD', 'CAP_KEYWORD', 'OPERATOR', 'COLON', 'STRING')
+			'IDENTIFIER', 'PARENT_NAME', 'SMALL_KEYWORD', 'CAP_KEYWORD', 'OPERATOR',
+			'COLON', 'STRING')
 
 	t_LPAREN = r'\('
 	t_RPAREN = r'\)'
@@ -34,6 +36,7 @@ class Parser:
 	t_LARROW = r'<-'
 	t_EQUAL = r'='
 	t_IDENTIFIER = r'[a-z_][a-zA-Z0-9_]*'
+	t_PARENT_NAME = t_IDENTIFIER + r'\*'
 	t_SMALL_KEYWORD = r'[a-z_][a-zA-Z0-9_]*:'
 	t_CAP_KEYWORD = r'[A-Z][a-zA-Z0-9_]*:'
 	t_COLON = r':'
@@ -163,10 +166,16 @@ class Parser:
 		'''data-slot : slot-name
 					 | slot-name LARROW expression
 					 | slot-name EQUAL expression'''
-		if(len(p) == 4):
-			p[0] = DataSlotNode(p[1], p[2], p[3])
+		if p[1][-1] == "*":
+			if(len(p) == 4):
+				p[0] = ParentSlotNode(p[1][:-1], p[2], p[3])
+			else:
+				p[0] = ParentSlotNode(p[1][:-1])
 		else:
-			p[0] = DataSlotNode(p[1])
+			if(len(p) == 4):
+				p[0] = DataSlotNode(p[1], p[2], p[3])
+			else:
+				p[0] = DataSlotNode(p[1])
 
 	def p_binary_slot(self, p):
 		'''binary-slot : OPERATOR EQUAL regular-object
@@ -214,7 +223,9 @@ class Parser:
 		p[0] = ArgumentSlotNode(p[2])
 
 	def p_slot_name(self, p):
-		'slot-name : IDENTIFIER'
+		'''slot-name : IDENTIFIER
+					 | PARENT_NAME
+					 '''
 		p[0] = p[1]
 
 	def p_code(self, p):

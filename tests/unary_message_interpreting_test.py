@@ -46,4 +46,4 @@ def test_invalid_unary_message_passing():
 	interpreted_result_2 = interpreter.interpret(unary_message_2)
 
 	assert str(interpreted_result_1) == str(SelfInteger(1))
-	assert str(interpreted_result_2) == str(SelfException("Lookup error"))
+	assert str(interpreted_result_2) == str(SelfException("Lookup error: no matching slot"))
