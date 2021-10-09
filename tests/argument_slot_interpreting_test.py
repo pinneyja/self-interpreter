@@ -8,7 +8,7 @@ def test_basic_argument_slot():
 	parser_result = RegularObjectNode([ BinarySlotNode("+", inner_reg_object) ])
 	interpreted_result = interpreter.interpret(parser_result)
 
-	method_object = SelfObject(OrderedDict(), OrderedDict([("arg", SelfSlot("arg"))]), UnaryMessageNode(None, "arg"))
+	method_object = SelfObject(OrderedDict(), OrderedDict([("arg", SelfSlot("arg"))]), code=UnaryMessageNode(None, "arg"))
 	binary_slot = SelfSlot("+", method_object, True)
 	expected_result = SelfObject(OrderedDict([("+", binary_slot)]), OrderedDict())
 

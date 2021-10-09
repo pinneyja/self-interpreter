@@ -22,7 +22,7 @@ def test_method_code_is_not_run_until_called():
 
 	parser_result = RegularObjectNode([DataSlotNode("x","=",RegularObjectNode([], UnaryMessageNode(RegularObjectNode(), "bogus")))])
 	slot_list = {}
-	self_object_inner = SelfObject({}, {}, UnaryMessageNode(RegularObjectNode(), "bogus"))
+	self_object_inner = SelfObject(code=UnaryMessageNode(RegularObjectNode(), "bogus"))
 	slot_list["x"] = SelfSlot("x", self_object_inner, isImmutable=True)
 	expected_result = SelfObject(slot_list)
 
@@ -36,7 +36,32 @@ def test_method_code_with_bad_unary_message():
 
 	parser_result_object = RegularObjectNode([DataSlotNode("x","=",RegularObjectNode([], UnaryMessageNode(RegularObjectNode(), "bogus")))])
 	parser_result = UnaryMessageNode(parser_result_object, "x")
-	expected_result = SelfException("Lookup error")
+	expected_result = SelfException("Lookup error: no matching slot")
+
+	interpreted_result = interpreter.interpret(parser_result)
+
+	assert str(interpreted_result) == str(expected_result)
+
+def test_method_code_parent_lookup():
+	# (|y = 5. x = (| | y)|) x
+	interpreter = Interpreter()
+
+	parser_result_object = RegularObjectNode([DataSlotNode("y", "=", IntegerNode(5)), DataSlotNode("x","=",RegularObjectNode([], UnaryMessageNode(None, "y")))])
+	parser_result = UnaryMessageNode(parser_result_object, "x")
+	expected_result = SelfInteger(5)
+
+	interpreted_result = interpreter.interpret(parser_result)
+
+	assert str(interpreted_result) == str(expected_result)
+
+def test_method_code_parent_lookup_using_self_slot():
+	# (|y = 5. x = (| | self y)|) x
+	interpreter = Interpreter()
+
+	code = UnaryMessageNode(UnaryMessageNode(None, "self"), "y")
+	parser_result_object = RegularObjectNode([DataSlotNode("y", "=", IntegerNode(5)), DataSlotNode("x","=",RegularObjectNode([], code))])
+	parser_result = UnaryMessageNode(parser_result_object, "x")
+	expected_result = SelfInteger(5)
 
 	interpreted_result = interpreter.interpret(parser_result)
 

@@ -11,20 +11,21 @@ class SelfSlot:
 		self.keyword_list = keyword_list
 
 	def __str__(self):
-		return "SelfSlot:{{name='{}', value={{{}}}, isImmutable='{}'}}".format(
-			self.name, self.value, self.isImmutable
+		return "SelfSlot:{{name='{}', value={{{}}}, isImmutable='{}', keyword_list='{}'}}".format(
+			self.name, self.value, self.isImmutable, self.keyword_list
 		)
 
-	def get_value(self, arg=None):
+	def get_value(self, receiver, arg=None):
 		if self.value.code:
 			clone = copy.deepcopy(self.value)
+			clone.parent_slots["self"] = SelfSlot("self", receiver, True)
 			for key in clone.arg_slots:
 				clone.slots[key] = SelfSlot(key, arg)
 			return self.value.code.interpret(clone)
 		else:
 			return self.value
 
-	def call_keyword_method(self, arg_dict):
+	def call_keyword_method(self, receiver, arg_dict):
 		if not self.keyword_list:
 			return SelfException("Not a keyword slot")
 
@@ -33,6 +34,7 @@ class SelfSlot:
 			return SelfException("Invalid number of argument slots")
 			
 		clone = copy.deepcopy(self.value)
+		clone.parent_slots["self"] = SelfSlot("self", receiver, True)
 		for i in range(len(self.keyword_list)):
 			clone.slots[list(self.value.arg_slots.keys())[i]] = arg_dict[self.keyword_list[i]] 
 

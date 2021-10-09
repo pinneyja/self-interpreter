@@ -34,7 +34,7 @@ def test_invalid_implicit_message_passing():
 
 	interpreted_result = interpreter.interpret(unary_message)
 
-	assert str(interpreted_result) == str(SelfException("Lookup error"))
+	assert str(interpreted_result) == str(SelfException("Lookup error: no matching slot"))
 
 def test_implicit_binary_message_passing_in_method_slot():
 	# (| object1 = (| + arg = (| | 1) | + 5)|) object1

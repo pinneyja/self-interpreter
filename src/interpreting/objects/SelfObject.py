@@ -2,15 +2,19 @@ from typing import OrderedDict
 from .SelfException import *
 
 class SelfObject:
-	def __init__(self, slots = None, arg_slots = None, code = None):
+	def __init__(self, slots = None, arg_slots = None, parent_slots = None, code = None):
 		if slots is None:
 			slots = OrderedDict()
 		
 		if arg_slots is None:
 			arg_slots = OrderedDict()
 			 
+		if parent_slots is None:
+			parent_slots = OrderedDict()
+
 		self.slots = slots
 		self.arg_slots = arg_slots
+		self.parent_slots = parent_slots
 		self.code = code
 
 	def __str__(self):
@@ -20,20 +24,52 @@ class SelfObject:
 		output += "], Argument Slots = ["
 		for key in self.arg_slots:
 			output += "{},".format(self.arg_slots[key])
+		output += "], Parent Slots = ["
+		for key in self.parent_slots:
+			output += "{},".format(self.parent_slots[key])
 		output += "], code={{{}}}".format(self.code)
 		return output + "}"
 
 	def pass_unary_message(self, message):
-		if (not message in self.slots):
-			return SelfException("Lookup error")
-		return self.slots[message].get_value()
+		matching_slot = self.lookup(message, set())
+		if type(matching_slot) is SelfException:
+			return matching_slot
+		return matching_slot.get_value(self)
 
 	def pass_binary_message(self, message, arg):
-		if (not message in self.slots):
-			return SelfException("Lookup error")
-		return self.slots[message].get_value(arg)
+		matching_slot = self.lookup(message, set())
+		if type(matching_slot) is SelfException:
+			return matching_slot
+		return matching_slot.get_value(self, arg)
 
 	def pass_keyword_message(self, message, arg_dict):
-		if (not message in self.slots):
-			return SelfException("Lookup error")
-		return self.slots[message].call_keyword_method(arg_dict)
+		matching_slot = self.lookup(message, set())
+		if type(matching_slot) is SelfException:
+			return matching_slot
+		return matching_slot.call_keyword_method(self, arg_dict)
+
+	def lookup(self, sel, V):
+		M = self.lookup_helper(sel, V)
+		if len(M) == 1:
+			return M.pop()
+		elif len(M) == 0:
+			return SelfException("Lookup error: no matching slot")
+		else:
+			return SelfException("Lookup error: more than one matching slot")
+
+	def lookup_helper(self, sel, V):
+		if self in V:
+			return set()
+		else:
+			if (sel in self.slots):
+				return {self.slots[sel]}
+			elif (sel in self.parent_slots):
+				return {self.parent_slots[sel]}
+			else:
+				return self.parent_lookup(sel, V)
+
+	def parent_lookup(self, sel, V):
+		M = set()
+		for parent_slot_name in self.parent_slots:
+			M = M.union(self.parent_slots[parent_slot_name].value.lookup_helper(sel, V.union({self})))
+		return M
