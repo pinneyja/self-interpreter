@@ -4,7 +4,7 @@ from parsing.nodes.ArgumentSlotNode import *
 from parsing.nodes.ParentSlotNode import *
 
 class RegularObjectNode(Node):
-	def __init__(self, slot_list=None, code=None):		
+	def __init__(self, slot_list=None, code=None):
 		super().__init__()
 
 		if slot_list is None:

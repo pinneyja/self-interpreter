@@ -3,10 +3,10 @@ from .SelfObject import *
 
 class SelfByteVector(SelfObject):
 	def __init__(self, value, slots = None):
-		super().__init__(slots)
-		
-		if slots is None:
-			slots = OrderedDict()
+		super().__init__()
+
+		if slots is not None:
+			self.slots.update(slots)
 
 		self.value = list(map(ord, value))
 
