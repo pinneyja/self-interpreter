@@ -1,4 +1,5 @@
 from typing import OrderedDict
+from interpreting.PrimitiveDictionary import primitive_dict
 from .SelfException import *
 
 class SelfObject:
@@ -34,19 +35,31 @@ class SelfObject:
 		matching_slot = self.lookup(message, set())
 		if type(matching_slot) is SelfException:
 			return matching_slot
+
 		return matching_slot.get_value(self)
 
 	def pass_binary_message(self, message, arg):
 		matching_slot = self.lookup(message, set())
 		if type(matching_slot) is SelfException:
 			return matching_slot
+
 		return matching_slot.get_value(self, arg)
 
 	def pass_keyword_message(self, message, arg_dict):
+		if message[0] == '_':
+			return self.handle_primitive_method(message, arg_dict)
+
 		matching_slot = self.lookup(message, set())
 		if type(matching_slot) is SelfException:
 			return matching_slot
+
 		return matching_slot.call_keyword_method(self, arg_dict)
+
+	def handle_primitive_method(self, message, arg_dict):
+		if message not in primitive_dict:
+			return SelfException("Lookup error")
+
+		return primitive_dict[message](self, arg_dict)
 
 	def lookup(self, sel, V):
 		M = self.lookup_helper(sel, V)

@@ -4,10 +4,10 @@ from interpreting.objects.SelfByteVector import *
 
 class SelfString(SelfObject):
 	def __init__(self, value, slots = None):
-		if slots is None:
-			slots = OrderedDict()
+		super().__init__()
 
-		super().__init__(slots)
+		if slots is not None:
+			self.slots.update(slots)
 
 		self.value = value
 		self.byte_vector = SelfByteVector(value)
