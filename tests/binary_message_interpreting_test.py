@@ -5,10 +5,10 @@ from parsing.nodes.UnaryMessageNode import *
 from interpreting.Interpreter import *
 
 def test_basic_binary_message_passing():
-	# (| + = (|| 5)|) + 1
+	# (| + = (|:arg| 5)|) + 1
 	interpreter = Interpreter()
 
-	reg_object = RegularObjectNode([ DataSlotNode("+", "=", RegularObjectNode([], IntegerNode(5))) ])
+	reg_object = RegularObjectNode([ DataSlotNode("+", "=", RegularObjectNode([ArgumentSlotNode("arg")], IntegerNode(5))) ])
 	parser_result = BinaryMessageNode(reg_object, "+", IntegerNode(1))
 	interpreted_result = interpreter.interpret(parser_result)
 

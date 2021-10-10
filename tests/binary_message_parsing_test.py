@@ -11,9 +11,9 @@ def test_basic_binary_message_parsing():
 def test_binary_message_parsing_with_objects():
 	parser = Parser()
 
-	reg_object = RegularObjectNode([ BinarySlotNode("+", RegularObjectNode([], IntegerNode(5))) ])
+	reg_object = RegularObjectNode([ BinarySlotNode("+", RegularObjectNode([ArgumentSlotNode("arg")], IntegerNode(5))) ])
 	binary_message = BinaryMessageNode(reg_object, "+", IntegerNode(1))
-	parsed_object = parser.parse("(| + = (| | 5)|) + 1")
+	parsed_object = parser.parse("(| + = (|:arg| 5)|) + 1")
 	assert str(binary_message) == str(parsed_object)
 
 def test_binary_message_associativity():
