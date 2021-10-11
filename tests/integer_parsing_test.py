@@ -9,7 +9,7 @@ def test_parses_random_number():
 	for i in range(100):
 		number = random.randint(-9999999, 9999999)
 
-		node = IntegerNode(number)
+		node = CodeNode([IntegerNode(number)])
 		parserNode = parser.parse(str(number))
 
 		generatedNodeString = str(node)

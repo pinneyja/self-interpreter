@@ -9,7 +9,7 @@ def test_simply_unary_method_call():
 	# (|x = (| | 1)|) x
 	interpreter = Interpreter()
 
-	parser_result = UnaryMessageNode(RegularObjectNode([DataSlotNode("x","=",RegularObjectNode([], IntegerNode(1)))]), "x")
+	parser_result = CodeNode([UnaryMessageNode(RegularObjectNode([DataSlotNode("x","=",RegularObjectNode([], IntegerNode(1)))]), "x")])
 	expected_result = SelfInteger(1)
 
 	interpreted_result = interpreter.interpret(parser_result)
@@ -20,7 +20,7 @@ def test_method_code_is_not_run_until_called():
 	# (|x = (| | () bogus)|)
 	interpreter = Interpreter()
 
-	parser_result = RegularObjectNode([DataSlotNode("x","=",RegularObjectNode([], UnaryMessageNode(RegularObjectNode(), "bogus")))])
+	parser_result = CodeNode([RegularObjectNode([DataSlotNode("x","=",RegularObjectNode([], UnaryMessageNode(RegularObjectNode(), "bogus")))])])
 	slot_list = {}
 	self_object_inner = SelfObject(code=UnaryMessageNode(RegularObjectNode(), "bogus"))
 	slot_list["x"] = SelfSlot("x", self_object_inner, isImmutable=True)
@@ -35,7 +35,7 @@ def test_method_code_with_bad_unary_message():
 	interpreter = Interpreter()
 
 	parser_result_object = RegularObjectNode([DataSlotNode("x","=",RegularObjectNode([], UnaryMessageNode(RegularObjectNode(), "bogus")))])
-	parser_result = UnaryMessageNode(parser_result_object, "x")
+	parser_result = CodeNode([UnaryMessageNode(parser_result_object, "x")])
 	expected_result = SelfException("Lookup error: no matching slot")
 
 	interpreted_result = interpreter.interpret(parser_result)
@@ -46,8 +46,8 @@ def test_method_code_parent_lookup():
 	# (|y = 5. x = (| | y)|) x
 	interpreter = Interpreter()
 
-	parser_result_object = RegularObjectNode([DataSlotNode("y", "=", IntegerNode(5)), DataSlotNode("x","=",RegularObjectNode([], UnaryMessageNode(None, "y")))])
-	parser_result = UnaryMessageNode(parser_result_object, "x")
+	parser_result_object = RegularObjectNode([DataSlotNode("y", "=", IntegerNode(5)), DataSlotNode("x","=",RegularObjectNode([], CodeNode([UnaryMessageNode(None, "y")])))])
+	parser_result = CodeNode([UnaryMessageNode(parser_result_object, "x")])
 	expected_result = SelfInteger(5)
 
 	interpreted_result = interpreter.interpret(parser_result)
@@ -58,9 +58,9 @@ def test_method_code_parent_lookup_using_self_slot():
 	# (|y = 5. x = (| | self y)|) x
 	interpreter = Interpreter()
 
-	code = UnaryMessageNode(UnaryMessageNode(None, "self"), "y")
+	code = CodeNode([UnaryMessageNode(UnaryMessageNode(None, "self"), "y")])
 	parser_result_object = RegularObjectNode([DataSlotNode("y", "=", IntegerNode(5)), DataSlotNode("x","=",RegularObjectNode([], code))])
-	parser_result = UnaryMessageNode(parser_result_object, "x")
+	parser_result = CodeNode([UnaryMessageNode(parser_result_object, "x")])
 	expected_result = SelfInteger(5)
 
 	interpreted_result = interpreter.interpret(parser_result)

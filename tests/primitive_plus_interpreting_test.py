@@ -10,7 +10,7 @@ def test_simple_addition():
 	# 1 + 3
 	interpreter = Interpreter()
 
-	parser_result = BinaryMessageNode(IntegerNode(1), "+", IntegerNode(3))
+	parser_result = CodeNode([BinaryMessageNode(IntegerNode(1), "+", IntegerNode(3))])
 	expected_result = SelfInteger(4)
 
 	interpreted_result = interpreter.interpret(parser_result)
@@ -21,7 +21,7 @@ def test_multiple_addition():
 	# 1 + 3 + 5
 	interpreter = Interpreter()
 
-	parser_result = BinaryMessageNode(BinaryMessageNode(IntegerNode(1), "+", IntegerNode(3)), "+", IntegerNode(5))
+	parser_result = CodeNode([BinaryMessageNode(BinaryMessageNode(IntegerNode(1), "+", IntegerNode(3)), "+", IntegerNode(5))])
 	expected_result = SelfInteger(9)
 
 	interpreted_result = interpreter.interpret(parser_result)
@@ -32,7 +32,7 @@ def test_primitive_addition():
 	# 1 _IntAdd: 3
 	interpreter = Interpreter()
 
-	parser_result = KeywordMessageNode(IntegerNode(1), ["_IntAdd:"], [IntegerNode(3)])
+	parser_result = CodeNode([KeywordMessageNode(IntegerNode(1), ["_IntAdd:"], [IntegerNode(3)])])
 	expected_result = SelfInteger(4)
 
 	interpreted_result = interpreter.interpret(parser_result)
@@ -43,7 +43,7 @@ def test_multiple_primitive_addition():
 	# 1 _IntAdd: 3 _IntAdd: 5
 	interpreter = Interpreter()
 
-	parser_result = KeywordMessageNode(KeywordMessageNode(IntegerNode(1), ["_IntAdd:"], [IntegerNode(3)]), ["_IntAdd:"], [IntegerNode(5)])
+	parser_result = CodeNode([KeywordMessageNode(KeywordMessageNode(IntegerNode(1), ["_IntAdd:"], [IntegerNode(3)]), ["_IntAdd:"], [IntegerNode(5)])])
 	expected_result = SelfInteger(9)
 
 	interpreted_result = interpreter.interpret(parser_result)

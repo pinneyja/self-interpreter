@@ -5,7 +5,7 @@ def test_basic_argument_slot():
 	interpreter = Interpreter()
 
 	inner_reg_object = RegularObjectNode([ ArgumentSlotNode("arg") ], UnaryMessageNode(None, "arg"))
-	parser_result = RegularObjectNode([ BinarySlotNode("+", inner_reg_object) ])
+	parser_result = CodeNode([RegularObjectNode([ BinarySlotNode("+", inner_reg_object) ])])
 	interpreted_result = interpreter.interpret(parser_result)
 
 	method_object = SelfObject(OrderedDict(), OrderedDict([("arg", SelfSlot("arg"))]), code=UnaryMessageNode(None, "arg"))
@@ -20,7 +20,7 @@ def test_argument_slot_binary_message():
 
 	inner_reg_object = RegularObjectNode([ ArgumentSlotNode("arg") ], UnaryMessageNode(None, "arg"))
 	reg_object = RegularObjectNode([ BinarySlotNode("+", inner_reg_object) ])
-	parser_result = BinaryMessageNode(reg_object, "+", IntegerNode(5))
+	parser_result = CodeNode([BinaryMessageNode(reg_object, "+", IntegerNode(5))])
 	interpreted_result = interpreter.interpret(parser_result)
 
 	expected_result = SelfInteger(5)
@@ -35,7 +35,7 @@ def test_argument_slot_binary_message():
 	slot_B = DataSlotNode('x', '=', IntegerNode(5))
 	object_B = RegularObjectNode([ slot_B ])
 
-	parser_result = BinaryMessageNode(object_A, "+", object_B)
+	parser_result = CodeNode([BinaryMessageNode(object_A, "+", object_B)])
 	interpreted_result = interpreter.interpret(parser_result)
 
 	expected_result = SelfInteger(5)

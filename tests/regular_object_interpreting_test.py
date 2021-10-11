@@ -8,7 +8,7 @@ def test_empty_object():
 	# ()
 	interpreter = Interpreter()
 
-	parser_result = RegularObjectNode()
+	parser_result = CodeNode([RegularObjectNode()])
 	expected_result = SelfObject()
 
 	interpreted_result = interpreter.interpret(parser_result)
@@ -19,7 +19,7 @@ def test_simple_object():
 	# (|x = 4|)
 	interpreter = Interpreter()
 
-	parser_result = RegularObjectNode([DataSlotNode("x", "=", IntegerNode(4))])
+	parser_result = CodeNode([RegularObjectNode([DataSlotNode("x", "=", IntegerNode(4))])])
 	slot_list = {}
 	slot_list["x"] = SelfSlot("x", SelfInteger('4'), isImmutable=True)
 	expected_result = SelfObject(slot_list)
@@ -32,7 +32,7 @@ def test_complicated_object():
 	# (|x = 4. y <- (|z = 4|)|)
 	interpreter = Interpreter()
 
-	parser_result = RegularObjectNode([DataSlotNode("x", "=", IntegerNode(4)), DataSlotNode("y", "<-", RegularObjectNode([DataSlotNode("z", "=", IntegerNode(4))]))])
+	parser_result = CodeNode([RegularObjectNode([DataSlotNode("x", "=", IntegerNode(4)), DataSlotNode("y", "<-", RegularObjectNode([DataSlotNode("z", "=", IntegerNode(4))]))])])
 	slot_list = {}
 	slot_list["x"] = SelfSlot("x", SelfInteger('4'), isImmutable=True)
 	inner_slot_list = {}

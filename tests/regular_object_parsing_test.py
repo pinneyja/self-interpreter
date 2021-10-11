@@ -7,7 +7,7 @@ from parsing.nodes.IntegerNode import *
 def test_parses_empty_object():
 	parser = Parser()
 
-	empty_object = RegularObjectNode()
+	empty_object = CodeNode([RegularObjectNode()])
 	parsed_empty = parser.parse("()")
 	parsed_empty_pipe = parser.parse("(| |)")
 	
@@ -17,9 +17,9 @@ def test_parses_empty_object():
 def test_parses_one_number_slot():
 	parser = Parser()
 
-	one_slot_obj = RegularObjectNode([DataSlotNode("x")])
-	one_slot_obj_equal = RegularObjectNode([DataSlotNode("x","=",IntegerNode(5))])
-	one_slot_obj_larrow = RegularObjectNode([DataSlotNode("x","<-",IntegerNode(5))])
+	one_slot_obj = CodeNode([RegularObjectNode([DataSlotNode("x")])])
+	one_slot_obj_equal = CodeNode([RegularObjectNode([DataSlotNode("x","=",IntegerNode(5))])])
+	one_slot_obj_larrow = CodeNode([RegularObjectNode([DataSlotNode("x","<-",IntegerNode(5))])])
 
 	parsed_one_slot_obj = parser.parse("(|x|)")
 	parsed_one_slot_obj_dot = parser.parse("(|x.|)")
@@ -38,8 +38,8 @@ def test_parses_one_number_slot():
 def test_parses_multiple_number_slot():
 	parser = Parser()
 
-	slot_obj_equal = RegularObjectNode([DataSlotNode("x","=",IntegerNode(5)), DataSlotNode("y","=",IntegerNode(6))])
-	slot_obj_larrow = RegularObjectNode([DataSlotNode("x","<-",IntegerNode(5)), DataSlotNode("y","<-",IntegerNode(6))])
+	slot_obj_equal = CodeNode([RegularObjectNode([DataSlotNode("x","=",IntegerNode(5)), DataSlotNode("y","=",IntegerNode(6))])])
+	slot_obj_larrow = CodeNode([RegularObjectNode([DataSlotNode("x","<-",IntegerNode(5)), DataSlotNode("y","<-",IntegerNode(6))])])
 
 	parsed_slot_obj_equal = parser.parse("(|x=5.y=6.|)")
 	parsed_slot_obj_larrow = parser.parse("(|x<-5. y<-6|)")
@@ -50,8 +50,8 @@ def test_parses_multiple_number_slot():
 def test_nested_object_slot():
 	parser = Parser()
 
-	slot_obj_equal_empty = RegularObjectNode([DataSlotNode("x","=",RegularObjectNode())])
-	slot_obj_larrow_nested = RegularObjectNode([DataSlotNode("y","<-",RegularObjectNode([DataSlotNode("x","=",IntegerNode(5)), DataSlotNode("z","=",IntegerNode(6))]))])
+	slot_obj_equal_empty = CodeNode([RegularObjectNode([DataSlotNode("x","=",RegularObjectNode())])])
+	slot_obj_larrow_nested = CodeNode([RegularObjectNode([DataSlotNode("y","<-",RegularObjectNode([DataSlotNode("x","=",IntegerNode(5)), DataSlotNode("z","=",IntegerNode(6))]))])])
 
 	parsed_slot_obj_equal_empty = parser.parse("(|x=()|)")
 	parsed_slot_obj_larrow_nested = parser.parse("(|y<-(|x=5. z=6|)|)")
