@@ -4,9 +4,9 @@ def test_basic_parent_slot():
 	# (| parent* = (|x=5|) |) x
 	interpreter = Interpreter()
 
-	inner_reg_object = RegularObjectNode([ DataSlotNode("x", "=", IntegerNode(5)) ])
+	inner_reg_object = RegularObjectNode([ DataSlotNode("x", "=", CodeNode([IntegerNode(5)])) ])
 	reg_object = RegularObjectNode([ ParentSlotNode("parent", "=", inner_reg_object) ])
-	parser_result = UnaryMessageNode(reg_object, "x")
+	parser_result = CodeNode([UnaryMessageNode(reg_object, "x")])
 	interpreted_result = interpreter.interpret(parser_result)
 
 	expected_result = SelfInteger(5)
@@ -20,7 +20,7 @@ def test_nested_parent_slots():
 	inner_reg_object = RegularObjectNode([ DataSlotNode("x", "=", IntegerNode(5)) ])
 	inner_reg_object2 = RegularObjectNode([ ParentSlotNode("parent2", "=", inner_reg_object) ])
 	reg_object = RegularObjectNode([ ParentSlotNode("parent", "=", inner_reg_object2) ])
-	parser_result = UnaryMessageNode(reg_object, "x")
+	parser_result = CodeNode([UnaryMessageNode(reg_object, "x")])
 	interpreted_result = interpreter.interpret(parser_result)
 
 	expected_result = SelfInteger(5)
@@ -34,7 +34,7 @@ def test_nested_parent_slots_with_same_slot():
 	inner_reg_object = RegularObjectNode([ DataSlotNode("x", "=", IntegerNode(5)) ])
 	inner_reg_object2 = RegularObjectNode([ DataSlotNode("x", "=", IntegerNode(4)), ParentSlotNode("parent2", "=", inner_reg_object) ])
 	reg_object = RegularObjectNode([ ParentSlotNode("parent", "=", inner_reg_object2) ])
-	parser_result = UnaryMessageNode(reg_object, "x")
+	parser_result = CodeNode([UnaryMessageNode(reg_object, "x")])
 	interpreted_result = interpreter.interpret(parser_result)
 
 	expected_result = SelfInteger(4)
@@ -48,7 +48,7 @@ def test_multiple_parent_slots():
 	inner_reg_object = RegularObjectNode([ DataSlotNode("x", "=", IntegerNode(5)) ])
 	inner_reg_object2 = RegularObjectNode([ DataSlotNode("x", "=", IntegerNode(4)) ])
 	reg_object = RegularObjectNode([ ParentSlotNode("parent", "=", inner_reg_object2), ParentSlotNode("parent2", "=", inner_reg_object2) ])
-	parser_result = UnaryMessageNode(reg_object, "x")
+	parser_result = CodeNode([UnaryMessageNode(reg_object, "x")])
 	interpreted_result = interpreter.interpret(parser_result)
 
 	expected_result = SelfException("Lookup error: more than one matching slot")

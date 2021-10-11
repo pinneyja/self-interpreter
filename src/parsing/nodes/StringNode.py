@@ -1,6 +1,7 @@
 from interpreting.objects.SelfString import *
+from parsing.nodes.Node import Node
 
-class StringNode:
+class StringNode(Node):
 	def __init__(self, value):
 		self.value = value
 

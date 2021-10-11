@@ -5,7 +5,7 @@ def test_basic_parent_slot():
 	parser = Parser()
 
 	inner_reg_object = RegularObjectNode()
-	reg_object = RegularObjectNode([ ParentSlotNode("parent", "=", inner_reg_object) ])
+	reg_object = CodeNode([RegularObjectNode([ ParentSlotNode("parent", "=", inner_reg_object) ])])
 
 	parsed_object = parser.parse("(| parent* = (| |) |)")
 	print(str(reg_object))
@@ -15,7 +15,7 @@ def test_nested_parent_slots():
 	parser = Parser()
 
 	inner_reg_object = RegularObjectNode([ ParentSlotNode("parent2", "=", RegularObjectNode()) ])
-	reg_object = RegularObjectNode([ ParentSlotNode("parent", "=", inner_reg_object) ])
+	reg_object = CodeNode([RegularObjectNode([ ParentSlotNode("parent", "=", inner_reg_object) ])])
 
 	parsed_object = parser.parse("(| parent* = (| parent2* = (| |) |) |)")
 	print(str(reg_object))
@@ -24,7 +24,7 @@ def test_nested_parent_slots():
 def test_multiple_parent_slots():
 	parser = Parser()
 
-	reg_object = RegularObjectNode([ ParentSlotNode("parent", "=", RegularObjectNode()), ParentSlotNode("parent2", "=", IntegerNode(5)) ])
+	reg_object = CodeNode([RegularObjectNode([ ParentSlotNode("parent", "=", RegularObjectNode()), ParentSlotNode("parent2", "=", IntegerNode(5)) ])])
 
 	parsed_object = parser.parse("(| parent* = (| |). parent2* = 5 |)")
 	print(str(reg_object))
