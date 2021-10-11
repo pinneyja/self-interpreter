@@ -25,16 +25,6 @@ def test_binary_message_associativity():
 
 	assert str(binary_message) == str(parsed_object)
 
-def test_binary_and_unary_message_precedence():
-	parser = Parser()
-
-	unary_message_node1 = UnaryMessageNode(IntegerNode(1), "m1")
-	unary_message_node2 = UnaryMessageNode(IntegerNode(2), "m2")
-	binary_message = CodeNode([BinaryMessageNode(unary_message_node1, "+", unary_message_node2)])
-	parsed_object = parser.parse("1 m1 + 2 m2")
-
-	assert str(binary_message) == str(parsed_object)
-
 def test_binary_message_parsing_slot_names():
 	parser = Parser()
 

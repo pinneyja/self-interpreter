@@ -4,7 +4,7 @@ from parsing.nodes.RegularObjectNode import RegularObjectNode
 from .Node import Node
 
 class KeywordSlotNode(Node):
-	def __init__(self, keyword_list:list, object:RegularObjectNode, arg_list=None):		
+	def __init__(self, keyword_list, object, arg_list=None):
 		super().__init__()
 				
 		if arg_list is None:
