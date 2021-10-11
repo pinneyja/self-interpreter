@@ -136,7 +136,7 @@ class Parser:
 
 	def p_cap_keyword_expression_list(self, p):
 		'''cap-keyword-expression-list : CAP_KEYWORD expression cap-keyword-expression-list %prec LOWER
-				       				   | %prec HIGHER'''
+									   | %prec HIGHER'''
 		if(len(p) == 4):
 			keyword_list = p[3][0]
 			value_list = p[3][1]

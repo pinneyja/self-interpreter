@@ -3,13 +3,22 @@ from parsing.Parser import *
 
 
 def main():
+	isParser = False
 	parser = Parser()
 	interpreter = Interpreter()
+
+	mode = input('Select mode (i)nterpret or (p)arse: ')
+	if mode == "p":
+		isParser = True
+
 	while True:
 		try:
 			s = input('>>> ')
 		except EOFError:
 			break
-		print(interpreter.interpret(parser.parse(s)))
+		if isParser:
+			print(parser.parse(s))
+		else:
+			print(interpreter.interpret(parser.parse(s)))
 
 main()
