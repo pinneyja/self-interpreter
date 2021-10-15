@@ -34,7 +34,7 @@ class Parser:
 	t_RPAREN = r'\)'
 	t_PIPE = r'\|'
 	t_PERIOD = r'\.'
-	t_LARROW = r'<-'
+	t_LARROW = r'<\-'
 	t_EQUAL = r'='
 	t_IDENTIFIER = r'[a-z_][a-zA-Z0-9_]*'
 	t_PARENT_NAME = t_IDENTIFIER + r'\*'
@@ -42,8 +42,12 @@ class Parser:
 	t_CAP_KEYWORD = r'[A-Z][a-zA-Z0-9_]*:'
 	t_COLON = r':'
 	t_CARET = r'\^'
-	operators = r"!@#$%&*+~\/?>,;\\"
-	t_OPERATOR = r'[\|\^' + operators + r']{2,}|[' + operators + r']'
+	normal_operators = r'!@#$%&*+~\/?>,;\\'
+	all_operators = normal_operators + t_EQUAL + t_PIPE + t_CARET + t_LARROW
+	exclude_larrow = r'(?!<-)'
+	t_OPERATOR = (rf'[{all_operators}]{{3,}}|'
+		+ rf'{exclude_larrow}[{all_operators}]{{2}}|'
+		+ rf'{exclude_larrow}[{normal_operators + t_LARROW}]{{1,2}}')
 	t_STRING = r'\'([^\\\']|\\[tbnfrva0\\\'"?]|\\x[0-9a-fA-F]{2}|\\d[0-9]{3}|\\o[0-7]{3})*\''
 
 	def t_INTEGER(self, t):
@@ -61,6 +65,7 @@ class Parser:
 		('right', 'HIGHER'),
 		('right', 'SMALL_KEYWORD', 'CAP_KEYWORD'),
 		('left', 'OPERATOR'),
+		('nonassoc', 'LARROW','EQUAL'),
 		('nonassoc', 'IDENTIFIER')
 	)
 
@@ -116,7 +121,11 @@ class Parser:
 
 	def p_binary_message(self, p):
 		'''binary-message : expression OPERATOR expression
-						  | OPERATOR expression'''
+						  | expression LARROW expression
+						  | expression EQUAL expression
+						  | OPERATOR expression
+						  | LARROW expression
+						  | EQUAL expression'''
 		if (len(p) == 4):
 			p[0] = BinaryMessageNode(p[1], p[2], p[3])
 		else:
@@ -195,7 +204,11 @@ class Parser:
 
 	def p_binary_slot(self, p):
 		'''binary-slot : OPERATOR EQUAL regular-object
-					   | OPERATOR IDENTIFIER EQUAL regular-object'''
+					   | LARROW EQUAL regular-object
+					   | EQUAL EQUAL regular-object
+					   | OPERATOR IDENTIFIER EQUAL regular-object
+					   | LARROW IDENTIFIER EQUAL regular-object
+					   | EQUAL IDENTIFIER EQUAL regular-object'''
 		if(len(p) == 4):
 			p[0] = BinarySlotNode(p[1], p[3])
 		else:
