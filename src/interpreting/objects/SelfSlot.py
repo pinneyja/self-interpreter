@@ -30,7 +30,6 @@ class SelfSlot:
 			return SelfException("Not a keyword slot")
 
 		if len(self.keyword_list) != len(self.value.arg_slots):
-			print(self.keyword_list, self.value.arg_slots)
 			return SelfException("Invalid number of argument slots")
 			
 		clone = copy.deepcopy(self.value)

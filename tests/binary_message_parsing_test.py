@@ -48,3 +48,25 @@ def test_binary_message_parsing_slot_names():
 	assert str(binary_message2) == str(parsed_object2)
 	assert str(binary_message3) == str(parsed_object3)
 	assert str(binary_message4) == str(parsed_object4)
+
+def test_lots_of_binary_message_parsing_slot_names():
+	parser = Parser()
+
+	slot_names = ["-", "<", "!", "@", "#", "$", "%", "&", "*", "+", "~", "/", "?", ">", 
+					",", ";", "\\", "<-", "=", "|", "^"]
+	extra_slot_names = []
+
+	for slot_name in slot_names:
+		for inner_slot_name in slot_names:
+			inner_slot_name += slot_name
+			extra_slot_names.append(inner_slot_name)
+
+	slot_names += extra_slot_names
+	slot_names.remove("|")
+	slot_names.remove("^")
+
+	for slot_name in slot_names:
+		reg_object = RegularObjectNode([ BinarySlotNode(slot_name, RegularObjectNode([ArgumentSlotNode("arg")], CodeNode([UnaryMessageNode(None, "arg")]))) ])
+		binary_message = CodeNode([BinaryMessageNode(reg_object, slot_name, IntegerNode(8))])
+		parsed_object = parser.parse("(| " + slot_name + " = (|:arg| arg)|) " + slot_name + " 8")
+		assert str(binary_message) == str(parsed_object)
