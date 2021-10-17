@@ -41,7 +41,7 @@ def test_implicit_binary_message_passing_in_method_slot():
 	interpreter = Interpreter()
 
 	code = CodeNode([BinaryMessageNode(None, "+", SelfInteger(5))])
-	slot_list = [ BinarySlotNode("+", IntegerNode(1), "arg") ]
+	slot_list = [ BinarySlotNode("+", RegularObjectNode(code=IntegerNode(1)), "arg") ]
 	reg_object = RegularObjectNode(slot_list, code)
 	slot_list1 = [ DataSlotNode("object1", "=", reg_object)]
 	reg_object1 = RegularObjectNode(slot_list1)
