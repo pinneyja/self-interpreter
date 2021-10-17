@@ -25,7 +25,7 @@ class SelfSlot:
 		else:
 			return self.value
 
-	def call_keyword_method(self, receiver, arg_dict):
+	def call_keyword_method(self, receiver, arg_list):
 		if not self.keyword_list:
 			return SelfException("Not a keyword slot")
 
@@ -35,6 +35,6 @@ class SelfSlot:
 		clone = copy.deepcopy(self.value)
 		clone.parent_slots["self"] = SelfSlot("self", receiver, True)
 		for i in range(len(self.keyword_list)):
-			clone.slots[list(self.value.arg_slots.keys())[i]] = arg_dict[self.keyword_list[i]] 
+			clone.slots[list(self.value.arg_slots.keys())[i]] = arg_list[i]
 
 		return self.value.code.interpret(clone)
