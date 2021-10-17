@@ -1,8 +1,8 @@
 from interpreting.objects.SelfException import SelfException
 
-def handleIntAdd(receiver, parameter_argument_dict):
+def handleIntAdd(receiver, parameter_argument_list):
 	from interpreting.objects.SelfInteger import SelfInteger
-	argument = parameter_argument_dict['_IntAdd:'].get_value(receiver)
+	argument = parameter_argument_list[0].get_value(receiver)
 	if type(receiver) is not SelfInteger or type(argument) is not SelfInteger:
 		return SelfException(f'Invalid operands for primitive _IntAdd: {receiver}, {argument}')
 

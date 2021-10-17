@@ -13,8 +13,8 @@ class KeywordMessageNode(Node):
 		return f"KeywordMessage: (expression={self.expression} keyword_list={self.keyword_list} value_list={self.value_list})"
 
 	def interpret(self, context):
-		arg_dict = {self.keyword_list[i] : DataSlotNode(self.keyword_list[i], expression=self.value_list[i]).interpret(context) for i in range(len(self.keyword_list))}
+		arg_list = [DataSlotNode(self.keyword_list[i], expression=self.value_list[i]).interpret(context) for i in range(len(self.keyword_list))]
 		if self.expression:
-			return self.expression.interpret(context).pass_keyword_message(self.message, arg_dict)
+			return self.expression.interpret(context).pass_keyword_message(self.message, arg_list)
 		else:
-			return context.pass_keyword_message(self.message, arg_dict)
+			return context.pass_keyword_message(self.message, arg_list)

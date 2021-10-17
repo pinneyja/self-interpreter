@@ -45,21 +45,21 @@ class SelfObject:
 
 		return matching_slot.get_value(self, arg)
 
-	def pass_keyword_message(self, message, arg_dict):
+	def pass_keyword_message(self, message, arg_list):
 		if message[0] == '_':
-			return self.handle_primitive_method(message, arg_dict)
+			return self.handle_primitive_method(message, arg_list)
 
 		matching_slot = self.lookup(message, set())
 		if type(matching_slot) is SelfException:
 			return matching_slot
 
-		return matching_slot.call_keyword_method(self, arg_dict)
+		return matching_slot.call_keyword_method(self, arg_list)
 
-	def handle_primitive_method(self, message, arg_dict):
+	def handle_primitive_method(self, message, arg_list):
 		if message not in primitive_dict:
 			return SelfException("Lookup error")
 
-		return primitive_dict[message](self, arg_dict)
+		return primitive_dict[message](self, arg_list)
 
 	def lookup(self, sel, V):
 		M = self.lookup_helper(sel, V)

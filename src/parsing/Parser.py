@@ -1,3 +1,4 @@
+from parsing.nodes.BlockNode import *
 from parsing.nodes.IntegerNode import *
 from parsing.nodes.StringNode import *
 from parsing.nodes.RegularObjectNode import *
@@ -26,12 +27,14 @@ class Parser:
 
 	# Tokens
 
-	tokens = ('INTEGER','LPAREN','RPAREN','PIPE','PERIOD','LARROW','EQUAL',
+	tokens = ('INTEGER','LPAREN','RPAREN','LBRAC','RBRAC','PIPE','PERIOD','LARROW','EQUAL',
 			'IDENTIFIER', 'PARENT_NAME', 'SMALL_KEYWORD', 'CAP_KEYWORD', 'OPERATOR',
 			'COLON', 'STRING', 'CARET')
 
 	t_LPAREN = r'\('
 	t_RPAREN = r'\)'
+	t_LBRAC = r'\['
+	t_RBRAC = r'\]'
 	t_PIPE = r'\|'
 	t_PERIOD = r'\.'
 	t_LARROW = r'<\-'
@@ -104,8 +107,13 @@ class Parser:
 		else:
 			p[0] = UnaryMessageNode(None, p[1])
 			
-	def p_constant_regular_object(self, p):
-		'constant : regular-object'
+	def p_constant_object(self, p):
+		'constant : object'
+		p[0] = p[1]
+
+	def p_object(self, p):
+		'''object : regular-object
+				  | block'''
 		p[0] = p[1]
 
 	def p_constant_integer(self, p):
@@ -166,6 +174,20 @@ class Parser:
 			p[0] = RegularObjectNode(p[3])
 		else:
 			p[0] = RegularObjectNode(p[3], p[5])
+
+	def p_block(self, p):
+		'''block : LBRAC PIPE slot-list PIPE RBRAC
+				 | LBRAC PIPE slot-list PIPE code RBRAC
+				 | LBRAC code RBRAC
+				 | LBRAC RBRAC'''
+		if len(p) == 7:
+			p[0] = BlockNode(p[3], p[5])
+		elif len(p) == 6:
+			p[0] = BlockNode(p[3])
+		elif len(p) == 4:
+			p[0] = BlockNode(code=p[2])
+		else:
+			p[0] = BlockNode()
 
 	def p_slot_list(self, p):
 		'''slot-list : slot PERIOD slot-list
