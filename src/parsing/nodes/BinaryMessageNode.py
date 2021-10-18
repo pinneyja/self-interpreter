@@ -1,4 +1,5 @@
-from .Node import Node
+from .Node import *
+from .RegularObjectNode import *
 
 class BinaryMessageNode(Node):
 	def __init__(self, expression, message, arg_expression):
@@ -15,3 +16,9 @@ class BinaryMessageNode(Node):
 			return self.expression.interpret(context).pass_binary_message(self.message, self.arg_expression.interpret(context))
 		else:
 			return context.pass_binary_message(self.message, self.arg_expression)
+
+	def verify_syntax(self):
+		if self.expression:
+			self.expression.verify_syntax()
+
+		self.arg_expression.verify_syntax()

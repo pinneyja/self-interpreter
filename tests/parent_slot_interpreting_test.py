@@ -1,4 +1,5 @@
 from interpreting.Interpreter import *
+from Messages import *
 
 def test_basic_parent_slot():
 	# (| parent* = (|x=5|) |) x
@@ -49,8 +50,9 @@ def test_multiple_parent_slots():
 	inner_reg_object2 = RegularObjectNode([ DataSlotNode("x", "=", IntegerNode(4)) ])
 	reg_object = RegularObjectNode([ ParentSlotNode("parent", "=", inner_reg_object2), ParentSlotNode("parent2", "=", inner_reg_object2) ])
 	parser_result = CodeNode([UnaryMessageNode(reg_object, "x")])
-	interpreted_result = interpreter.interpret(parser_result)
 
-	expected_result = SelfException("Lookup error: more than one matching slot")
-
-	assert str(interpreted_result) == str(expected_result)
+	try:
+		interpreted_result = interpreter.interpret(parser_result)
+		assert False
+	except SelfException as selfException:
+		assert str(selfException) == Messages.LOOKUP_ERROR_MULTIPLE_SLOTS.value

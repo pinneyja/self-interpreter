@@ -2,6 +2,7 @@ from typing import OrderedDict
 from interpreting.objects.SelfException import SelfException
 import copy
 from interpreting.objects.SelfObject import SelfObject
+from Messages import *
 
 class SelfSlot:
 	def __init__(self, name, value=None, isImmutable=False, keyword_list=None):
@@ -27,11 +28,8 @@ class SelfSlot:
 
 	def call_keyword_method(self, receiver, arg_list):
 		if not self.keyword_list:
-			return SelfException("Not a keyword slot")
+			raise SelfException(Messages.NOT_A_KEYWORD_SLOT.value)
 
-		if len(self.keyword_list) != len(self.value.arg_slots):
-			return SelfException("Invalid number of argument slots")
-			
 		clone = copy.deepcopy(self.value)
 		clone.parent_slots["self"] = SelfSlot("self", receiver, True)
 		for i in range(len(self.keyword_list)):

@@ -1,4 +1,5 @@
 from parsing.SelfParsingError import *
+from Messages import *
 import re
 import codecs
 
@@ -11,7 +12,7 @@ def convert_d_and_o_escapes_to_x(s):
 		else:
 			decimalValue = int(match.group()[2:], 8)
 		if decimalValue > 255:
-			raise SelfParsingError('invalid escape character: ' + match.group())
+			raise SelfParsingError(Messages.INVALID_ESCAPE_CHARACTER.value.format(match.group()))
 		hexValue = hex(decimalValue)[2:]
 		s = s.replace(match.group(), r'\x' + hexValue, 1)
 		match = re.search(pattern, s)

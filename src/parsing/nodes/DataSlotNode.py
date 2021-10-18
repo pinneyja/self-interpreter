@@ -16,3 +16,7 @@ class DataSlotNode(Node):
 			return SelfSlot(self.name)
 		else:
 			return SelfSlot(self.name, self.expression.interpret(context), self.operator == "=")
+
+	def verify_syntax(self):
+		if self.expression:
+			self.expression.verify_syntax()

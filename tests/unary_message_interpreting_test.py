@@ -2,6 +2,7 @@ from interpreting.Interpreter import *
 from parsing.nodes.RegularObjectNode import *
 from parsing.nodes.UnaryMessageNode import *
 from parsing.nodes.IntegerNode import *
+from Messages import *
 
 def test_basic_valid_unary_message_passing():
 	# (|slot1 = 1. slot2 = 2|) slot1/slot2
@@ -43,7 +44,10 @@ def test_invalid_unary_message_passing():
 	unary_message_2 = CodeNode([UnaryMessageNode(reg_object, "slot2")])
 
 	interpreted_result_1 = interpreter.interpret(unary_message_1)
-	interpreted_result_2 = interpreter.interpret(unary_message_2)
-
 	assert str(interpreted_result_1) == str(SelfInteger(1))
-	assert str(interpreted_result_2) == str(SelfException("Lookup error: no matching slot"))
+
+	try:
+		interpreted_result = interpreter.interpret(unary_message_2)
+		assert False
+	except SelfException as selfException:
+		assert str(selfException) == Messages.LOOKUP_ERROR_NO_SLOT.value

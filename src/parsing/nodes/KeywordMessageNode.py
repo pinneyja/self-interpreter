@@ -18,3 +18,7 @@ class KeywordMessageNode(Node):
 			return self.expression.interpret(context).pass_keyword_message(self.message, arg_list)
 		else:
 			return context.pass_keyword_message(self.message, arg_list)
+
+	def verify_syntax(self):
+		if self.expression:
+			self.expression.verify_syntax()
