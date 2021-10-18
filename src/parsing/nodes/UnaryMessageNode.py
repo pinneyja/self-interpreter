@@ -14,3 +14,7 @@ class UnaryMessageNode(Node):
 			return self.expression.interpret(context).pass_unary_message(self.message)
 		else:
 			return context.pass_unary_message(self.message)
+
+	def verify_syntax(self):
+		if self.expression:
+			self.expression.verify_syntax()

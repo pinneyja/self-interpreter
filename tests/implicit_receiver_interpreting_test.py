@@ -2,6 +2,7 @@ from interpreting.Interpreter import *
 from parsing.nodes.RegularObjectNode import *
 from parsing.nodes.UnaryMessageNode import *
 from parsing.nodes.IntegerNode import *
+from Messages import *
 
 def test_basic_valid_implicit_message_passing():
 	pass # TODO: No way to test this until we have object permanence (aka lobby)
@@ -32,9 +33,11 @@ def test_invalid_implicit_message_passing():
 	reg_object1 = RegularObjectNode(slot_list1)
 	unary_message = CodeNode([UnaryMessageNode(reg_object1, "object1")])
 
-	interpreted_result = interpreter.interpret(unary_message)
-
-	assert str(interpreted_result) == str(SelfException("Lookup error: no matching slot"))
+	try:
+		interpreted_result = interpreter.interpret(unary_message)
+		assert False
+	except SelfException as selfException:
+		assert str(selfException) == Messages.LOOKUP_ERROR_NO_SLOT.value
 
 def test_implicit_binary_message_passing_in_method_slot():
 	# (| object1 = (| + arg = (| | 1) | + 5)|) object1

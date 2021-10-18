@@ -2,6 +2,7 @@ from interpreting.objects.SelfSlot import *
 from parsing.nodes.ArgumentSlotNode import ArgumentSlotNode
 from parsing.nodes.RegularObjectNode import RegularObjectNode
 from .Node import Node
+from parsing.SelfParsingError import *
 
 class KeywordSlotNode(Node):
 	def __init__(self, keyword_list, object, arg_list=None):
@@ -20,3 +21,7 @@ class KeywordSlotNode(Node):
 
 	def interpret(self, context):
 		return SelfSlot(self.name, self.object.interpret(context), True, self.keyword_list)
+
+	def verify_syntax(self):
+		self.object.set_allowable_argument_slot_count(len(self.keyword_list))
+		self.object.verify_syntax() 

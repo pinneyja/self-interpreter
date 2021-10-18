@@ -3,7 +3,7 @@ from parsing.nodes.DataSlotNode import *
 from parsing.nodes.IntegerNode import *
 from parsing.nodes.UnaryMessageNode import *
 from interpreting.Interpreter import *
-
+from Messages import *
 
 def test_simply_unary_method_call():
 	# (|x = (| | 1)|) x
@@ -36,11 +36,12 @@ def test_method_code_with_bad_unary_message():
 
 	parser_result_object = RegularObjectNode([DataSlotNode("x","=",RegularObjectNode([], UnaryMessageNode(RegularObjectNode(), "bogus")))])
 	parser_result = CodeNode([UnaryMessageNode(parser_result_object, "x")])
-	expected_result = SelfException("Lookup error: no matching slot")
 
-	interpreted_result = interpreter.interpret(parser_result)
-
-	assert str(interpreted_result) == str(expected_result)
+	try:
+		interpreted_result = interpreter.interpret(parser_result)
+		assert False
+	except SelfException as selfException:
+		assert str(selfException) == Messages.LOOKUP_ERROR_NO_SLOT.value
 
 def test_method_code_parent_lookup():
 	# (|y = 5. x = (| | y)|) x

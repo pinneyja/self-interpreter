@@ -1,6 +1,7 @@
 from typing import OrderedDict
 from interpreting.PrimitiveDictionary import primitive_dict
 from .SelfException import *
+from Messages import *
 
 class SelfObject:
 	def __init__(self, slots = None, arg_slots = None, parent_slots = None, code = None):
@@ -57,7 +58,7 @@ class SelfObject:
 
 	def handle_primitive_method(self, message, arg_list):
 		if message not in primitive_dict:
-			return SelfException("Lookup error")
+			raise SelfException(Messages.PRIMITIVE_NOT_DEFINED.value.format(message))
 
 		return primitive_dict[message](self, arg_list)
 
@@ -66,9 +67,9 @@ class SelfObject:
 		if len(M) == 1:
 			return M.pop()
 		elif len(M) == 0:
-			return SelfException("Lookup error: no matching slot")
+			raise SelfException(Messages.LOOKUP_ERROR_NO_SLOT.value)
 		else:
-			return SelfException("Lookup error: more than one matching slot")
+			raise SelfException(Messages.LOOKUP_ERROR_MULTIPLE_SLOTS.value)
 
 	def lookup_helper(self, sel, V):
 		if self in V:

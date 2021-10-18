@@ -1,6 +1,8 @@
 from interpreting.objects.SelfSlot import *
 from parsing.nodes.ArgumentSlotNode import *
 from .Node import Node
+from parsing.SelfParsingError import *
+from parsing.nodes.ArgumentSlotNode import *
 
 class BinarySlotNode(Node):
 	def __init__(self, name, expression, arg_name = None):
@@ -15,3 +17,7 @@ class BinarySlotNode(Node):
 
 	def interpret(self, context):
 		return SelfSlot(self.name, self.expression.interpret(context), True)
+	
+	def verify_syntax(self):
+		self.expression.set_allowable_argument_slot_count(1)
+		self.expression.verify_syntax()

@@ -16,9 +16,15 @@ def main():
 			s = input('>>> ')
 		except EOFError:
 			break
-		if isParser:
-			print(parser.parse(s))
-		else:
-			print(interpreter.interpret(parser.parse(s)))
+		
+		try:
+			if isParser:
+				print(parser.parse(s))
+			else:
+				print(interpreter.interpret(parser.parse(s)))
+		except SelfParsingError as selfParsingError:
+			print(selfParsingError)
+		except SelfException as selfException:
+			print(selfException)
 
 main()

@@ -13,6 +13,7 @@ from parsing.nodes.ArgumentSlotNode import *
 from parsing.nodes.CodeNode import *
 from parsing.ParsingUtils import *
 from parsing.SelfParsingError import *
+from Messages import *
 import ply.lex as lex
 import ply.yacc as yacc
 
@@ -59,7 +60,7 @@ class Parser:
 		return t
 
 	def t_error(self, t):
-		raise SelfParsingError(f'at token: \'{t.value[0]}\'')
+		raise SelfParsingError(Messages.SYNTAX_ERROR_AT_TOKEN.value.format(t.value[0]))
 
 	# Precedence Rules
 
@@ -280,7 +281,9 @@ class Parser:
 		p[0] = p[1]
 
 	def p_error(self, p):
-		raise SelfParsingError(f'at token: \'{p.value if p else None}\'')
+		raise SelfParsingError(Messages.SYNTAX_ERROR_AT_TOKEN.value.format(p.value if p else None))
 
 	def parse(self, string):
-		return self.parser.parse(string)
+		abstract_syntax_tree = self.parser.parse(string)
+		abstract_syntax_tree.verify_syntax()
+		return abstract_syntax_tree

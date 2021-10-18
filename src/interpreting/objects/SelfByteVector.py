@@ -5,7 +5,7 @@ class SelfByteVector(SelfObject):
 	def __init__(self, value, slots = None):
 		super().__init__()
 
-		if slots is not None:
+		if slots:
 			self.slots.update(slots)
 
 		self.value = list(map(ord, value))
