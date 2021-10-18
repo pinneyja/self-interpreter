@@ -14,3 +14,4 @@ class Messages(Enum):
 	EMPTY_OBJECT_WITH_ARG = "Empty objects cannot have arguments."
 	INVALID_PRIMITIVE_OPERANDS = "Invalid operands for primitive {} {}, {}"
 	PRIMITIVE_NOT_DEFINED = "Primitive '{}' not defined"
+	GENERIC_ERROR = "Unknown error occurred: {}."
