@@ -14,6 +14,9 @@ class BlockNode(Node):
 		self.slot_list = slot_list
 		self.code = code
 
+		if self.code:
+			self.code.set_contained_in_block(True)
+
 	def __str__(self):
 		return f"BlockObject: (slot-list={self.slot_list} code={{{self.code}}})"
 

@@ -5,7 +5,7 @@ from parsing.nodes.UnaryMessageNode import *
 from interpreting.Interpreter import *
 
 def test_basic_keyword_message_passing():
-	# (| x: a Y: b = (| | 100) |) x: 1 Y: ()
+	# (| x: a Y: b = (| | a) |) x: 1 Y: ()
 	interpreter = Interpreter()
 
 	keyword_method_object = RegularObjectNode(code=CodeNode([UnaryMessageNode(None, 'a')]))

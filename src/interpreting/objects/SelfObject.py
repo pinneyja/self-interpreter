@@ -18,6 +18,7 @@ class SelfObject:
 		self.arg_slots = arg_slots
 		self.parent_slots = parent_slots
 		self.code = code
+		self.nonlocal_return = False
 
 	def __str__(self):
 		output  = "SelfObject:{Slots = ["
@@ -30,6 +31,7 @@ class SelfObject:
 		for key in self.parent_slots:
 			output += "{},".format(self.parent_slots[key])
 		output += "], code={{{}}}".format(self.code)
+		output += f", nonlocal_return={self.nonlocal_return}" 
 		return output + "}"
 
 	def pass_unary_message(self, message):
@@ -88,3 +90,6 @@ class SelfObject:
 			raise SelfException(Messages.LOOKUP_ERROR_NO_SLOT.value)
 		else:
 			matching_slot.value = value
+
+	def set_nonlocal_return(self, nonlocal_return):
+		self.nonlocal_return = nonlocal_return

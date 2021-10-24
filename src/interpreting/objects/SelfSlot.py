@@ -33,6 +33,7 @@ class SelfSlot:
 		clone = copy.deepcopy(self.value)
 		clone.parent_slots["self"] = SelfSlot("self", receiver, True)
 		for i in range(len(self.keyword_list)):
-			clone.slots[list(self.value.arg_slots.keys())[i]] = arg_list[i]
+			slot_name = list(self.value.arg_slots.keys())[i]
+			clone.slots[slot_name] = SelfSlot(slot_name, arg_list[i])
 
 		return self.value.code.interpret(clone)

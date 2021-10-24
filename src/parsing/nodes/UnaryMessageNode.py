@@ -11,7 +11,10 @@ class UnaryMessageNode(Node):
 
 	def interpret(self, context):
 		if self.expression:
-			return self.expression.interpret(context).pass_unary_message(self.message)
+			interpreted = self.expression.interpret(context)
+			if interpreted.nonlocal_return:
+				return interpreted
+			return interpreted.pass_unary_message(self.message)
 		else:
 			return context.pass_unary_message(self.message)
 

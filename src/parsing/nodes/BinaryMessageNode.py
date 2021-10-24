@@ -13,9 +13,18 @@ class BinaryMessageNode(Node):
 
 	def interpret(self, context):
 		if self.expression:
-			return self.expression.interpret(context).pass_binary_message(self.message, self.arg_expression.interpret(context))
+			interpreted = self.expression.interpret(context)
+			if interpreted.nonlocal_return:
+				return interpreted
+			interpreted_arg = self.arg_expression.interpret(context)
+			if interpreted_arg.nonlocal_return:
+				return interpreted_arg
+			return interpreted.pass_binary_message(self.message, interpreted_arg)
 		else:
-			return context.pass_binary_message(self.message, self.arg_expression)
+			interpreted_arg = self.arg_expression.interpret(context)
+			if interpreted_arg.nonlocal_return:
+				return interpreted_arg
+			return context.pass_binary_message(self.message, interpreted_arg)
 
 	def verify_syntax(self):
 		if self.expression:
