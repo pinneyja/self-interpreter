@@ -11,6 +11,7 @@ from parsing.nodes.UnaryMessageNode import *
 from parsing.nodes.BinaryMessageNode import *
 from parsing.nodes.ArgumentSlotNode import *
 from parsing.nodes.CodeNode import *
+from parsing.nodes.RealNode import *
 from parsing.ParsingUtils import *
 from parsing.SelfParsingError import *
 from Messages import *
@@ -30,7 +31,7 @@ class Parser:
 
 	tokens = ('INTEGER','LPAREN','RPAREN','LBRAC','RBRAC','PIPE','PERIOD','LARROW','EQUAL',
 			'IDENTIFIER', 'PARENT_NAME', 'SMALL_KEYWORD', 'CAP_KEYWORD', 'OPERATOR',
-			'COLON', 'STRING', 'CARET')
+			'COLON', 'STRING', 'CARET', 'DECIMAL', 'FLOAT', 'INTEGER_WITH_BASE')
 
 	t_LPAREN = r'\('
 	t_RPAREN = r'\)'
@@ -54,9 +55,20 @@ class Parser:
 		+ rf'{exclude_larrow}[{normal_operators + t_LARROW}]{{1,2}}')
 	t_STRING = r'\'([^\\\']|\\[tbnfrva0\\\'"?]|\\x[0-9a-fA-F]{2}|\\d[0-9]{3}|\\o[0-7]{3})*\''
 
+	def t_FLOAT(self, t):
+		r'-?\d+(.\d+)?[eE][\+-]?\d+'
+		return t
+
+	def t_DECIMAL(self, t):
+		r'-?\d+[.]\d+'
+		return t
+	
+	def t_INTEGER_WITH_BASE(self, t):
+		r'-?\d+[rR][\da-zA-Z]+'
+		return t
+
 	def t_INTEGER(self, t):
 		r'-?\d+'
-		t.value = int(t.value)
 		return t
 
 	def t_error(self, t):
@@ -121,6 +133,18 @@ class Parser:
 	def p_constant_integer(self, p):
 		'constant : INTEGER'
 		p[0] = IntegerNode(p[1])
+	
+	def p_constant_integer_with_base(self, p):
+		'constant : INTEGER_WITH_BASE'
+		p[0] = IntegerNode(p[1])
+	
+	def p_constant_decimal(self, p):
+		'constant : DECIMAL'
+		p[0] = RealNode(p[1])
+	
+	def p_constant_float(self, p):
+		'constant : FLOAT'
+		p[0] = RealNode(p[1])
 
 	def p_constant_string(self, p):
 		'constant : STRING'
