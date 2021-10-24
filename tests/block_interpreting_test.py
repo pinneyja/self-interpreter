@@ -3,6 +3,7 @@ from interpreting.Interpreter import Interpreter
 from interpreting.objects.SelfInteger import SelfInteger
 from interpreting.objects.SelfObject import SelfObject
 from interpreting.objects.SelfSlot import SelfSlot
+from interpreting.objects.SelfLobby import SelfLobby
 from parsing.nodes.ArgumentSlotNode import ArgumentSlotNode
 from parsing.nodes.CodeNode import CodeNode
 from parsing.nodes.BlockNode import BlockNode
@@ -22,7 +23,7 @@ def test_interprets_empty_block():
 	empty_block_node = CodeNode([BlockNode()])
 	empty_block = SelfObject({
 		"value" : SelfSlot("value", SelfObject(parent_slots={
-				"" : SelfSlot("", isImmutable=True)
+				"" : SelfSlot("", SelfLobby(), isImmutable=True)
 			}), isImmutable=True)
 	})
 	interpreted_empty_block = interpreter.interpret(empty_block_node)
@@ -36,7 +37,7 @@ def test_interprets_code_block():
 	code_block_node = CodeNode([BlockNode(code=CodeNode([IntegerNode(1), IntegerNode(2)]))])
 	code_block = SelfObject({
 		"value" : SelfSlot("value", SelfObject(parent_slots={
-				"" : SelfSlot("", isImmutable=True)
+				"" : SelfSlot("", SelfLobby(), isImmutable=True)
 			}, code=CodeNode([IntegerNode(1), IntegerNode(2)])), isImmutable=True)
 	})
 	interpreted_code_block = interpreter.interpret(code_block_node)
@@ -64,7 +65,7 @@ def test_interprets_code_args_block():
 			},
 			parent_slots={
 				"b" : SelfSlot("b"),
-				"" : SelfSlot("", isImmutable=True)
+				"" : SelfSlot("", SelfLobby(), isImmutable=True)
 			}, 
 			code=CodeNode([IntegerNode(1), IntegerNode(2)])), 
 			isImmutable=True, 
@@ -97,7 +98,7 @@ def test_interprets_block_with_more_than_one_argument():
 				"c" : SelfSlot("c")
 			},
 			parent_slots={
-				"" : SelfSlot("", isImmutable=True)
+				"" : SelfSlot("", SelfLobby(), isImmutable=True)
 			}, 
 			code=CodeNode([BinaryMessageNode(BinaryMessageNode(UnaryMessageNode(None, "a"), "+", UnaryMessageNode(None, "b")), "+", UnaryMessageNode(None, "c"))])), 
 			isImmutable=True, 

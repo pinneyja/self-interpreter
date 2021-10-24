@@ -5,7 +5,13 @@ from parsing.nodes.IntegerNode import *
 from Messages import *
 
 def test_basic_valid_implicit_message_passing():
-	pass # TODO: No way to test this until we have object permanence (aka lobby)
+	# lobby
+	interpreter = Interpreter()
+	
+	unary_message = CodeNode([UnaryMessageNode(None, "lobby")])
+	interpreted_result = interpreter.interpret(unary_message)
+	
+	assert str(interpreted_result) == str(SelfLobby())
 
 def test_implicit_message_passing_in_method_slot():
 	# (| object1 = (| int1 = 1 | int1)|) object1
