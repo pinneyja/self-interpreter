@@ -13,9 +13,20 @@ class KeywordMessageNode(Node):
 		return f"KeywordMessage: (expression={self.expression} keyword_list={self.keyword_list} value_list={self.value_list})"
 
 	def interpret(self, context):
-		arg_list = [DataSlotNode(self.keyword_list[i], expression=self.value_list[i]).interpret(context) for i in range(len(self.keyword_list))]
 		if self.expression:
-			return self.expression.interpret(context).pass_keyword_message(self.message, arg_list)
+			interpreted = self.expression.interpret(context)
+			if interpreted.nonlocal_return:
+				return interpreted
+
+		arg_list = []
+		for i in range(len(self.keyword_list)):
+			interpreted_arg_value = self.value_list[i].interpret(context)
+			if interpreted_arg_value.nonlocal_return:
+				return interpreted_arg_value
+			arg_list.append(interpreted_arg_value)
+
+		if self.expression:
+			return interpreted.pass_keyword_message(self.message, arg_list)
 		else:
 			return context.pass_keyword_message(self.message, arg_list)
 

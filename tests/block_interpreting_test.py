@@ -116,7 +116,7 @@ def test_interprets_block_in_context():
 	# (|a = 1. x = (|b=2| [a + b] value) |) x
 	interpreter = Interpreter()
 	
-	inner_code_block_node = CodeNode([UnaryMessageNode(BlockNode(code=BinaryMessageNode(UnaryMessageNode(None, "a"), "+", UnaryMessageNode(None, "b"))), "value")])
+	inner_code_block_node = CodeNode([UnaryMessageNode(BlockNode(code=CodeNode([BinaryMessageNode(UnaryMessageNode(None, "a"), "+", UnaryMessageNode(None, "b"))])), "value")])
 	inner_slots = [DataSlotNode("b", "=", IntegerNode(2))]
 	inner_object = RegularObjectNode(inner_slots, code=inner_code_block_node)
 	slots = [
@@ -135,7 +135,7 @@ def test_block_saves_context_from_creation():
 	# (| x = (| a = 1| y: [a]). y: block = (|a = 2| block value) |) x
 	interpreter = Interpreter()
 
-	inner_code_node = CodeNode([KeywordMessageNode(None, ["y:"], [BlockNode(code=UnaryMessageNode(None, "a"))])])
+	inner_code_node = CodeNode([KeywordMessageNode(None, ["y:"], [BlockNode(code=CodeNode([UnaryMessageNode(None, "a")]))])])
 	inner_slots = [DataSlotNode("a", "=", IntegerNode(1))]
 	inner_object = RegularObjectNode(inner_slots, code=inner_code_node)
 
@@ -164,7 +164,7 @@ def test_interprets_block_in_context_complicated():
 	inner_code_block_node = CodeNode([BinaryMessageNode(part1, "+", part2)])
 	inner_object = RegularObjectNode(code=inner_code_block_node)
 	slots = [KeywordSlotNode(["doIt:"], inner_object, ["block"]),]
-	arg_block_node = BlockNode([ArgumentSlotNode("arg")], BinaryMessageNode(UnaryMessageNode(None, "arg"), "+", UnaryMessageNode(None, "arg")))
+	arg_block_node = BlockNode([ArgumentSlotNode("arg")], CodeNode([BinaryMessageNode(UnaryMessageNode(None, "arg"), "+", UnaryMessageNode(None, "arg"))]))
 	code_block_node = CodeNode([KeywordMessageNode(RegularObjectNode(slots), ["doIt:"], [arg_block_node])])
 
 	expected = SelfInteger(6)

@@ -88,6 +88,7 @@ class Parser:
 		'''code : CARET expression PERIOD
 				| CARET expression'''
 		p[0] = CodeNode([p[2]])
+		p[0].set_nonlocal_return(True)
 
 	def p_expression(self, p):
 		'''expression : constant
