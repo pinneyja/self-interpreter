@@ -15,3 +15,5 @@ class Messages(Enum):
 	INVALID_PRIMITIVE_OPERANDS = "Invalid operands for primitive {} {}, {}"
 	PRIMITIVE_NOT_DEFINED = "Primitive '{}' not defined"
 	GENERIC_ERROR = "Unknown error occurred: {}."
+	INVALID_BASE = "Integers may only be written using bases from 2 to 36."
+	INVALID_DIGIT = "The digit '{}' is not appropriate for the base '{}'."
