@@ -34,15 +34,11 @@ class SelfObject:
 
 	def pass_unary_message(self, message):
 		matching_slot = self.lookup(message, set())
-		if type(matching_slot) is SelfException:
-			return matching_slot
-
+		
 		return matching_slot.get_value(self)
 
 	def pass_binary_message(self, message, arg):
 		matching_slot = self.lookup(message, set())
-		if type(matching_slot) is SelfException:
-			return matching_slot
 
 		return matching_slot.get_value(self, arg)
 
@@ -51,8 +47,6 @@ class SelfObject:
 			return self.handle_primitive_method(message, arg_list)
 
 		matching_slot = self.lookup(message, set())
-		if type(matching_slot) is SelfException:
-			return matching_slot
 
 		return matching_slot.call_keyword_method(self, arg_list)
 
@@ -87,3 +81,10 @@ class SelfObject:
 		for parent_slot_name in self.parent_slots:
 			M = M.union(self.parent_slots[parent_slot_name].value.lookup_helper(sel, V.union({self})))
 		return M
+
+	def set_slot(self, slot_name, value):
+		matching_slot = self.lookup(slot_name, set())
+		if matching_slot.is_immutable:
+			raise SelfException(Messages.LOOKUP_ERROR_NO_SLOT.value)
+		else:
+			matching_slot.value = value

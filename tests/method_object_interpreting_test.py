@@ -23,7 +23,7 @@ def test_method_code_is_not_run_until_called():
 	parser_result = CodeNode([RegularObjectNode([DataSlotNode("x","=",RegularObjectNode([], UnaryMessageNode(RegularObjectNode(), "bogus")))])])
 	slot_list = {}
 	self_object_inner = SelfObject(code=UnaryMessageNode(RegularObjectNode(), "bogus"))
-	slot_list["x"] = SelfSlot("x", self_object_inner, isImmutable=True)
+	slot_list["x"] = SelfSlot("x", self_object_inner, is_immutable=True)
 	expected_result = SelfObject(slot_list)
 
 	interpreted_result = interpreter.interpret(parser_result)

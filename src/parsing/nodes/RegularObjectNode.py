@@ -1,7 +1,10 @@
 from interpreting.objects.SelfObject import *
 from .Node import Node
 from parsing.nodes.ArgumentSlotNode import *
+from parsing.nodes.StringNode import *
 from parsing.nodes.ParentSlotNode import *
+from parsing.nodes.KeywordMessageNode import *
+from parsing.nodes.UnaryMessageNode import *
 from parsing.SelfParsingError import *
 from Messages import *
 
@@ -30,6 +33,15 @@ class RegularObjectNode(Node):
 				interpreted_parent_slot_list[s.name] = s.interpret(context)
 			else:
 				interpreted_slot_list[s.name] = s.interpret(context)
+
+			if type(s) is ParentSlotNode or type(s) is DataSlotNode:
+				if s.operator == "<-" or s.operator is None:
+					slot_name = f"{s.name}:"
+					arg_slot_name = "arg"
+					arg_slots = OrderedDict()
+					arg_slots[arg_slot_name] = SelfSlot(arg_slot_name)
+					code = KeywordMessageNode(UnaryMessageNode(None, "self"), ["_Assignment:", "Value:"], [StringNode(s.name), UnaryMessageNode(None, arg_slot_name)])
+					interpreted_slot_list[slot_name] = SelfSlot(slot_name, SelfObject(arg_slots=arg_slots, code=code), keyword_list=[slot_name])
 		return SelfObject(interpreted_slot_list, interpreted_arg_slot_list, interpreted_parent_slot_list, self.code)
 	
 	def set_allowable_argument_slot_count(self, allowable_argument_slot_count):

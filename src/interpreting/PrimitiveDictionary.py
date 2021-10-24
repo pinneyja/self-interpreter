@@ -9,6 +9,14 @@ def handleIntAdd(receiver, parameter_argument_list):
 
 	return SelfInteger(receiver.get_value() + argument.get_value())
 
+def handleAssignment(receiver, argument_list):
+	slot_name = argument_list[0].value.value
+	value = argument_list[1].value
+	receiver.set_slot(slot_name, value)
+
+	return receiver
+
 primitive_dict = {
-	'_IntAdd:' : handleIntAdd
+	'_IntAdd:' : handleIntAdd,
+	'_Assignment:Value:' : handleAssignment
 }

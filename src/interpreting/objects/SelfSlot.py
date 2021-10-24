@@ -5,15 +5,15 @@ from interpreting.objects.SelfObject import SelfObject
 from Messages import *
 
 class SelfSlot:
-	def __init__(self, name, value=None, isImmutable=False, keyword_list=None):
+	def __init__(self, name, value=None, is_immutable=False, keyword_list=None):
 		self.name = name
 		self.value:SelfObject = value
-		self.isImmutable = isImmutable
+		self.is_immutable = is_immutable
 		self.keyword_list = keyword_list
 
 	def __str__(self):
-		return "SelfSlot:{{name='{}', value={{{}}}, isImmutable='{}', keyword_list='{}'}}".format(
-			self.name, self.value, self.isImmutable, self.keyword_list
+		return "SelfSlot:{{name='{}', value={{{}}}, is_immutable='{}', keyword_list='{}'}}".format(
+			self.name, self.value, self.is_immutable, self.keyword_list
 		)
 
 	def get_value(self, receiver, arg=None):
