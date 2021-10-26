@@ -15,6 +15,9 @@ class SelfSlot:
 		return "SelfSlot:{{name='{}', value={{{}}}, is_immutable='{}', keyword_list='{}'}}".format(
 			self.name, self.value, self.is_immutable, self.keyword_list
 		)
+	
+	def __repr__(self):
+		return self.__str__()
 
 	def get_value(self, receiver, arg=None):
 		if self.value.code:
