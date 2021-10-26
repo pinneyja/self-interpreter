@@ -13,7 +13,6 @@ class CodeNode(Node):
 	def interpret(self, context):
 		for expression in self.expressions:
 			result = expression.interpret(context)
-
 			if result.nonlocal_return:
 				if not self.contained_in_block:
 					result.set_nonlocal_return(False)
