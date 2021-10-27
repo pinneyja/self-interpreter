@@ -33,3 +33,5 @@ class KeywordMessageNode(Node):
 	def verify_syntax(self):
 		if self.expression:
 			self.expression.verify_syntax()
+		for value in self.value_list:
+			value.verify_syntax()

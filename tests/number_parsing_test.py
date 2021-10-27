@@ -1,46 +1,47 @@
 from parsing.Parser import *
 from Messages import *
+import pytest
 
 def test_bad_integer_bases():
 	parser = Parser()
-	try:
+
+	with pytest.raises(SelfParsingError, match=Messages.INVALID_BASE.value):
 		parser.parse("0r0")
+	with pytest.raises(SelfParsingError, match=Messages.INVALID_BASE.value):
 		parser.parse("1r0")
+	with pytest.raises(SelfParsingError, match=Messages.INVALID_BASE.value):
 		parser.parse("37r0")
-		assert False
-	except SelfParsingError as self_parsing_error:
-		assert str(self_parsing_error) == Messages.INVALID_BASE.value
 	
 def test_bad_integer_digits():
 	parser = Parser()
+
 	for base in range(2, 10):
 		for uni in range(ord('0') + base, ord('0') + 10):
-			try:
-				number_str = "{}r{}".format(base, chr(uni))
-				print(number_str)
+			# numeric digits
+			number_str = "{}r{}".format(base, chr(uni))
+			with pytest.raises(SelfParsingError, match=Messages.INVALID_DIGIT.value.format(chr(uni), base)):
 				parser.parse(number_str)
-				assert False
-			except SelfParsingError as exception:
-				assert str(exception) == Messages.INVALID_DIGIT.value.format(chr(uni), base)
 		for uni in range(ord('A'), ord('Z') + 1):
-			try:
-				number_str = "{}r{}".format(base, chr(uni))
+			# uppercase digits
+			number_str = "{}r{}".format(base, chr(uni))
+			with pytest.raises(SelfParsingError, match=Messages.INVALID_DIGIT.value.format(chr(uni), base)):
 				parser.parse(number_str)
-				number_str = "{}r{}".format(base, chr(uni + 20))
+			# lowercase digits
+			number_str = "{}r{}".format(base, chr(uni + 32))
+			with pytest.raises(SelfParsingError, match=Messages.INVALID_DIGIT.value.format(chr(uni + 32), base)):
 				parser.parse(number_str)
-				assert False
-			except SelfParsingError as exception:
-				assert str(exception) == Messages.INVALID_DIGIT.value.format(chr(uni), base)
+
 	for base in range(11, 37):
 		for uni in range(ord('A') + base - 10, ord('Z') + 1):
-			try:
-				number_str = "{}r{}".format(base, chr(uni))
+			# uppercase digits
+			number_str = "{}r{}".format(base, chr(uni))
+			with pytest.raises(SelfParsingError, match=Messages.INVALID_DIGIT.value.format(chr(uni), base)):
 				parser.parse(number_str)
-				number_str = "{}r{}".format(base, chr(uni + 20))
+			# lowercase digits
+			number_str = "{}r{}".format(base, chr(uni + 32))
+			with pytest.raises(SelfParsingError, match=Messages.INVALID_DIGIT.value.format(chr(uni + 32), base)):
 				parser.parse(number_str)
-				assert False
-			except SelfParsingError as exception:
-				assert str(exception) == Messages.INVALID_DIGIT.value.format(chr(uni), base)
+		
 
 def test_negative_with_base():
 	parser = Parser()
@@ -103,3 +104,9 @@ def test_regular_float():
 	expected_node = CodeNode([RealNode(0.00000000122)])
 	parsed_node = parser.parse("12.2e-10")
 	assert str(expected_node) == str(parsed_node)
+
+def test_integer_in_obj():
+	parser = Parser()
+
+	parsed_node = parser.parse("[| :x | x + x] value: 3")
+	assert parsed_node.expressions[0].value_list[0].value == 3

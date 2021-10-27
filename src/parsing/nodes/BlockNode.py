@@ -45,3 +45,4 @@ class BlockNode(Node):
 				["value:"] + ["With:"]*(len(interpreted_arg_slot_list) - 1))
 
 		return SelfObject(slots)
+	
