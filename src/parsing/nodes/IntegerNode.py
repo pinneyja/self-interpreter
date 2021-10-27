@@ -25,7 +25,6 @@ class IntegerNode(Node):
 
 			if (base < 2 or base > 36):
 				raise SelfParsingError(Messages.INVALID_BASE.value)
-
 			if (base <= 10):
 				for digit in digits:
 					if (ord(digit) >= ord('0') + base):
@@ -39,6 +38,7 @@ class IntegerNode(Node):
 						(ord(digit) >= ord('a') and
 						ord(digit) < ord('a') + base - 10))):
 						raise SelfParsingError(Messages.INVALID_DIGIT.value.format(digit, base))
+			
 			if (tokens[0].startswith('-')):
 				self.value = int('-' + digits, base)
 			else:
