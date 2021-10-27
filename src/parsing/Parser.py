@@ -55,6 +55,10 @@ class Parser:
 		+ rf'{exclude_larrow}[{normal_operators + t_LARROW}]{{1,2}}')
 	t_STRING = r'\'([^\\\']|\\[tbnfrva0\\\'"?]|\\x[0-9a-fA-F]{2}|\\d[0-9]{3}|\\o[0-7]{3})*\''
 
+	def t_COMMENT(self, t):
+		r'\"[^"]*\"'
+		pass
+
 	def t_FLOAT(self, t):
 		r'-?\d+(.\d+)?[eE][\+-]?\d+'
 		return t
