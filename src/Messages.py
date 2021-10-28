@@ -17,3 +17,4 @@ class Messages(Enum):
 	GENERIC_ERROR = "Unknown error occurred: {}."
 	INVALID_BASE = "Integers may only be written using bases from 2 to 36."
 	INVALID_DIGIT = "The digit '{}' is not appropriate for the base '{}'."
+	MULTIPLE_EXPRESSIONS_IN_SUB_EXPRESSION = "Cannot have multiple expressions inside a sub-expression"

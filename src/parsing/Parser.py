@@ -89,21 +89,21 @@ class Parser:
 		('nonassoc', 'IDENTIFIER')
 	)
 
-	# Productions		
+	# Productions
 	def p_code(self, p):
 		'''code : expression PERIOD code
 				| expression PERIOD
 				| expression'''
 		if(len(p) == 4):
-			p[3].expressions.insert(0, p[1])
+			p[3].expressions.insert(0, get_first_expression_if_method(p[1]))
 			p[0] = p[3]
 		else:
-			p[0] = CodeNode([p[1]])
+			p[0] = CodeNode([get_first_expression_if_method(p[1])])
 
 	def p_code_with_return(self, p):
 		'''code : CARET expression PERIOD
 				| CARET expression'''
-		p[0] = CodeNode([p[2]])
+		p[0] = CodeNode([get_first_expression_if_method(p[2])])
 		p[0].set_nonlocal_return(True)
 
 	def p_expression(self, p):
