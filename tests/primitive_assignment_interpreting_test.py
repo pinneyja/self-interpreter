@@ -34,6 +34,23 @@ def test_simple_assignment():
 
 	assert str(interpreted_result) == str(expected_result)
 
+def test_simple_assignment_in_code():
+	# (| m = (| x <- 1| x: 2) |) m x
+	interpreter = Interpreter()
+
+	keyword_message = KeywordMessageNode(None, ["x:"], [IntegerNode(2)])
+	inner_regular_object = RegularObjectNode(slot_list=[DataSlotNode("x", "<-", IntegerNode(1))], code=CodeNode([keyword_message]))
+	regular_object = RegularObjectNode(slot_list=[DataSlotNode("m", "=", inner_regular_object)])
+	inner_unary_message = UnaryMessageNode(regular_object, "m")
+	unary_message = UnaryMessageNode(inner_unary_message, "x")
+	parser_result = CodeNode([unary_message])
+	
+	expected_result = SelfInteger(2)
+
+	interpreted_result = interpreter.interpret(parser_result)
+
+	assert str(interpreted_result) == str(expected_result)
+
 def test_simple_parent_assignment():
 	# ((| x* <- 1 |) x: 2) x
 	interpreter = Interpreter()

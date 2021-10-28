@@ -41,7 +41,7 @@ def test_complicated_object():
 	
 	arg_slots = OrderedDict()
 	arg_slots["arg"] = SelfSlot("arg")
-	code = KeywordMessageNode(UnaryMessageNode(None, "self"), ["_Assignment:", "Value:"], [StringNode("y"), UnaryMessageNode(None, "arg")])
+	code = KeywordMessageNode(None, ["_Assignment:", "Value:"], [StringNode("y"), UnaryMessageNode(None, "arg")])
 	slot_list["y:"] = SelfSlot("y:", SelfObject(arg_slots=arg_slots, code=code), keyword_list=["y:"])
 	
 	expected_result = SelfObject(slot_list)
