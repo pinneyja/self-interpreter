@@ -40,7 +40,7 @@ class RegularObjectNode(Node):
 					arg_slot_name = "arg"
 					arg_slots = OrderedDict()
 					arg_slots[arg_slot_name] = SelfSlot(arg_slot_name)
-					code = KeywordMessageNode(UnaryMessageNode(None, "self"), ["_Assignment:", "Value:"], [StringNode(s.name), UnaryMessageNode(None, arg_slot_name)])
+					code = KeywordMessageNode(None, ["_Assignment:", "Value:"], [StringNode(s.name), UnaryMessageNode(None, arg_slot_name)])
 					interpreted_slot_list[slot_name] = SelfSlot(slot_name, SelfObject(arg_slots=arg_slots, code=code), keyword_list=[slot_name])
 		return SelfObject(interpreted_slot_list, interpreted_arg_slot_list, interpreted_parent_slot_list, self.code)
 	
