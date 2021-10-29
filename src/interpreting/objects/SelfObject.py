@@ -19,6 +19,8 @@ class SelfObject:
 		self.parent_slots = parent_slots
 		self.code = code
 		self.nonlocal_return = False
+		self.nonlocal_return_context = None
+		self.is_block_method = False
 
 	def __str__(self):
 		output  = "SelfObject:{Slots = ["

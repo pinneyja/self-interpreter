@@ -1,4 +1,5 @@
 from interpreting.Interpreter import Interpreter
+from parsing.Parser import Parser
 from interpreting.objects.SelfInteger import SelfInteger
 from parsing.nodes.CodeNode import CodeNode
 from parsing.nodes.BlockNode import BlockNode
@@ -31,7 +32,7 @@ def test_interprets_nested_return_block():
 
 	inner_code = CodeNode([IntegerNode(2)])
 	inner_code.set_nonlocal_return(True)
-	value_message = UnaryMessageNode(BlockNode(code=CodeNode([inner_code])), "value")
+	value_message = UnaryMessageNode(BlockNode(code=inner_code), "value")
 
 	outer_value_message = UnaryMessageNode(BlockNode(code=CodeNode([value_message, IntegerNode(9)])), "value")
 	code_node = CodeNode([outer_value_message])
@@ -47,7 +48,7 @@ def test_interprets_nested_return_block_in_object():
 
 	inner_code = CodeNode([IntegerNode(2)])
 	inner_code.set_nonlocal_return(True)
-	value_message = UnaryMessageNode(BlockNode(code=CodeNode([inner_code])), "value")
+	value_message = UnaryMessageNode(BlockNode(code=inner_code), "value")
 
 	outer_value_message = UnaryMessageNode(BlockNode(code=CodeNode([value_message, IntegerNode(9)])), "value")
 	code_node = CodeNode([outer_value_message, IntegerNode(10)])
@@ -68,7 +69,7 @@ def test_interprets_nested_return_block_in_object_in_code():
 
 	inner_code = CodeNode([IntegerNode(2)])
 	inner_code.set_nonlocal_return(True)
-	value_message = UnaryMessageNode(BlockNode(code=CodeNode([inner_code])), "value")
+	value_message = UnaryMessageNode(BlockNode(code=inner_code), "value")
 
 	outer_value_message = UnaryMessageNode(BlockNode(code=CodeNode([value_message, IntegerNode(9)])), "value")
 	code_node = CodeNode([outer_value_message, IntegerNode(10)])
@@ -206,3 +207,47 @@ def test_interprets_return_in_keyword_message_argument():
 	interpreted_block = interpreter.interpret(code)
 
 	assert str(expected_result) == str(interpreted_block)
+
+def test_methods_passing_around_block():
+	parser = Parser()
+	interpreter = Interpreter()
+
+	interpreted_block = interpreter.interpret(parser.parse("(| f: b = (| | s: b. 1). s: b = (| | t: b. 2). t: b = (| | b value. 3) |) f: [^4]. 5"))
+	assert str(SelfInteger(4)) == str(interpreted_block)
+
+	interpreted_block = interpreter.interpret(parser.parse("(| f: b = (| | s: [^100]. 1). s: b = (| | t: b. 2). t: b = (| | b value. 3) |) f: [^4]. 5"))
+	assert str(SelfInteger(5)) == str(interpreted_block)
+
+	interpreted_block = interpreter.interpret(parser.parse("(| f: b = (| | s: [^100]. 1). s: b = (| | t: b. 2). t: b = (| | b value. 3) |) f: [^4]"))
+	assert str(SelfInteger(100)) == str(interpreted_block)
+
+	interpreted_block = interpreter.interpret(parser.parse("(| f: b = (| | s: b. 1). s: b = (| | t: [^100]. 2). t: b = (| | b value. 3) |) f: [^4]"))
+	assert str(SelfInteger(1)) == str(interpreted_block)
+
+	interpreted_block = interpreter.interpret(parser.parse("(| f: b = (| | s: b. 1). s: b = (| | t: [^100]. 2). t: b = (| | b value. 3) |) f: [^4]. 5"))
+	assert str(SelfInteger(5)) == str(interpreted_block)
+
+	interpreted_block = interpreter.interpret(parser.parse("(| f: b = (| | s: b. 1). s: b = (| | t: b. 2). t: b = (| | [^100] value. 3) |) f: [^4]. 5"))
+	assert str(SelfInteger(5)) == str(interpreted_block)
+
+	interpreted_block = interpreter.interpret(parser.parse("(| f: b = (| | s: b. 1). s: b = (| | t: b. 2). t: b = (| | [^100] value. 3) |) f: [^4]"))
+	assert str(SelfInteger(1)) == str(interpreted_block)
+
+	interpreted_block = interpreter.interpret(parser.parse("(| f: b = (| | s: b). s: b = (| | t: b. 2). t: b = (| | [^100] value. 3) |) f: [^4]"))
+	assert str(SelfInteger(2)) == str(interpreted_block)
+
+	interpreted_block = interpreter.interpret(parser.parse("(| f: b = (| | s: b). s: b = (| | t: b). t: b = (| | [^100] value. 3) |) f: [^4]"))
+	assert str(SelfInteger(100)) == str(interpreted_block)
+
+	interpreted_block = interpreter.interpret(parser.parse("(| f: b = (| | s: b). s: b = (| | t: b). t: b = (| | 100. 3) |) f: [^4]"))
+	assert str(SelfInteger(3)) == str(interpreted_block)
+
+def test_returns_in_methods_are_not_actually_nonlocal_returns():
+	parser = Parser()
+	interpreter = Interpreter()
+
+	interpreted_block = interpreter.interpret(parser.parse("[^2] value. 3"))
+	assert str(SelfInteger(2)) == str(interpreted_block)
+
+	interpreted_block = interpreter.interpret(parser.parse("(| value = (| | ^2) |) value. 3"))
+	assert str(SelfInteger(3)) == str(interpreted_block)

@@ -26,6 +26,19 @@ def test_parses_code_block():
 	assert str(code_block) == str(parsed_code)
 	assert str(code_block) == str(parsed_code_pipe)
 
+def test_parses_code_block_with_return():
+	parser = Parser()
+
+	inner_code_block = CodeNode([IntegerNode(1), IntegerNode(2)])
+	inner_code_block.set_nonlocal_return(True)
+
+	code_block = CodeNode([BlockNode(code=inner_code_block)])
+	parsed_code = parser.parse("[1. ^2]")
+	parsed_code_pipe = parser.parse("[| | 1. ^2]")
+	
+	assert str(code_block) == str(parsed_code)
+	assert str(code_block) == str(parsed_code_pipe)
+
 def test_parses_code_args_block():
 	parser = Parser()
 

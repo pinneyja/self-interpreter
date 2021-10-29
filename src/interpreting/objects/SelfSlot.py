@@ -21,7 +21,7 @@ class SelfSlot:
 
 	def get_value(self, receiver, arg=None):
 		if self.value.code:
-			clone = copy.deepcopy(self.value)
+			clone = copy.copy(self.value)
 			clone.parent_slots["self"] = SelfSlot("self", receiver, True)
 			for key in clone.arg_slots:
 				clone.slots[key] = SelfSlot(key, arg)
@@ -33,7 +33,7 @@ class SelfSlot:
 		if not self.keyword_list:
 			raise SelfException(Messages.NOT_A_KEYWORD_SLOT.value)
 
-		clone = copy.deepcopy(self.value)
+		clone = copy.copy(self.value)
 		clone.parent_slots["self"] = SelfSlot("self", receiver, True)
 		for i in range(len(self.keyword_list)):
 			slot_name = list(self.value.arg_slots.keys())[i]

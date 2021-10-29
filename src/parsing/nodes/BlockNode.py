@@ -35,12 +35,16 @@ class BlockNode(Node):
 		slots = OrderedDict()
 		interpreted_parent_slot_list[""] = SelfSlot("", context, True)
 		if len(interpreted_arg_slot_list) == 0:
-			slots["value"] = SelfSlot("value", SelfObject(interpreted_slot_list, interpreted_arg_slot_list, interpreted_parent_slot_list, self.code), True)
+			block_method = SelfObject(interpreted_slot_list, interpreted_arg_slot_list, interpreted_parent_slot_list, self.code)
+			block_method.is_block_method = True
+			slots["value"] = SelfSlot("value", block_method, True)
 		else:
 			method_name = "value:" + "With:"*(len(interpreted_arg_slot_list) - 1)
+			block_method = SelfObject(interpreted_slot_list, interpreted_arg_slot_list, interpreted_parent_slot_list, self.code)
+			block_method.is_block_method = True
 			slots[method_name] = SelfSlot(
 				method_name, 
-				SelfObject(interpreted_slot_list, interpreted_arg_slot_list, interpreted_parent_slot_list, self.code), 
+				block_method,
 				True, 
 				["value:"] + ["With:"]*(len(interpreted_arg_slot_list) - 1))
 
