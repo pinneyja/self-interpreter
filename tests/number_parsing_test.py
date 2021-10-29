@@ -108,5 +108,15 @@ def test_regular_float():
 def test_integer_in_obj():
 	parser = Parser()
 
+	binary_msg = BinaryMessageNode(UnaryMessageNode(None, 'x'), '+', UnaryMessageNode(None, 'x'))
+	expression = BlockNode([ArgumentSlotNode('x')], CodeNode([binary_msg]))
+	keyword_msg = KeywordMessageNode(expression, ['value:'], [IntegerNode(3)])
+	expected_node = CodeNode([keyword_msg])
 	parsed_node = parser.parse("[| :x | x + x] value: 3")
-	assert parsed_node.expressions[0].value_list[0].value == 3
+	assert repr(parsed_node) == repr(expected_node)
+
+	binary_msg = BinaryMessageNode(IntegerNode(1), '+', IntegerNode(2))
+	block_node = BlockNode(None, CodeNode([binary_msg]))
+	expected_node = CodeNode([UnaryMessageNode(block_node, 'value')])
+	parsed_node = parser.parse("[1 + 2] value")
+	assert repr(parsed_node) == repr(expected_node)

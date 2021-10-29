@@ -9,8 +9,8 @@ class IntegerNode(Node):
 		super().__init__()
 		self.value = value
 
-	def __str__(self):
-		return "Integer: ('{}')".format(self.value)
+	def __repr__(self):
+		return "Integer: ('{}')".format(repr(self.value))
 
 	def interpret(self, context):
 		return SelfInteger(self.value)

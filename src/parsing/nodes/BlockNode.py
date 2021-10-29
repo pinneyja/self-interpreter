@@ -50,3 +50,8 @@ class BlockNode(Node):
 
 		return SelfObject(slots)
 	
+	def verify_syntax(self):
+		for s in self.slot_list:
+			s.verify_syntax()
+		if self.code:
+			self.code.verify_syntax()
