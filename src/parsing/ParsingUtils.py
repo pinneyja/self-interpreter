@@ -1,5 +1,7 @@
 from parsing.SelfParsingError import *
 from Messages import *
+from parsing.nodes.RegularObjectNode import *
+from parsing.nodes.CodeNode import *
 import re
 import codecs
 
@@ -23,3 +25,12 @@ def remove_backslash_from_backslash_question_mark(s):
 
 def raw_string_to_normal_string(s):
 	return codecs.decode(s, 'unicode_escape')
+
+def get_first_expression_if_method(object_node):
+	if type(object_node) is RegularObjectNode and object_node.code:
+		expressions = object_node.code.expressions
+		if len(expressions) != 1:
+			raise SelfParsingError(Messages.MULTIPLE_EXPRESSIONS_IN_SUB_EXPRESSION.value)
+		return expressions[0]
+	else:
+		return object_node
