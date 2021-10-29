@@ -14,13 +14,16 @@ class CodeNode(Node):
 		for expression in self.expressions:
 			result = expression.interpret(context)
 			if result.nonlocal_return:
-				if not self.contained_in_block:
+				if result.nonlocal_return_context is context:
 					result.set_nonlocal_return(False)
 
 				return result
 
-		if self.nonlocal_return:
+		if self.nonlocal_return and self.contained_in_block:
 			result.set_nonlocal_return(True)
+			result.nonlocal_return_context = context.parent_slots[""].value
+			while result.nonlocal_return_context.is_block_method:
+				result.nonlocal_return_context = result.nonlocal_return_context.parent_slots[""].value
 
 		return result
 
