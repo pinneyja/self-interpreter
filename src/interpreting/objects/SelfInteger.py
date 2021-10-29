@@ -1,4 +1,5 @@
 from .SelfSmallInt import *
+import warnings
 
 class SelfInteger(SelfSmallInt):
 	def __init__(self, value, slots = None):
@@ -8,6 +9,9 @@ class SelfInteger(SelfSmallInt):
 			self.slots.update(slots)
 
 		self.value = value
+		if (type(value) is not int):
+			warnings.warn(Messages.NUMBER_NOT_VERIFIED.value.format('integer', self.value))
+			self.value = int(value)
 
 	def __str__(self):
 		return f"SelfInteger: (value='{self.value}')"
