@@ -2,7 +2,7 @@ from enum import Enum
 
 class Messages(Enum):
 	LOOKUP_ERROR_GENERIC = "Lookup error"
-	LOOKUP_ERROR_NO_SLOT = "Lookup error: no matching slot"
+	LOOKUP_ERROR_NO_SLOT = "Lookup error, '{}' not found"
 	LOOKUP_ERROR_MULTIPLE_SLOTS = "Lookup error: more than one matching slot"
 	NOT_A_KEYWORD_SLOT = "Not a keyword slot"
 	INVALID_NUMBER_ARG_SLOTS = "Wrong number of argument slots"
@@ -19,3 +19,4 @@ class Messages(Enum):
 	INVALID_DIGIT = "The digit '{}' is not appropriate for the base '{}'."
 	NUMBER_NOT_VERIFIED = "The {} '{}' in the input was never verified."
 	MULTIPLE_EXPRESSIONS_IN_SUB_EXPRESSION = "Cannot have multiple expressions inside a sub-expression"
+	SLOT_ALREADY_DEFINED = "The slot '{}' is already defined."

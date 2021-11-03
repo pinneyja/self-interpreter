@@ -35,7 +35,8 @@ def test_nested_valid_unary_message_passing():
 	assert str(interpreted_result) == str(SelfInteger(1))
 
 def test_invalid_unary_message_passing():
-	# (|slot1 = 1|) slot1/slot2
+	# (|slot1 = 1|) slot1
+	# (|slot1 = 1|) slot2
 	interpreter = Interpreter()
 
 	slot_list = [ DataSlotNode("slot1", "=", IntegerNode(1)) ]
@@ -50,4 +51,4 @@ def test_invalid_unary_message_passing():
 		interpreted_result = interpreter.interpret(unary_message_2)
 		assert False
 	except SelfException as selfException:
-		assert str(selfException) == Messages.LOOKUP_ERROR_NO_SLOT.value
+		assert str(selfException) == Messages.LOOKUP_ERROR_NO_SLOT.value.format("slot2")

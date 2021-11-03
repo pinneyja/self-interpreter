@@ -43,7 +43,7 @@ def test_invalid_implicit_message_passing():
 		interpreted_result = interpreter.interpret(unary_message)
 		assert False
 	except SelfException as selfException:
-		assert str(selfException) == Messages.LOOKUP_ERROR_NO_SLOT.value
+		assert str(selfException) == Messages.LOOKUP_ERROR_NO_SLOT.value.format("int2")
 
 def test_implicit_binary_message_passing_in_method_slot():
 	# (| object1 = (| + arg = (| | 1) | + 5)|) object1

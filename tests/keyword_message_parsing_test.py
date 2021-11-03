@@ -1,5 +1,6 @@
 from parsing.Parser import *
 from parsing.nodes.IntegerNode import *
+from Messages import *
 
 def test_basic_keyword_message_parsing():
 	parser = Parser()
@@ -34,3 +35,11 @@ def test_keyword_message_precedence_chained_binary_message():
 	keyword_message = CodeNode([KeywordMessageNode(IntegerNode(1), ["x:", "Y:"], [IntegerNode(1), keyword_message_1])])
 	parsed_object = parser.parse("1 x: 1 Y: () z: 1 + 2 a: 5")
 	assert str(keyword_message) == str(parsed_object)
+
+def test_keyword_message_multiple_arguments():
+	parser = Parser()
+
+	try:
+		parser.parse("(| x: a Y: b Y: b = (| | a + b + b) |) x: 1 Y: 2 Y: 3")
+	except SelfParsingError as selfParsingError:
+		assert str(selfParsingError) == str(Messages.SLOT_ALREADY_DEFINED.value.format("b"))

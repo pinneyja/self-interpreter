@@ -41,7 +41,7 @@ def test_method_code_with_bad_unary_message():
 		interpreted_result = interpreter.interpret(parser_result)
 		assert False
 	except SelfException as selfException:
-		assert str(selfException) == Messages.LOOKUP_ERROR_NO_SLOT.value
+		assert str(selfException) == Messages.LOOKUP_ERROR_NO_SLOT.value.format("bogus")
 
 def test_method_code_parent_lookup():
 	# (|y = 5. x = (| | y)|) x
