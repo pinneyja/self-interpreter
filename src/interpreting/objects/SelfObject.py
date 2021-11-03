@@ -65,7 +65,7 @@ class SelfObject:
 		if len(M) == 1:
 			return M.pop()
 		elif len(M) == 0:
-			raise SelfException(Messages.LOOKUP_ERROR_NO_SLOT.value)
+			raise SelfException(Messages.LOOKUP_ERROR_NO_SLOT.value.format(sel))
 		else:
 			raise SelfException(Messages.LOOKUP_ERROR_MULTIPLE_SLOTS.value)
 
@@ -89,7 +89,7 @@ class SelfObject:
 	def set_slot(self, slot_name, value):
 		matching_slot = self.lookup(slot_name, set())
 		if matching_slot.is_immutable:
-			raise SelfException(Messages.LOOKUP_ERROR_NO_SLOT.value)
+			raise SelfException(Messages.LOOKUP_ERROR_NO_SLOT.value.format(slot_name + ":"))
 		else:
 			matching_slot.value = value
 

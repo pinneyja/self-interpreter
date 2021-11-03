@@ -56,3 +56,19 @@ def test_multiple_parent_slots():
 		assert False
 	except SelfException as selfException:
 		assert str(selfException) == Messages.LOOKUP_ERROR_MULTIPLE_SLOTS.value
+
+def test_parent_slot_loop():
+	# (lobby _AddSlots: (|x* = (| y* = lobby |) |)) z
+	interpreter = Interpreter()
+
+	inner_object = RegularObjectNode([ ParentSlotNode("y", "=", UnaryMessageNode(None, "lobby")) ])
+	outer_object = RegularObjectNode([ ParentSlotNode("x", "=", inner_object) ])
+	keyword_message = KeywordMessageNode(UnaryMessageNode(None, "lobby"), ["_AddSlots:"], [outer_object])
+	unary_message = UnaryMessageNode(keyword_message, "z")
+	parser_result = CodeNode([unary_message])
+
+	try:
+		interpreted_result = interpreter.interpret(parser_result)
+		assert False
+	except SelfException as selfException:
+		assert str(selfException) == Messages.LOOKUP_ERROR_NO_SLOT.value.format("z")

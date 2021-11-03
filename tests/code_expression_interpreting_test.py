@@ -22,4 +22,4 @@ def test_code_error():
 		interpreter.interpret(code)
 		assert False
 	except SelfException as exception:
-		assert str(exception) == Messages.LOOKUP_ERROR_NO_SLOT.value
+		assert str(exception) == Messages.LOOKUP_ERROR_NO_SLOT.value.format("x")

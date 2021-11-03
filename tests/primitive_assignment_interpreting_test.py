@@ -104,7 +104,7 @@ def test_does_not_assign_equals():
 		interpreted_result = interpreter.interpret(parser_result)
 		assert False
 	except SelfException as selfException:
-		assert str(selfException) == str(SelfException(Messages.LOOKUP_ERROR_NO_SLOT.value))
+		assert str(selfException) == str(SelfException(Messages.LOOKUP_ERROR_NO_SLOT.value.format("x:")))
 
 def test_simple_parent_assignment():
 	# ((| p* = (| x <- 1 |) |) x: 2) x
@@ -137,4 +137,4 @@ def test_does_not_assign_equals_primitive():
 		interpreted_result = interpreter.interpret(parser_result)
 		assert False
 	except SelfException as selfException:
-		assert str(selfException) == str(SelfException(Messages.LOOKUP_ERROR_NO_SLOT.value))
+		assert str(selfException) == str(SelfException(Messages.LOOKUP_ERROR_NO_SLOT.value.format("x:")))
