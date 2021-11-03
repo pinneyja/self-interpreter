@@ -12,7 +12,7 @@ class Messages(Enum):
 	SYNTAX_ERROR_AT_TOKEN = "Syntax error at token: \'{}\'"
 	INVALID_ESCAPE_CHARACTER = 'Invalid escape character: \'{}\'.'
 	EMPTY_OBJECT_WITH_ARG = "Empty objects cannot have arguments."
-	INVALID_PRIMITIVE_OPERANDS = "Invalid operands for primitive {} {}, {}"
+	INVALID_PRIMITIVE_OPERANDS = "Invalid operands for primitive '{}': '{}' and '{}'"
 	PRIMITIVE_NOT_DEFINED = "Primitive '{}' not defined"
 	GENERIC_ERROR = "Unknown error occurred: {}."
 	INVALID_BASE = "Integers may only be written using bases from 2 to 36."
