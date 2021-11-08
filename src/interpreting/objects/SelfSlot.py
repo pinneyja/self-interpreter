@@ -19,24 +19,14 @@ class SelfSlot:
 	def __repr__(self):
 		return self.__str__()
 
-	def get_value(self, receiver, arg=None):
+	def call_method(self, receiver, args=None):
 		if self.value.code:
 			clone = copy.copy(self.value)
 			clone.parent_slots["self"] = SelfSlot("self", receiver, True)
-			for key in clone.arg_slots:
-				clone.slots[key] = SelfSlot(key, arg)
-			return self.value.code.interpret(clone)
+			for i, key in enumerate(clone.arg_slots):
+				clone.slots[key] = SelfSlot(key, args[i])
+			result = self.value.code.interpret(clone)
+			clone.has_returned = True
+			return result
 		else:
 			return self.value
-
-	def call_keyword_method(self, receiver, arg_list):
-		if not self.keyword_list:
-			raise SelfException(Messages.NOT_A_KEYWORD_SLOT.value)
-
-		clone = copy.copy(self.value)
-		clone.parent_slots["self"] = SelfSlot("self", receiver, True)
-		for i in range(len(self.keyword_list)):
-			slot_name = list(self.value.arg_slots.keys())[i]
-			clone.slots[slot_name] = SelfSlot(slot_name, arg_list[i])
-
-		return self.value.code.interpret(clone)
