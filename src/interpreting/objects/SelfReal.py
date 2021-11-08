@@ -1,4 +1,5 @@
 from .SelfSmallInt import *
+import warnings
 
 class SelfReal(SelfObject):
 	def __init__(self, value, slots = None):

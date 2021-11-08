@@ -23,7 +23,7 @@ def handleAssignment(receiver, argument_list):
 	
 	return receiver
 
-def handleComparison(receiver, argument_list, operator, primitive_name):
+def handleIntComparison(receiver, argument_list, operator, primitive_name):
 	from interpreting.objects.SelfBoolean import SelfBoolean
 	from interpreting.objects.SelfInteger import SelfInteger
 	argument = argument_list[0]
@@ -36,23 +36,53 @@ def handleComparison(receiver, argument_list, operator, primitive_name):
 
 	return SelfBoolean(boolean_result)
 
+def handleFloatComparison(receiver, argument_list, operator, primitive_name):
+	from interpreting.objects.SelfBoolean import SelfBoolean
+	from interpreting.objects.SelfReal import SelfReal
+	argument = argument_list[0]
+	if type(receiver) is not SelfReal or type(argument) is not SelfReal:
+		raise SelfException(Messages.INVALID_PRIMITIVE_OPERANDS.value.format(primitive_name, receiver, argument))
+
+	float1 = receiver.get_value()
+	float2 = argument.get_value()
+	boolean_result = operator(float1, float2)
+
+	return SelfBoolean(boolean_result)
+
 def handleIntNE(receiver, argument_list):
-	return handleComparison(receiver, argument_list, lambda x, y: x != y, "_IntNE:")
+	return handleIntComparison(receiver, argument_list, lambda x, y: x != y, "_IntNE:")
 
 def handleIntLT(receiver, argument_list):
-	return handleComparison(receiver, argument_list, lambda x, y: x < y, "_IntLT:")
+	return handleIntComparison(receiver, argument_list, lambda x, y: x < y, "_IntLT:")
 
 def handleIntLE(receiver, argument_list):
-	return handleComparison(receiver, argument_list, lambda x, y: x <= y, "_IntLE:")
+	return handleIntComparison(receiver, argument_list, lambda x, y: x <= y, "_IntLE:")
 
 def handleIntEQ(receiver, argument_list):
-	return handleComparison(receiver, argument_list, lambda x, y: x == y, "_IntEQ:")
+	return handleIntComparison(receiver, argument_list, lambda x, y: x == y, "_IntEQ:")
 
 def handleIntGT(receiver, argument_list):
-	return handleComparison(receiver, argument_list, lambda x, y: x > y, "_IntGT:")
+	return handleIntComparison(receiver, argument_list, lambda x, y: x > y, "_IntGT:")
 
 def handleIntGE(receiver, argument_list):
-	return handleComparison(receiver, argument_list, lambda x, y: x >= y, "_IntGE:")
+	return handleIntComparison(receiver, argument_list, lambda x, y: x >= y, "_IntGE:")
+
+def handleFloatEQ(receiver, argument_list):
+	return handleFloatComparison(receiver, argument_list, lambda x, y: x == y, "_FloatEQ:")
+
+def handleEq(receiver, argument_list):
+	from interpreting.objects.SelfInteger import SelfInteger
+	from interpreting.objects.SelfReal import SelfReal
+	from interpreting.objects.SelfBoolean import SelfBoolean
+
+	if type(receiver) != type(argument_list[0]):
+		return SelfBoolean(False)
+	elif type(receiver) is SelfInteger:
+		return handleIntEQ(receiver, argument_list)
+	elif type(receiver) is SelfReal:
+		return handleFloatEQ(receiver, argument_list)
+	else:
+		return SelfBoolean(receiver == argument_list[0])
 
 primitive_dict = {
 	'_IntAdd:' : handleIntAdd,
@@ -63,5 +93,6 @@ primitive_dict = {
 	'_IntLE:' : handleIntLE,
 	'_IntEQ:' : handleIntEQ,
 	'_IntGT:' : handleIntGT,
-	'_IntGE:' : handleIntGE
+	'_IntGE:' : handleIntGE,
+	'_Eq:' : handleEq
 }
