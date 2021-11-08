@@ -1,16 +1,26 @@
 from .Node import Node
+from Messages import *
+from interpreting.objects.SelfException import *
 
 class CodeNode(Node):
 	def __init__(self, expressions):
 		super().__init__()
 		self.expressions = expressions
-		self.nonlocal_return = False
+		self.has_caret = False
 		self.contained_in_block = False
 
 	def __str__(self):
-		return f"Code: (expression_list={self.expressions}, nonlocal_return={self.nonlocal_return})"
+		return f"Code: (expression_list={self.expressions}, has_caret={self.has_caret})"
 
 	def interpret(self, context):
+		return_context = None
+		if self.contained_in_block:
+			return_context = context.parent_slots[""].value
+			while return_context.is_block_method:
+				return_context = return_context.parent_slots[""].value
+			if return_context.has_returned:
+				raise SelfException(Messages.ENCLOSING_METHOD_HAS_RETURNED.value)
+
 		for expression in self.expressions:
 			result = expression.interpret(context)
 			if result.nonlocal_return:
@@ -19,11 +29,10 @@ class CodeNode(Node):
 
 				return result
 
-		if self.nonlocal_return and self.contained_in_block:
+		result.nonlocal_return_context = return_context
+
+		if self.has_caret and self.contained_in_block:
 			result.set_nonlocal_return(True)
-			result.nonlocal_return_context = context.parent_slots[""].value
-			while result.nonlocal_return_context.is_block_method:
-				result.nonlocal_return_context = result.nonlocal_return_context.parent_slots[""].value
 
 		return result
 
@@ -31,8 +40,8 @@ class CodeNode(Node):
 		for expression in self.expressions:
 			expression.verify_syntax()
 
-	def set_nonlocal_return(self, nonlocal_return):
-		self.nonlocal_return = nonlocal_return
+	def set_has_caret(self, has_caret):
+		self.has_caret = has_caret
 
 	def set_contained_in_block(self, contained_in_block):
 		self.contained_in_block = contained_in_block

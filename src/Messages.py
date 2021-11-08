@@ -20,3 +20,4 @@ class Messages(Enum):
 	NUMBER_NOT_VERIFIED = "The {} '{}' in the input was never verified."
 	MULTIPLE_EXPRESSIONS_IN_SUB_EXPRESSION = "Cannot have multiple expressions inside a sub-expression"
 	SLOT_ALREADY_DEFINED = "The slot '{}' is already defined."
+	ENCLOSING_METHOD_HAS_RETURNED = "Cannot run a block after its enclosing method has returned."

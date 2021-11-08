@@ -30,7 +30,7 @@ def test_parses_code_block_with_return():
 	parser = Parser()
 
 	inner_code_block = CodeNode([IntegerNode(1), IntegerNode(2)])
-	inner_code_block.set_nonlocal_return(True)
+	inner_code_block.set_has_caret(True)
 
 	code_block = CodeNode([BlockNode(code=inner_code_block)])
 	parsed_code = parser.parse("[1. ^2]")

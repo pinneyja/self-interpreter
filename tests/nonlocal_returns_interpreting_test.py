@@ -11,13 +11,16 @@ from parsing.nodes.UnaryMessageNode import UnaryMessageNode
 from parsing.nodes.BinaryMessageNode import BinaryMessageNode
 from parsing.nodes.KeywordMessageNode import KeywordMessageNode
 from parsing.nodes.RegularObjectNode import RegularObjectNode
+from interpreting.objects.SelfException import *
+from Messages import *
+import pytest
 
 def test_interprets_basic_return_block():
 	# [^ 2] value
 	interpreter = Interpreter()
 
 	inner_code = CodeNode([IntegerNode(2)])
-	inner_code.set_nonlocal_return(True)
+	inner_code.set_has_caret(True)
 	value_message = UnaryMessageNode(BlockNode(code=CodeNode([inner_code])), "value")
 	code_node = CodeNode([value_message])
 
@@ -31,7 +34,7 @@ def test_interprets_nested_return_block():
 	interpreter = Interpreter()
 
 	inner_code = CodeNode([IntegerNode(2)])
-	inner_code.set_nonlocal_return(True)
+	inner_code.set_has_caret(True)
 	value_message = UnaryMessageNode(BlockNode(code=inner_code), "value")
 
 	outer_value_message = UnaryMessageNode(BlockNode(code=CodeNode([value_message, IntegerNode(9)])), "value")
@@ -47,7 +50,7 @@ def test_interprets_nested_return_block_in_object():
 	interpreter = Interpreter()
 
 	inner_code = CodeNode([IntegerNode(2)])
-	inner_code.set_nonlocal_return(True)
+	inner_code.set_has_caret(True)
 	value_message = UnaryMessageNode(BlockNode(code=inner_code), "value")
 
 	outer_value_message = UnaryMessageNode(BlockNode(code=CodeNode([value_message, IntegerNode(9)])), "value")
@@ -68,7 +71,7 @@ def test_interprets_nested_return_block_in_object_in_code():
 	interpreter = Interpreter()
 
 	inner_code = CodeNode([IntegerNode(2)])
-	inner_code.set_nonlocal_return(True)
+	inner_code.set_has_caret(True)
 	value_message = UnaryMessageNode(BlockNode(code=inner_code), "value")
 
 	outer_value_message = UnaryMessageNode(BlockNode(code=CodeNode([value_message, IntegerNode(9)])), "value")
@@ -96,7 +99,7 @@ def test_interprets_passed_in_return_block():
 	slot_list = [KeywordSlotNode(["doIt:"], inner_regular_object, ["b"])]
 	containing_object = RegularObjectNode(slot_list=slot_list)
 	in_block_code_node = CodeNode([UnaryMessageNode(None, "arg")])
-	in_block_code_node.set_nonlocal_return(True)
+	in_block_code_node.set_has_caret(True)
 	arg_block = BlockNode([ArgumentSlotNode("arg")], in_block_code_node)
 	keyword_message = KeywordMessageNode(containing_object, ["doIt:"], [arg_block])
 	code = CodeNode([keyword_message])
@@ -111,7 +114,7 @@ def test_interprets_return_in_unary_message():
 	interpreter = Interpreter()
 
 	inner_code = CodeNode([IntegerNode(1)])
-	inner_code.set_nonlocal_return(True)
+	inner_code.set_has_caret(True)
 	inner_block = BlockNode(code=inner_code)
 	containing_object = UnaryMessageNode(inner_block, "value")
 	unary_message = UnaryMessageNode(containing_object, "badMessage")
@@ -127,12 +130,12 @@ def test_interprets_return_in_binary_message_receiver():
 	interpreter = Interpreter()
 
 	inner_code = CodeNode([IntegerNode(1)])
-	inner_code.set_nonlocal_return(True)
+	inner_code.set_has_caret(True)
 	inner_block = BlockNode(code=inner_code)
 	containing_object = UnaryMessageNode(inner_block, "value")
 
 	inner_code2 = CodeNode([IntegerNode(2)])
-	inner_code2.set_nonlocal_return(True)
+	inner_code2.set_has_caret(True)
 	inner_block2 = BlockNode(code=inner_code2)
 	containing_object2 = UnaryMessageNode(inner_block2, "value")
 
@@ -153,7 +156,7 @@ def test_interprets_return_in_binary_message_argument():
 	containing_object = UnaryMessageNode(inner_block, "value")
 
 	inner_code2 = CodeNode([IntegerNode(2)])
-	inner_code2.set_nonlocal_return(True)
+	inner_code2.set_has_caret(True)
 	inner_block2 = BlockNode(code=inner_code2)
 	containing_object2 = UnaryMessageNode(inner_block2, "value")
 
@@ -170,12 +173,12 @@ def test_interprets_return_in_keyword_message_receiver():
 	interpreter = Interpreter()
 
 	inner_code = CodeNode([IntegerNode(1)])
-	inner_code.set_nonlocal_return(True)
+	inner_code.set_has_caret(True)
 	inner_block = BlockNode(code=inner_code)
 	containing_object = UnaryMessageNode(inner_block, "value")
 
 	inner_code2 = CodeNode([IntegerNode(2)])
-	inner_code2.set_nonlocal_return(True)
+	inner_code2.set_has_caret(True)
 	inner_block2 = BlockNode(code=inner_code2)
 	containing_object2 = UnaryMessageNode(inner_block2, "value")
 
@@ -196,7 +199,7 @@ def test_interprets_return_in_keyword_message_argument():
 	containing_object = UnaryMessageNode(inner_block, "value")
 
 	inner_code2 = CodeNode([IntegerNode(2)])
-	inner_code2.set_nonlocal_return(True)
+	inner_code2.set_has_caret(True)
 	inner_block2 = BlockNode(code=inner_code2)
 	containing_object2 = UnaryMessageNode(inner_block2, "value")
 
@@ -251,3 +254,16 @@ def test_returns_in_methods_are_not_actually_nonlocal_returns():
 
 	interpreted_block = interpreter.interpret(parser.parse("(| value = (| | ^2) |) value. 3"))
 	assert str(SelfInteger(3)) == str(interpreted_block)
+
+def test_raises_exception_when_block_executed_after_enclosing_method_returns():
+	parser = Parser()
+	interpreter = Interpreter()
+
+	with pytest.raises(SelfException, match=Messages.ENCLOSING_METHOD_HAS_RETURNED.value):
+		interpreted_block = interpreter.interpret(parser.parse("(| m = (| | [^2]) |) m value"))
+
+	with pytest.raises(SelfException, match=Messages.ENCLOSING_METHOD_HAS_RETURNED.value):
+		interpreted_block = interpreter.interpret(parser.parse("(| m = (| | [2]) |) m value"))
+
+	with pytest.raises(SelfException, match=Messages.ENCLOSING_METHOD_HAS_RETURNED.value):
+		interpreted_block = interpreter.interpret(parser.parse("(|x = (| | y value: 2 With: 3). y = (| | [|:a. :b| a + b]) |) x"))

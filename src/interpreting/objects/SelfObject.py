@@ -21,6 +21,7 @@ class SelfObject:
 		self.nonlocal_return = False
 		self.nonlocal_return_context = None
 		self.is_block_method = False
+		self.has_returned = False
 
 	def __str__(self):
 		output  = "SelfObject:{Slots = ["
@@ -39,12 +40,12 @@ class SelfObject:
 	def pass_unary_message(self, message):
 		matching_slot = self.lookup(message, set())
 		
-		return matching_slot.get_value(self)
+		return matching_slot.call_method(self)
 
 	def pass_binary_message(self, message, arg):
 		matching_slot = self.lookup(message, set())
 
-		return matching_slot.get_value(self, arg)
+		return matching_slot.call_method(self, [arg])
 
 	def pass_keyword_message(self, message, arg_list):
 		if message[0] == '_':
@@ -52,7 +53,7 @@ class SelfObject:
 
 		matching_slot = self.lookup(message, set())
 
-		return matching_slot.call_keyword_method(self, arg_list)
+		return matching_slot.call_method(self, arg_list)
 
 	def handle_primitive_method(self, message, arg_list):
 		if message not in primitive_dict:

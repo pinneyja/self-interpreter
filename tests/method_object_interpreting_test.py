@@ -67,3 +67,10 @@ def test_method_code_parent_lookup_using_self_slot():
 	interpreted_result = interpreter.interpret(parser_result)
 
 	assert str(interpreted_result) == str(expected_result)
+
+def test_call_method_multiple_times():
+	parser = Parser()
+	interpreter = Interpreter()
+
+	interpreted_block = interpreter.interpret(parser.parse("_AddSlots: (|y = (| | 1 + 2 ) |). y. y"))
+	assert str(SelfInteger(3)) == str(interpreted_block)
