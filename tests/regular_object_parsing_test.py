@@ -22,7 +22,7 @@ def test_parses_one_number_slot():
 	one_slot_obj_larrow = CodeNode([RegularObjectNode([DataSlotNode("x","<-",IntegerNode(5))])])
 
 	parsed_one_slot_obj = parser.parse("(|x|)")
-	parsed_one_slot_obj_dot = parser.parse("(|x.|)")
+	parsed_one_slot_obj_dot = parser.parse("(|x. |)")
 	parsed_one_slot_obj_equal = parser.parse("(|x=5|)")
 	parsed_one_slot_obj_equal_dot = parser.parse("(|x=5.|)")
 	parsed_one_slot_obj_larrow = parser.parse("(|x<-5|)")

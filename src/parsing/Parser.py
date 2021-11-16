@@ -12,6 +12,7 @@ from parsing.nodes.BinaryMessageNode import *
 from parsing.nodes.ArgumentSlotNode import *
 from parsing.nodes.CodeNode import *
 from parsing.nodes.RealNode import *
+from parsing.nodes.ResendNode import *
 from parsing.ParsingUtils import *
 from parsing.SelfParsingError import *
 from Messages import *
@@ -31,7 +32,8 @@ class Parser:
 
 	tokens = ('INTEGER','LPAREN','RPAREN','LBRAC','RBRAC','PIPE','PERIOD','LARROW','EQUAL',
 			'IDENTIFIER', 'PARENT_NAME', 'SMALL_KEYWORD', 'CAP_KEYWORD', 'OPERATOR',
-			'COLON', 'STRING', 'CARET', 'DECIMAL', 'FLOAT', 'INTEGER_WITH_BASE')
+			'COLON', 'STRING', 'CARET', 'DECIMAL', 'FLOAT', 'INTEGER_WITH_BASE', 'RESEND_UNARY',
+			'RESEND_BINARY')
 
 	t_LPAREN = r'\('
 	t_RPAREN = r'\)'
@@ -54,6 +56,18 @@ class Parser:
 		+ rf'{exclude_larrow}[{all_operators}]{{2}}|'
 		+ rf'{exclude_larrow}[{normal_operators + t_LARROW}]{{1,2}}')
 	t_STRING = r'\'([^\\\']|\\[tbnfrva0\\\'"?]|\\x[0-9a-fA-F]{2}|\\d[0-9]{3}|\\o[0-7]{3})*\''
+
+	def t_RESEND_UNARY(self, t):
+		r'[a-z_][a-zA-Z0-9_]*[.][a-z_][a-zA-Z0-9_]*'
+		tokens = re.split('\\.', t.value)
+		t.value = (tokens[0], tokens[1])
+		return t
+
+	def t_RESEND_BINARY(self, t):
+		r'[a-z_][a-zA-Z0-9_]*[.][!@#$%^&*-+=~/?<>,;|\\]+'
+		tokens = re.split('\\.', t.value)
+		t.value = (tokens[0], tokens[1])
+		return t
 
 	def t_COMMENT(self, t):
 		r'\"[^"]*\"'
@@ -124,6 +138,10 @@ class Parser:
 			p[0] = UnaryMessageNode(p[1], p[2])
 		else:
 			p[0] = UnaryMessageNode(None, p[1])
+
+	def p_unary_message_resend(self, p):
+		'unary-message : RESEND_UNARY'
+		p[0] = UnaryMessageNode(ResendNode(p[1][0]), p[1][1])
 			
 	def p_constant_object(self, p):
 		'constant : object'
@@ -168,6 +186,10 @@ class Parser:
 			p[0] = BinaryMessageNode(p[1], p[2], p[3])
 		else:
 			p[0] = BinaryMessageNode(None, p[1], p[2])
+
+	def p_binary_message_resend(self, p):
+		'binary-message : RESEND_BINARY expression %prec LOWER'
+		p[0] = BinaryMessageNode(ResendNode(p[1][0]), p[1][1], p[2])
 
 	def p_keyword_message(self, p):
 		'''keyword-message : expression SMALL_KEYWORD expression cap-keyword-expression-list
