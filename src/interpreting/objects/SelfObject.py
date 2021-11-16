@@ -55,7 +55,7 @@ class SelfObject:
 
 		return matching_slot.call_method(self, arg_list)
 
-	def handle_primitive_method(self, message, arg_list):
+	def handle_primitive_method(self, message, arg_list=None):
 		if message not in primitive_dict:
 			raise SelfException(Messages.PRIMITIVE_NOT_DEFINED.value.format(message))
 
@@ -68,7 +68,7 @@ class SelfObject:
 		elif len(M) == 0:
 			raise SelfException(Messages.LOOKUP_ERROR_NO_SLOT.value.format(sel))
 		else:
-			raise SelfException(Messages.LOOKUP_ERROR_MULTIPLE_SLOTS.value)
+			raise SelfException(Messages.LOOKUP_ERROR_MULTIPLE_SLOTS.value.format(sel))
 
 	def lookup_helper(self, sel, V):
 		if self in V:
@@ -96,3 +96,23 @@ class SelfObject:
 
 	def set_nonlocal_return(self, nonlocal_return):
 		self.nonlocal_return = nonlocal_return
+
+	def undirected_resend(self, sel, arg_list=None):
+		M = self.parent_lookup(sel, set())
+		if len(M) == 0:
+			raise SelfException(Messages.LOOKUP_ERROR_NO_SLOT.value.format(sel))
+		elif len(M) == 1:
+			matching_slot = M.pop()
+			return matching_slot.call_method(self, arg_list)
+		else:
+			raise SelfException(Messages.LOOKUP_ERROR_MULTIPLE_SLOTS.value.format(sel))
+
+	def directed_resend(self, del_name, sel, arg_list=None):
+		if del_name not in self.slots and del_name not in self.parent_slots:
+			raise SelfException(Messages.NO_DELEGATEE_SLOT.value.format(del_name))
+		
+		if del_name in self.slots:
+			matching_slot = self.slots[del_name].call_method(None).lookup(sel, set())
+		else:
+			matching_slot = self.parent_slots[del_name].call_method(None).lookup(sel, set())
+		return matching_slot.call_method(self, arg_list)

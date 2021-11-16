@@ -55,7 +55,7 @@ def test_multiple_parent_slots():
 		interpreted_result = interpreter.interpret(parser_result)
 		assert False
 	except SelfException as selfException:
-		assert str(selfException) == Messages.LOOKUP_ERROR_MULTIPLE_SLOTS.value
+		assert str(selfException) == Messages.LOOKUP_ERROR_MULTIPLE_SLOTS.value.format("x")
 
 def test_parent_slot_loop():
 	# (lobby _AddSlots: (|x* = (| y* = lobby |) |)) z

@@ -3,7 +3,7 @@ from enum import Enum
 class Messages(Enum):
 	LOOKUP_ERROR_GENERIC = "Lookup error"
 	LOOKUP_ERROR_NO_SLOT = "Lookup error, '{}' not found"
-	LOOKUP_ERROR_MULTIPLE_SLOTS = "Lookup error: more than one matching slot"
+	LOOKUP_ERROR_MULTIPLE_SLOTS = "Lookup error: more than one matching slot for the name '{}'"
 	NOT_A_KEYWORD_SLOT = "Not a keyword slot"
 	INVALID_NUMBER_ARG_SLOTS = "Wrong number of argument slots"
 	INVALID_UNARY_RECEIVER = "Attempted to pass unary message to invalid receiver."
@@ -20,4 +20,5 @@ class Messages(Enum):
 	NUMBER_NOT_VERIFIED = "The {} '{}' in the input was never verified."
 	MULTIPLE_EXPRESSIONS_IN_SUB_EXPRESSION = "Cannot have multiple expressions inside a sub-expression"
 	SLOT_ALREADY_DEFINED = "The slot '{}' is already defined."
+	NO_DELEGATEE_SLOT = "No '{}' delegatee slot was found."
 	ENCLOSING_METHOD_HAS_RETURNED = "Cannot run a block after its enclosing method has returned."
