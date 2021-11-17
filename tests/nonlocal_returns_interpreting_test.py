@@ -58,7 +58,7 @@ def test_interprets_nested_return_block_in_object():
 
 	inner_regular_object = RegularObjectNode(code=code_node)
 	slot_list = [DataSlotNode("y", "=", inner_regular_object)]
-	containing_object = RegularObjectNode(slot_list=slot_list)
+	containing_object = RegularObjectNode(slot_list_annotated=slot_list)
 	outer_unary_message = UnaryMessageNode(containing_object, "y")
 
 	expected_result = SelfInteger(2)
@@ -79,7 +79,7 @@ def test_interprets_nested_return_block_in_object_in_code():
 
 	inner_regular_object = RegularObjectNode(code=code_node)
 	slot_list = [DataSlotNode("y", "=", inner_regular_object)]
-	containing_object = RegularObjectNode(slot_list=slot_list)
+	containing_object = RegularObjectNode(slot_list_annotated=slot_list)
 	outer_unary_message = UnaryMessageNode(containing_object, "y")
 	code = CodeNode([outer_unary_message, IntegerNode(11)])
 
@@ -97,7 +97,7 @@ def test_interprets_passed_in_return_block():
 	inner_code_node = CodeNode([BinaryMessageNode(part1, "+", part2)])
 	inner_regular_object = RegularObjectNode(code=inner_code_node)
 	slot_list = [KeywordSlotNode(["doIt:"], inner_regular_object, ["b"])]
-	containing_object = RegularObjectNode(slot_list=slot_list)
+	containing_object = RegularObjectNode(slot_list_annotated=slot_list)
 	in_block_code_node = CodeNode([UnaryMessageNode(None, "arg")])
 	in_block_code_node.set_has_caret(True)
 	arg_block = BlockNode([ArgumentSlotNode("arg")], in_block_code_node)

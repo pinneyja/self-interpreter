@@ -1,3 +1,4 @@
+from parsing.utils.AnnotatedList import *
 from parsing.nodes.BlockNode import *
 from parsing.nodes.IntegerNode import *
 from parsing.nodes.StringNode import *
@@ -13,7 +14,7 @@ from parsing.nodes.ArgumentSlotNode import *
 from parsing.nodes.CodeNode import *
 from parsing.nodes.RealNode import *
 from parsing.nodes.ResendNode import *
-from parsing.ParsingUtils import *
+from parsing.utils.ParsingUtils import *
 from parsing.SelfParsingError import *
 from Messages import *
 import ply.lex as lex
@@ -30,7 +31,7 @@ class Parser:
 
 	# Tokens
 
-	tokens = ('INTEGER','LPAREN','RPAREN','LBRAC','RBRAC','PIPE','PERIOD','LARROW','EQUAL',
+	tokens = ('INTEGER','LPAREN','RPAREN','LBRAC','RBRAC','LCBRAC','RCBRAC','PIPE','PERIOD','LARROW','EQUAL',
 			'IDENTIFIER', 'PARENT_NAME', 'SMALL_KEYWORD', 'CAP_KEYWORD', 'OPERATOR',
 			'COLON', 'STRING', 'CARET', 'DECIMAL', 'FLOAT', 'INTEGER_WITH_BASE', 'RESEND_UNARY',
 			'RESEND_BINARY')
@@ -39,6 +40,8 @@ class Parser:
 	t_RPAREN = r'\)'
 	t_LBRAC = r'\['
 	t_RBRAC = r'\]'
+	t_LCBRAC = r'\{'
+	t_RCBRAC = r'\}'
 	t_PIPE = r'\|'
 	t_PERIOD = r'\.'
 	t_LARROW = r'<\-'
@@ -169,7 +172,11 @@ class Parser:
 		p[0] = RealNode(p[1])
 
 	def p_constant_string(self, p):
-		'constant : STRING'
+		'constant : string'
+		p[0] = p[1]
+
+	def p_string(self, p):
+		'string : STRING'
 		s = p[1][1:-1]
 		s = convert_d_and_o_escapes_to_x(s)
 		s = remove_backslash_from_backslash_question_mark(s)
@@ -219,6 +226,14 @@ class Parser:
 		'regular-object : LPAREN RPAREN'
 		p[0] = RegularObjectNode()
 
+	def p_regular_object_slotted_annotated(self, p):
+		'''regular-object : LPAREN PIPE object-annotation slot-list PIPE RPAREN
+						  | LPAREN PIPE object-annotation slot-list PIPE code RPAREN'''
+		if(len(p) == 7):
+			p[0] = RegularObjectNode(p[4], object_annotation=p[3])
+		else:
+			p[0] = RegularObjectNode(p[4], p[6], object_annotation=p[3])
+
 	def p_regular_object_slotted(self, p):
 		'''regular-object : LPAREN PIPE slot-list PIPE RPAREN
 						  | LPAREN PIPE slot-list PIPE code RPAREN'''
@@ -226,6 +241,10 @@ class Parser:
 			p[0] = RegularObjectNode(p[3])
 		else:
 			p[0] = RegularObjectNode(p[3], p[5])
+
+	def p_object_annotation(self, p):
+		'object-annotation : LCBRAC RCBRAC EQUAL string'
+		p[0] = p[4]
 
 	def p_block(self, p):
 		'''block : LBRAC PIPE slot-list PIPE RBRAC
@@ -241,18 +260,33 @@ class Parser:
 		else:
 			p[0] = BlockNode()
 
-	def p_slot_list(self, p):
-		'''slot-list : slot PERIOD slot-list
-					 | slot
+	def p_slot_list_unannotated(self, p):
+		'''slot-list : unannotated-slot-list slot-list
 					 | '''
+		if len(p) == 1:
+			p[0] = []
+		else:
+			p[0] = p[1] + p[2]
+
+	def p_slot_list_annotated(self, p):
+		'slot-list : annotated-slot-list slot-list'
+		p[2].insert(0, p[1])
+		p[0] = p[2]
+
+	def p_annotated_slot_list(self, p):
+		'annotated-slot-list : LCBRAC string slot-list RCBRAC'
+		p[0] = AnnotatedList(p[2], p[3])
+
+	def p_unannotated_slot_list(self, p):
+		'''unannotated-slot-list : slot PERIOD unannotated-slot-list
+								 | slot %prec HIGHER
+								 | slot PERIOD %prec HIGHER'''
 		if(len(p) == 4):
 			new_slot_list = p[3]
 			new_slot_list.insert(0, p[1])
 			p[0] = new_slot_list
-		elif(len(p) == 2):
-			p[0] = [p[1]]
 		else:
-			p[0] = []
+			p[0] = [p[1]]
 
 	def p_slot(self, p):
 		'''slot : data-slot
@@ -262,7 +296,7 @@ class Parser:
 		p[0] = p[1]
 
 	def p_data_slot(self, p):
-		'''data-slot : slot-name
+		'''data-slot : slot-name %prec HIGHER
 					 | slot-name LARROW expression
 					 | slot-name EQUAL expression'''
 		if p[1][-1] == "*":

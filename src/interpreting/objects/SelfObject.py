@@ -4,7 +4,7 @@ from .SelfException import *
 from Messages import *
 
 class SelfObject:
-	def __init__(self, slots = None, arg_slots = None, parent_slots = None, code = None):
+	def __init__(self, slots = None, arg_slots = None, parent_slots = None, code = None, annotation = None):
 		if slots is None:
 			slots = OrderedDict()
 		
@@ -17,6 +17,7 @@ class SelfObject:
 		self.slots = slots
 		self.arg_slots = arg_slots
 		self.parent_slots = parent_slots
+		self.annotation = annotation
 		self.code = code
 		self.nonlocal_return = False
 		self.nonlocal_return_context = None
@@ -24,7 +25,7 @@ class SelfObject:
 		self.has_returned = False
 
 	def __str__(self):
-		output  = "SelfObject:{Slots = ["
+		output  = f"SelfObject:{{ '{self.annotation}' Slots = ["
 		for key in self.slots:
 			output += "{},".format(self.slots[key])
 		output += "], Argument Slots = ["
