@@ -8,7 +8,7 @@ def test_empty_assignment():
 	# ((| x |) x: 2) x
 	interpreter = Interpreter()
 
-	original_object = RegularObjectNode(slot_list=[DataSlotNode("x")])
+	original_object = RegularObjectNode(slot_list_annotated=[DataSlotNode("x")])
 	keyword_message = KeywordMessageNode(original_object, ["x:"], [IntegerNode(2)])
 	unary_message = UnaryMessageNode(keyword_message, "x")
 	parser_result = CodeNode([unary_message])
@@ -23,7 +23,7 @@ def test_simple_assignment():
 	# ((| x <- 1 |) x: 2) x
 	interpreter = Interpreter()
 
-	original_object = RegularObjectNode(slot_list=[DataSlotNode("x", "<-", IntegerNode(1))])
+	original_object = RegularObjectNode(slot_list_annotated=[DataSlotNode("x", "<-", IntegerNode(1))])
 	keyword_message = KeywordMessageNode(original_object, ["x:"], [IntegerNode(2)])
 	unary_message = UnaryMessageNode(keyword_message, "x")
 	parser_result = CodeNode([unary_message])
@@ -39,8 +39,8 @@ def test_simple_assignment_in_code():
 	interpreter = Interpreter()
 
 	keyword_message = KeywordMessageNode(None, ["x:"], [IntegerNode(2)])
-	inner_regular_object = RegularObjectNode(slot_list=[DataSlotNode("x", "<-", IntegerNode(1))], code=CodeNode([keyword_message]))
-	regular_object = RegularObjectNode(slot_list=[DataSlotNode("m", "=", inner_regular_object)])
+	inner_regular_object = RegularObjectNode(slot_list_annotated=[DataSlotNode("x", "<-", IntegerNode(1))], code=CodeNode([keyword_message]))
+	regular_object = RegularObjectNode(slot_list_annotated=[DataSlotNode("m", "=", inner_regular_object)])
 	inner_unary_message = UnaryMessageNode(regular_object, "m")
 	unary_message = UnaryMessageNode(inner_unary_message, "x")
 	parser_result = CodeNode([unary_message])
@@ -55,7 +55,7 @@ def test_simple_parent_assignment():
 	# ((| x* <- 1 |) x: 2) x
 	interpreter = Interpreter()
 
-	original_object = RegularObjectNode(slot_list=[ParentSlotNode("x", "<-", IntegerNode(1))])
+	original_object = RegularObjectNode(slot_list_annotated=[ParentSlotNode("x", "<-", IntegerNode(1))])
 	keyword_message = KeywordMessageNode(original_object, ["x:"], [IntegerNode(2)])
 	unary_message = UnaryMessageNode(keyword_message, "x")
 	parser_result = CodeNode([unary_message])
@@ -71,7 +71,7 @@ def test_more_complex_assignment():
 	# (((| x <- 1 |) x: (| a = 6. b = 2|))) x) b
 	interpreter = Interpreter()
 
-	original_object = RegularObjectNode(slot_list=[DataSlotNode("x", "<-", IntegerNode(1))])
+	original_object = RegularObjectNode(slot_list_annotated=[DataSlotNode("x", "<-", IntegerNode(1))])
 	new_assignment = RegularObjectNode([DataSlotNode("a", "=", IntegerNode(6)), DataSlotNode("b", "=", IntegerNode(2))])
 	keyword_message = KeywordMessageNode(original_object, ["x:"], [new_assignment])
 	unary_message = UnaryMessageNode(keyword_message, "x")
@@ -93,7 +93,7 @@ def test_does_not_assign_equals():
 	# ((| x = 1 |) x: 2) x
 	interpreter = Interpreter()
 
-	original_object = RegularObjectNode(slot_list=[DataSlotNode("x", "=", IntegerNode(1))])
+	original_object = RegularObjectNode(slot_list_annotated=[DataSlotNode("x", "=", IntegerNode(1))])
 	keyword_message = KeywordMessageNode(original_object, ["x:"], [IntegerNode(2)])
 	unary_message = UnaryMessageNode(keyword_message, "x")
 	parser_result = CodeNode([unary_message])
@@ -110,8 +110,8 @@ def test_simple_parent_assignment():
 	# ((| p* = (| x <- 1 |) |) x: 2) x
 	interpreter = Interpreter()
 
-	parent_object = RegularObjectNode(slot_list=[DataSlotNode("x", "<-", IntegerNode(1))])
-	original_object = RegularObjectNode(slot_list=[ParentSlotNode("p", "<-", parent_object)])
+	parent_object = RegularObjectNode(slot_list_annotated=[DataSlotNode("x", "<-", IntegerNode(1))])
+	original_object = RegularObjectNode(slot_list_annotated=[ParentSlotNode("p", "<-", parent_object)])
 	keyword_message = KeywordMessageNode(original_object, ["x:"], [IntegerNode(2)])
 	unary_message = UnaryMessageNode(keyword_message, "x")
 	parser_result = CodeNode([unary_message])
@@ -126,7 +126,7 @@ def test_does_not_assign_equals_primitive():
 	# ((| x = 1 |) _Assignment: 'x' Value: 2) x
 	interpreter = Interpreter()
 
-	original_object = RegularObjectNode(slot_list=[DataSlotNode("x", "=", IntegerNode(1))])
+	original_object = RegularObjectNode(slot_list_annotated=[DataSlotNode("x", "=", IntegerNode(1))])
 	keyword_message = KeywordMessageNode(original_object, ["_Assignment:", "Value:"], [StringNode("x"), IntegerNode(2)])
 	unary_message = UnaryMessageNode(keyword_message, "x")
 	parser_result = CodeNode([unary_message])

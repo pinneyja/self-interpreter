@@ -5,13 +5,17 @@ from parsing.nodes.ArgumentSlotNode import *
 from parsing.nodes.ParentSlotNode import *
 
 class BlockNode(Node):
-	def __init__(self, slot_list=None, code=None):
+	def __init__(self, slot_list=None, code=None, annotated_slot_lists=None):
 		super().__init__()
 
 		if slot_list is None:
 			slot_list = []
 
+		if annotated_slot_lists is None:
+			annotated_slot_lists = []
+
 		self.slot_list = slot_list
+		self.annotated_slot_lists=annotated_slot_lists
 		self.code = code
 
 		if self.code:

@@ -1,7 +1,6 @@
 from interpreting.Interpreter import *
 from parsing.Parser import *
 
-
 def main():
 	isParser = False
 	parser = Parser()
@@ -26,5 +25,4 @@ def main():
 			print(selfParsingError)
 		except SelfException as selfException:
 			print(selfException)
-
 main()

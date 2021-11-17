@@ -1,4 +1,4 @@
-from parsing.ParsingUtils import *
+from parsing.utils.ParsingUtils import *
 from parsing.SelfParsingError import *
 import pytest
 

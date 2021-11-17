@@ -9,7 +9,7 @@ class IntegerNode(Node):
 		super().__init__()
 		self.value = value
 
-	def __repr__(self):
+	def __str__(self):
 		return "Integer: ('{}')".format(repr(self.value))
 
 	def interpret(self, context):
