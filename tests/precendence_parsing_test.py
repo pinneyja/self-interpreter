@@ -119,3 +119,30 @@ def test_binary_and_unary_message_precedence():
 	parsed_object = parser.parse("1 m1 + 2 m2")
 
 	assert str(binary_message) == str(parsed_object)
+
+def test_assignment_has_higher_precedence_than_unary():
+	parser = Parser()
+
+	unary_message_node = UnaryMessageNode(UnaryMessageNode(None, "m1"), "m2")
+	object_node = CodeNode([RegularObjectNode([DataSlotNode("x", "=", unary_message_node)])])
+	parsed_object = parser.parse("(| x = m1 m2 |)")
+
+	assert str(object_node) == str(parsed_object)
+
+def test_assignment_has_higher_precedence_than_binary():
+	parser = Parser()
+
+	binary_message_node = BinaryMessageNode(IntegerNode(1), "+", IntegerNode(2))
+	object_node = CodeNode([RegularObjectNode([DataSlotNode("x", "=", binary_message_node)])])
+	parsed_object = parser.parse("(| x = 1 + 2 |)")
+
+	assert str(object_node) == str(parsed_object)
+
+def test_assignment_has_higher_precedence_than_keyword():
+	parser = Parser()
+
+	keyword_message_node = KeywordMessageNode(IntegerNode(1), ["m:"], [IntegerNode(2)])
+	object_node = CodeNode([RegularObjectNode([DataSlotNode("x", "=", keyword_message_node)])])
+	parsed_object = parser.parse("(| x = 1 m: 2 |)")
+
+	assert str(object_node) == str(parsed_object)
