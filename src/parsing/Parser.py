@@ -100,9 +100,9 @@ class Parser:
 	precedence = (
 		('right', 'LOWER'),
 		('right', 'HIGHER'),
+		('nonassoc', 'LARROW','EQUAL'),
 		('right', 'SMALL_KEYWORD', 'CAP_KEYWORD'),
 		('left', 'OPERATOR'),
-		('nonassoc', 'LARROW','EQUAL'),
 		('nonassoc', 'IDENTIFIER')
 	)
 
