@@ -84,6 +84,10 @@ def handleEq(receiver, argument_list):
 	else:
 		return SelfBoolean(receiver == argument_list[0])
 
+def handleIdentityHash(receiver, argument_list=None):
+	from interpreting.objects.SelfInteger import SelfInteger
+	return SelfInteger(hash(receiver))
+
 primitive_dict = {
 	'_IntAdd:' : handleIntAdd,
 	'_AddSlots:' : handleAddSlots,
@@ -94,5 +98,6 @@ primitive_dict = {
 	'_IntEQ:' : handleIntEQ,
 	'_IntGT:' : handleIntGT,
 	'_IntGE:' : handleIntGE,
-	'_Eq:' : handleEq
+	'_Eq:' : handleEq,
+	'_IdentityHash' : handleIdentityHash
 }

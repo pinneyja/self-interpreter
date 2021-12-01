@@ -39,6 +39,8 @@ class SelfObject:
 		return output + "}"
 
 	def pass_unary_message(self, message):
+		if message[0] == '_':
+			return self.handle_primitive_method(message)
 		matching_slot = self.lookup(message, set())
 		
 		return matching_slot.call_method(self)

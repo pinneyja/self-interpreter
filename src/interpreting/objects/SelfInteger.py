@@ -16,5 +16,8 @@ class SelfInteger(SelfSmallInt):
 	def __str__(self):
 		return f"SelfInteger: (value='{self.value}')"
 
+	def __hash__(self):
+		return hash(self.value)
+
 	def get_value(self):
 		return self.value
