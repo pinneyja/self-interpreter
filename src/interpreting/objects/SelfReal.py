@@ -16,5 +16,8 @@ class SelfReal(SelfObject):
 	def __str__(self):
 		return f"SelfReal: (value='{self.value}')"
 
+	def __hash__(self):
+		return hash(self.value)
+
 	def get_value(self):
 		return self.value
