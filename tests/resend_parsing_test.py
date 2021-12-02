@@ -26,6 +26,18 @@ def test_undirected_resend():
 
 	assert str(parsed_node) == str(expected_node)
 
+	resend_msg = KeywordMessageNode(ResendNode('resend'), ["x:", "Y:"], [IntegerNode(1), IntegerNode(2)])
+	x_slot = DataSlotNode('x', '=', RegularObjectNode(None, CodeNode([resend_msg])))
+	binary_msg = BinaryMessageNode(UnaryMessageNode(None, 'a'), '+', UnaryMessageNode(None, 'b'))
+	keyword_method_object = RegularObjectNode(None, CodeNode([binary_msg]))
+	keyword_slot = KeywordSlotNode(["x:", "Y:"], keyword_method_object, ["a", "b"])
+	p_slot = ParentSlotNode('p', '=', RegularObjectNode([keyword_slot]))
+	expected_node = CodeNode([UnaryMessageNode(RegularObjectNode([p_slot, x_slot]), 'x')])
+
+	parsed_node = parser.parse("(| p* = (| x: a Y: b = (| | a + b) |). x = (| | resend.x: 1 Y: 2) |) x")
+
+	assert str(parsed_node) == str(expected_node)
+
 def test_directed_resend():
 	parser = Parser()
 
@@ -43,5 +55,17 @@ def test_directed_resend():
 	expected_node = CodeNode([UnaryMessageNode(RegularObjectNode([p_slot, x_slot]), 'x')])
 
 	parsed_node = parser.parse("(| p* = (| + arg = (| | arg) |). x = (| | p.+5) |) x")
+
+	assert str(parsed_node) == str(expected_node)
+
+	resend_msg = KeywordMessageNode(ResendNode('p'), ["x:", "Y:"], [IntegerNode(1), IntegerNode(2)])
+	x_slot = DataSlotNode('x', '=', RegularObjectNode(None, CodeNode([resend_msg])))
+	binary_msg = BinaryMessageNode(UnaryMessageNode(None, 'a'), '+', UnaryMessageNode(None, 'b'))
+	keyword_method_object = RegularObjectNode(None, CodeNode([binary_msg]))
+	keyword_slot = KeywordSlotNode(["x:", "Y:"], keyword_method_object, ["a", "b"])
+	p_slot = ParentSlotNode('p', '=', RegularObjectNode([keyword_slot]))
+	expected_node = CodeNode([UnaryMessageNode(RegularObjectNode([p_slot, x_slot]), 'x')])
+
+	parsed_node = parser.parse("(| p* = (| x: a Y: b = (| | a + b) |). x = (| | p.x: 1 Y: 2) |) x")
 
 	assert str(parsed_node) == str(expected_node)

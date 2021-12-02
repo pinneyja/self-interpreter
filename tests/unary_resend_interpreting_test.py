@@ -1,9 +1,3 @@
-from parsing.nodes.DataSlotNode import *
-from parsing.nodes.UnaryMessageNode import *
-from parsing.nodes.ParentSlotNode import *
-from parsing.nodes.CodeNode import *
-from parsing.nodes.RegularObjectNode import *
-from parsing.nodes.IntegerNode import *
 from interpreting.Interpreter import *
 
 def test_undirected_resend():
@@ -14,17 +8,6 @@ def test_undirected_resend():
 
 	x_slot = DataSlotNode('x', '=', RegularObjectNode(None, CodeNode([UnaryMessageNode(ResendNode("resend"), 'a')])))
 	p_slot = ParentSlotNode('p', '=', RegularObjectNode([DataSlotNode('a', '=', IntegerNode(1))]))
-	parsed_node = CodeNode([UnaryMessageNode(RegularObjectNode([p_slot, x_slot]), 'x')])
-	interpreted_node = interpreter.interpret(parsed_node)
-
-	assert str(interpreted_node) == str(expected_output)
-
-	# (| p* = (| + arg = (| | arg) |). x = (| | resend.+ 5) |) x
-	expected_output = SelfInteger(5)
-	
-	x_slot = DataSlotNode('x', '=', RegularObjectNode(None, CodeNode([BinaryMessageNode(ResendNode("resend"), '+', IntegerNode(5))])))
-	binary_slot = BinarySlotNode('+', RegularObjectNode(None, CodeNode([UnaryMessageNode(None, 'arg')])), 'arg')
-	p_slot = ParentSlotNode('p', '=', RegularObjectNode([binary_slot]))
 	parsed_node = CodeNode([UnaryMessageNode(RegularObjectNode([p_slot, x_slot]), 'x')])
 	interpreted_node = interpreter.interpret(parsed_node)
 
@@ -77,32 +60,6 @@ def test_directed_resend():
 
 	m_slot = DataSlotNode('m', '=', RegularObjectNode(None, CodeNode([UnaryMessageNode(ResendNode("p2"), 'x')])))
 	parsed_node = CodeNode([UnaryMessageNode(RegularObjectNode([p1_slot, p2_slot, m_slot]), 'm')])
-	interpreted_node = interpreter.interpret(parsed_node)
-
-	assert str(interpreted_node) == str(expected_output)
-
-	# (| p1* = (| + arg = (| | arg) |). p2* = (| + arg = (| | arg + 1) |). x = (| | p1.+ 5) |) x
-	expected_output = SelfInteger(5)
-	
-	x_slot = DataSlotNode('x', '=', RegularObjectNode(None, CodeNode([BinaryMessageNode(ResendNode("p1"), '+', IntegerNode(5))])))
-	binary_slot1 = BinarySlotNode('+', RegularObjectNode(None, CodeNode([UnaryMessageNode(None, 'arg')])), 'arg')
-	p1_slot = ParentSlotNode('p1', '=', RegularObjectNode([binary_slot1]))
-	binary_slot2 = BinarySlotNode('+', RegularObjectNode(None, CodeNode([BinaryMessageNode(UnaryMessageNode(None, 'arg'), '+', IntegerNode(1))])), 'arg')
-	p2_slot = ParentSlotNode('p2', '=', RegularObjectNode([binary_slot2]))
-	parsed_node = CodeNode([UnaryMessageNode(RegularObjectNode([p1_slot, p2_slot, x_slot]), 'x')])
-	interpreted_node = interpreter.interpret(parsed_node)
-
-	assert str(interpreted_node) == str(expected_output)
-
-	# (| p1* = (| + arg = (| | arg) |). p2* = (| + arg = (| | arg + 1) |). x = (| | p2.+ 5) |) x
-	expected_output = SelfInteger(6)
-	
-	x_slot = DataSlotNode('x', '=', RegularObjectNode(None, CodeNode([BinaryMessageNode(ResendNode("p2"), '+', IntegerNode(5))])))
-	binary_slot1 = BinarySlotNode('+', RegularObjectNode(None, CodeNode([UnaryMessageNode(None, 'arg')])), 'arg')
-	p1_slot = ParentSlotNode('p1', '=', RegularObjectNode([binary_slot1]))
-	binary_slot2 = BinarySlotNode('+', RegularObjectNode(None, CodeNode([BinaryMessageNode(UnaryMessageNode(None, 'arg'), '+', IntegerNode(1))])), 'arg')
-	p2_slot = ParentSlotNode('p2', '=', RegularObjectNode([binary_slot2]))
-	parsed_node = CodeNode([UnaryMessageNode(RegularObjectNode([p1_slot, p2_slot, x_slot]), 'x')])
 	interpreted_node = interpreter.interpret(parsed_node)
 
 	assert str(interpreted_node) == str(expected_output)

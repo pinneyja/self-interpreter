@@ -1,5 +1,6 @@
 from .Node import Node
 from .DataSlotNode import DataSlotNode
+from .ResendNode import ResendNode
 
 class KeywordMessageNode(Node):
 	def __init__(self, expression, keyword_list, value_list):
@@ -13,7 +14,7 @@ class KeywordMessageNode(Node):
 		return f"KeywordMessage: (expression={self.expression} keyword_list={self.keyword_list} value_list={self.value_list})"
 
 	def interpret(self, context):
-		if self.expression:
+		if self.expression and type(self.expression) is not ResendNode:
 			interpreted = self.expression.interpret(context)
 			if interpreted.nonlocal_return:
 				return interpreted
@@ -26,6 +27,11 @@ class KeywordMessageNode(Node):
 			arg_list.append(interpreted_arg_value)
 
 		if self.expression:
+			if type(self.expression) is ResendNode:
+				if (self.expression.receiver == "resend"):
+					return context.parent_slots["self"].call_method(None).undirected_resend(self.message, arg_list)
+				else:
+					return context.parent_slots["self"].call_method(None).directed_resend(self.expression.receiver, self.message, arg_list)
 			return interpreted.pass_keyword_message(self.message, arg_list)
 		else:
 			return context.pass_keyword_message(self.message, arg_list)

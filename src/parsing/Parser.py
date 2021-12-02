@@ -34,7 +34,7 @@ class Parser:
 	tokens = ('INTEGER','LPAREN','RPAREN','LBRAC','RBRAC','LCBRAC','RCBRAC','PIPE','PERIOD','LARROW','EQUAL',
 			'IDENTIFIER', 'PARENT_NAME', 'SMALL_KEYWORD', 'CAP_KEYWORD', 'OPERATOR',
 			'COLON', 'STRING', 'CARET', 'DECIMAL', 'FLOAT', 'INTEGER_WITH_BASE', 'RESEND_UNARY',
-			'RESEND_BINARY')
+			'RESEND_BINARY', 'RESEND_KEYWORD')
 
 	t_LPAREN = r'\('
 	t_RPAREN = r'\)'
@@ -59,6 +59,12 @@ class Parser:
 		+ rf'{exclude_larrow}[{all_operators}]{{2}}|'
 		+ rf'{exclude_larrow}[{normal_operators + t_LARROW}]{{1,2}}')
 	t_STRING = r'\'([^\\\']|\\[tbnfrva0\\\'"?]|\\x[0-9a-fA-F]{2}|\\d[0-9]{3}|\\o[0-7]{3})*\''
+
+	def t_RESEND_KEYWORD(self, t):
+		r'[a-z_][a-zA-Z0-9_]*[.][a-z_][a-zA-Z0-9_]*[:]'
+		tokens = re.split('\\.', t.value)
+		t.value = (tokens[0], tokens[1])
+		return t
 
 	def t_RESEND_UNARY(self, t):
 		r'[a-z_][a-zA-Z0-9_]*[.][a-z_][a-zA-Z0-9_]*'
@@ -209,6 +215,12 @@ class Parser:
 			p[3][0].insert(0, p[1])
 			p[3][1].insert(0, p[2])
 			p[0] = KeywordMessageNode(None, p[3][0], p[3][1])
+	
+	def p_keyword_message_resend(self, p):
+		'keyword-message : RESEND_KEYWORD expression cap-keyword-expression-list'
+		p[3][0].insert(0, p[1][1])
+		p[3][1].insert(0, p[2])
+		p[0] = KeywordMessageNode(ResendNode(p[1][0]), p[3][0], p[3][1])
 
 	def p_cap_keyword_expression_list(self, p):
 		'''cap-keyword-expression-list : CAP_KEYWORD expression cap-keyword-expression-list %prec LOWER
