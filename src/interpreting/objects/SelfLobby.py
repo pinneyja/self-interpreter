@@ -3,6 +3,8 @@ from .SelfSlot import *
 from .SelfInteger import *
 
 class SelfLobby(SelfObject):
+	lobby = None
+
 	def __init__(self):
 		slots = {
 			"lobby": SelfSlot("lobby", self),
@@ -15,6 +17,7 @@ class SelfLobby(SelfObject):
 			"globals": SelfSlot("globals", SelfObject()),
 			}
 		super().__init__(slots, parent_slots=parent_slots)
+		SelfLobby.lobby = self
 
 	def __str__(self):
 		output  = "SelfObject:{Slots = ["
@@ -31,3 +34,9 @@ class SelfLobby(SelfObject):
 			output += "{},".format(self.parent_slots[key])
 		output += "], code={{{}}}".format(self.code)
 		return output + "}"
+
+	@staticmethod
+	def get_lobby():
+		if not SelfLobby.lobby:
+			SelfLobby.lobby = SelfLobby()
+		return SelfLobby.lobby
