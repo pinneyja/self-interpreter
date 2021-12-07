@@ -5,8 +5,10 @@ from Messages import *
 from interpreting.objects.SelfLobby import *
 
 class Interpreter:
-	def __init__(self):
-		self.lobby = SelfLobby()
+	def __init__(self, lobby=None):
+		if not lobby:
+			lobby = SelfLobby()
+		self.lobby = lobby
 
 	def interpret(self, syntaxTree):
 		try:
