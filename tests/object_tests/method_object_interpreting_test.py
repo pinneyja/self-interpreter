@@ -74,3 +74,10 @@ def test_call_method_multiple_times():
 
 	interpreted_block = interpreter.interpret(parser.parse("_AddSlots: (|y = (| | 1 + 2 ) |). y. y"))
 	assert str(SelfInteger(3)) == str(interpreted_block)
+
+def test_call_method_multiple_times_with_local_variable():
+	parser = Parser()
+	interpreter = Interpreter()
+
+	interpreted_block = interpreter.interpret(parser.parse("_AddSlots: (|y = (| x <- 1| x: (x + 1). x) |). y. y"))
+	assert str(SelfInteger(2)) == str(interpreted_block)

@@ -2,6 +2,7 @@ from typing import OrderedDict
 from Messages import Messages
 from interpreting.primitive_methods.PrimitiveDictionary import primitive_dict
 from interpreting.objects.SelfException import SelfException
+import copy
 
 class SelfObject:
 	def __init__(self, slots = None, arg_slots = None, parent_slots = None, code = None, annotation = None):
@@ -121,7 +122,8 @@ class SelfObject:
 		return matching_slot.call_method(self, arg_list)
 
 	def clone(self):
-		new_slots = {key : self.slots[key].clone() for key in self.slots}
-		new_arg_slots = {key : self.arg_slots[key].clone() for key in self.arg_slots}
-		new_parent_slots = {key : self.parent_slots[key].clone() for key in self.parent_slots}
-		return SelfObject(new_slots, new_arg_slots, new_parent_slots, self.code, self.annotation)
+		clone = copy.copy(self)
+		clone.slots = {key : self.slots[key].clone() for key in self.slots}
+		clone.arg_slots = {key : self.arg_slots[key].clone() for key in self.arg_slots}
+		clone.parent_slots = {key : self.parent_slots[key].clone() for key in self.parent_slots}
+		return clone
