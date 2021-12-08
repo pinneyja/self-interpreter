@@ -119,3 +119,9 @@ class SelfObject:
 		else:
 			matching_slot = self.parent_slots[del_name].call_method(None).lookup(sel, set())
 		return matching_slot.call_method(self, arg_list)
+
+	def clone(self):
+		new_slots = {key : self.slots[key].clone() for key in self.slots}
+		new_arg_slots = {key : self.arg_slots[key].clone() for key in self.arg_slots}
+		new_parent_slots = {key : self.parent_slots[key].clone() for key in self.parent_slots}
+		return SelfObject(new_slots, new_arg_slots, new_parent_slots, self.code, self.annotation)

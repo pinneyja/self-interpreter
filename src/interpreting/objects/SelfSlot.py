@@ -31,3 +31,6 @@ class SelfSlot:
 			return result
 		else:
 			return self.value
+
+	def clone(self):
+		return copy.copy(self)

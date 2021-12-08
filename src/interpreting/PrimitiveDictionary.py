@@ -15,12 +15,12 @@ def handleAddSlots(receiver, argument_list):
 	receiver.parent_slots.update(slot_container_object.parent_slots)
 
 	return receiver
-	
+
 def handleAssignment(receiver, argument_list):
 	slot_name = argument_list[0].value
 	value = argument_list[1]
 	receiver.set_slot(slot_name, value)
-	
+
 	return receiver
 
 def handleRunScript(receiver, argument_list):
@@ -40,7 +40,7 @@ def handleRunScript(receiver, argument_list):
 		with open(receiver.value, 'r') as script_file:
 			file_contents = script_file.read().strip()
 			file_lines = re.split('\n', file_contents)
-			
+
 			file_line_index = 0
 			current_expression = ""
 			start_new_expression = False
@@ -137,6 +137,16 @@ def handleIsString(receiver, argument_list=None):
 	else:
 		return receiver
 
+def handleClone(receiver, argument_list=None):
+	from interpreting.objects.SelfInteger import SelfInteger
+	from interpreting.objects.SelfReal import SelfReal
+	from interpreting.objects.SelfString import SelfString
+
+	if type(receiver) == SelfInteger or type(receiver) == SelfReal or type(receiver) == SelfString:
+		return receiver
+
+	return receiver.clone()
+
 primitive_dict = {
 	'_IntAdd:' : handleIntAdd,
 	'_AddSlots:' : handleAddSlots,
@@ -150,5 +160,7 @@ primitive_dict = {
 	'_IntGE:' : handleIntGE,
 	'_Eq:' : handleEq,
 	'_IdentityHash' : handleIdentityHash,
-	'_IsStringIfFalse:' : handleIsString
+	'_IsStringIfFalse:' : handleIsString,
+	'_IdentityHash' : handleIdentityHash,
+	'_Clone' : handleClone
 }
