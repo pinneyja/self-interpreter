@@ -15,7 +15,10 @@ def main():
 			s = input('>>> ')
 		except EOFError:
 			break
-		
+
+		if s.strip() == "":
+			continue
+
 		try:
 			if isParser:
 				print(parser.parse(s))

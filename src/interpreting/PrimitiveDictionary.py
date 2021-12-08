@@ -129,6 +129,14 @@ def handleIdentityHash(receiver, argument_list=None):
 	from interpreting.objects.SelfInteger import SelfInteger
 	return SelfInteger(hash(receiver))
 
+def handleIsString(receiver, argument_list=None):
+	from interpreting.objects.SelfString import SelfString
+
+	if type(receiver) is not SelfString:
+		return argument_list[0].pass_unary_message("value")
+	else:
+		return receiver
+
 primitive_dict = {
 	'_IntAdd:' : handleIntAdd,
 	'_AddSlots:' : handleAddSlots,
@@ -141,5 +149,6 @@ primitive_dict = {
 	'_IntGT:' : handleIntGT,
 	'_IntGE:' : handleIntGE,
 	'_Eq:' : handleEq,
-	'_IdentityHash' : handleIdentityHash
+	'_IdentityHash' : handleIdentityHash,
+	'_IsStringIfFalse:' : handleIsString
 }
