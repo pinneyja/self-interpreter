@@ -19,7 +19,7 @@ class SelfSlot:
 
 	def call_method(self, receiver, args=None):
 		if self.value.code:
-			clone = copy.copy(self.value)
+			clone = self.value.clone()
 			clone.parent_slots["self"] = SelfSlot("self", receiver, True)
 			for i, key in enumerate(clone.arg_slots):
 				clone.slots[key] = SelfSlot(key, args[i])
