@@ -1,14 +1,14 @@
 from parsing.Parser import *
 from parsing.nodes.CodeNode import *
-from parsing.nodes.UnaryMessageNode import *
-from parsing.nodes.BinaryMessageNode import *
-from parsing.nodes.KeywordMessageNode import *
-from parsing.nodes.ArgumentSlotNode import *
-from parsing.nodes.DataSlotNode import *
-from parsing.nodes.BinarySlotNode import *
-from parsing.nodes.KeywordSlotNode import *
-from parsing.nodes.IntegerNode import *
-from parsing.nodes.RegularObjectNode import *
+from parsing.nodes.message_nodes.UnaryMessageNode import *
+from parsing.nodes.message_nodes.BinaryMessageNode import *
+from parsing.nodes.message_nodes.KeywordMessageNode import *
+from parsing.nodes.slot_nodes.ArgumentSlotNode import *
+from parsing.nodes.slot_nodes.DataSlotNode import *
+from parsing.nodes.slot_nodes.BinarySlotNode import *
+from parsing.nodes.slot_nodes.KeywordSlotNode import *
+from parsing.nodes.object_nodes.IntegerNode import *
+from parsing.nodes.object_nodes.RegularObjectNode import *
 
 
 def test_parses_all_left_right():

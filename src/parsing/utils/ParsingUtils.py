@@ -1,9 +1,8 @@
-from parsing.SelfParsingError import *
-from Messages import *
-from parsing.nodes.RegularObjectNode import *
-from parsing.nodes.CodeNode import *
 import re
 import codecs
+from Messages import Messages
+from parsing.SelfParsingError import SelfParsingError
+from parsing.nodes.object_nodes.RegularObjectNode import RegularObjectNode
 
 def convert_d_and_o_escapes_to_x(s):
 	pattern = r'\\(d|o)[0-9]{3}'

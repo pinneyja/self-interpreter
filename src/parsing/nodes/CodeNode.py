@@ -1,6 +1,6 @@
-from .Node import Node
-from Messages import *
-from interpreting.objects.SelfException import *
+from Messages import Messages
+from interpreting.objects.SelfException import SelfException
+from parsing.nodes.Node import Node
 
 class CodeNode(Node):
 	def __init__(self, expressions):

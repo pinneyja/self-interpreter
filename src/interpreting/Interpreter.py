@@ -2,7 +2,7 @@ from parsing.Parser import *
 from interpreting.objects.SelfException import *
 from parsing.SelfParsingError import *
 from Messages import *
-from interpreting.objects.SelfLobby import *
+from interpreting.objects.primitive_objects.SelfLobby import *
 
 class Interpreter:
 	def __init__(self, lobby=None):
