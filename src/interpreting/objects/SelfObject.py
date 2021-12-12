@@ -1,7 +1,7 @@
 from typing import OrderedDict
-from interpreting.PrimitiveDictionary import primitive_dict
-from .SelfException import *
-from Messages import *
+from Messages import Messages
+from interpreting.primitive_methods.PrimitiveDictionary import primitive_dict
+from interpreting.objects.SelfException import SelfException
 
 class SelfObject:
 	def __init__(self, slots = None, arg_slots = None, parent_slots = None, code = None, annotation = None):

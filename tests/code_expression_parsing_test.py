@@ -1,5 +1,5 @@
 from parsing.Parser import *
-from parsing.nodes.IntegerNode import *
+from parsing.nodes.object_nodes.IntegerNode import *
 from parsing.nodes.CodeNode import *
 
 def test_basic_code_parsing():

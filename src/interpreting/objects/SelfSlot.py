@@ -1,8 +1,5 @@
-from typing import OrderedDict
-from interpreting.objects.SelfException import SelfException
 import copy
 from interpreting.objects.SelfObject import SelfObject
-from Messages import *
 
 class SelfSlot:
 	def __init__(self, name, value=None, is_immutable=False, keyword_list=None, annotations=None):

@@ -1,8 +1,8 @@
 from interpreting.Interpreter import Interpreter
 from interpreting.objects.SelfException import *
-from parsing.nodes.UnaryMessageNode import *
-from parsing.nodes.KeywordMessageNode import *
-from parsing.nodes.IntegerNode import *
+from parsing.nodes.message_nodes.UnaryMessageNode import *
+from parsing.nodes.message_nodes.KeywordMessageNode import *
+from parsing.nodes.object_nodes.IntegerNode import *
 from parsing.nodes.CodeNode import *
 from Messages import *
 
