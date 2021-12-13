@@ -13,7 +13,7 @@ def handleAssignment(receiver, argument_list):
 def handleEq(receiver, argument_list):
 	from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
 	from interpreting.objects.primitive_objects.SelfReal import SelfReal
-	from interpreting.objects.primitive_objects.SelfBoolean import SelfBoolean
+	from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
 	from interpreting.primitive_methods.IntPrimitives import handleIntEQ
 	from interpreting.primitive_methods.FloatPrimitives import handleFloatEQ
 
@@ -99,3 +99,16 @@ def handleDefine(receiver, argument_list):
 		raise SelfException(Messages.BAD_TYPE_ERROR.value.format('_Define:'))
 	receiver.copy_slots_of(argument_list[0])
 	return receiver
+
+def handleGetSlot(receiver, argument_list):
+	from interpreting.objects.SelfSlot import SelfSlot
+	from interpreting.objects.SelfObject import SelfObject
+	
+	slot = argument_list[0].value
+	if slot in receiver.slots:
+		return receiver.slots[slot].value
+	elif slot in receiver.parent_slots:
+		return receiver.parent_slots[slot].value
+	else:
+		receiver.slots[slot] = SelfSlot(slot, SelfObject())
+		return receiver.slots[slot].value

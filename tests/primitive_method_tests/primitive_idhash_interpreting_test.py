@@ -1,5 +1,5 @@
 from interpreting.Interpreter import *
-from interpreting.objects.primitive_objects.SelfBoolean import *
+from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
 import random
 
 def test_idhash_numbers():

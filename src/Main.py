@@ -9,6 +9,8 @@ def main():
 	mode = input('Select mode (i)nterpret or (p)arse: ')
 	if mode == "p":
 		isParser = True
+	else:
+		interpreter.initializeBootstrap()
 
 	while True:
 		try:
@@ -28,4 +30,5 @@ def main():
 			print(selfParsingError)
 		except SelfException as selfException:
 			print(selfException)
+
 main()
