@@ -90,3 +90,12 @@ def handleClone(receiver, argument_list=None):
 		return receiver
 
 	return receiver.clone()
+
+def handleDefine(receiver, argument_list):
+	from interpreting.objects.SelfObject import SelfObject
+	from interpreting.objects.SelfException import SelfException
+	from Messages import Messages
+	if type(receiver) is not SelfObject or type(argument_list[0]) is not SelfObject:
+		raise SelfException(Messages.BAD_TYPE_ERROR.value.format('_Define:'))
+	receiver.copy_slots_of(argument_list[0])
+	return receiver

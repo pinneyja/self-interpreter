@@ -22,3 +22,4 @@ class Messages(Enum):
 	SLOT_ALREADY_DEFINED = "The slot '{}' is already defined."
 	NO_DELEGATEE_SLOT = "No '{}' delegatee slot was found."
 	ENCLOSING_METHOD_HAS_RETURNED = "Cannot run a block after its enclosing method has returned."
+	BAD_TYPE_ERROR = "The '{}' primitive failed. Either the receiver or one of its arguments are of a bad type."

@@ -16,5 +16,6 @@ primitive_dict = {
 	'_Eq:' : handleEq,
 	'_IdentityHash' : handleIdentityHash,
 	'_IsStringIfFalse:' : handleIsString,
-	'_Clone' : handleClone
+	'_Clone' : handleClone,
+	'_Define:' : handleDefine
 }
