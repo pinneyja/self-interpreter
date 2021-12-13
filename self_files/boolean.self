@@ -115,7 +115,7 @@ SlotsToOmit: comment directory fileInTimeString myComment postFileIn revision su
  bootstrap addSlotsTo: bootstrap stub -> 'globals' -> 'modules' -> 'boolean' -> () From: ( | {
          'ModuleInfo: Module: boolean InitialContents: InitializeToExpression: (_CurrentTimeString)\x7fVisibility: public'
         
-         fileInTimeString <- _CurrentTimeString.
+         fileInTimeString <- '_CurrentTimeString.'
         } | ) 
 
  bootstrap addSlotsTo: bootstrap stub -> 'globals' -> 'modules' -> 'boolean' -> () From: ( | {

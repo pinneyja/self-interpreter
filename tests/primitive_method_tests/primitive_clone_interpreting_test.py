@@ -1,6 +1,6 @@
 from parsing.Parser import Parser
 from interpreting.Interpreter import *
-from interpreting.objects.primitive_objects.SelfBoolean import *
+from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
 
 def test_clone_simple():
 	parser = Parser()

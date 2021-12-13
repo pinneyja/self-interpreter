@@ -18,3 +18,8 @@ class Interpreter:
 		except Exception as e:
 			raise SelfException(Messages.GENERIC_ERROR.value.format(str(e)))
 		return result
+
+	def initializeBootstrap(self):
+		parser = Parser()
+		self.interpret(parser.parse("'self_files/bootstrap.self' _RunScript."))
+		self.interpret(parser.parse("'self_files/boolean.self' _RunScript."))

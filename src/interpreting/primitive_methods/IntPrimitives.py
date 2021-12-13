@@ -13,7 +13,7 @@ def handleIntComparison(receiver, argument_list, operator, primitive_name):
 	from interpreting.objects.SelfException import SelfException
 	from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
 	from Messages import Messages
-	from interpreting.objects.primitive_objects.SelfBoolean import SelfBoolean
+	from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
 	
 	argument = argument_list[0]
 	if type(receiver) is not SelfInteger or type(argument) is not SelfInteger:

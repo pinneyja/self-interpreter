@@ -1,5 +1,5 @@
 from interpreting.Interpreter import *
-from interpreting.objects.primitive_objects.SelfBoolean import *
+from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
 from parsing.nodes.object_nodes.RealNode import *
 
 def test_eq_numbers():

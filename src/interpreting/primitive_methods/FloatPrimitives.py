@@ -1,5 +1,5 @@
 def handleFloatComparison(receiver, argument_list, operator, primitive_name):
-	from interpreting.objects.primitive_objects.SelfBoolean import SelfBoolean
+	from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
 	from interpreting.objects.primitive_objects.SelfReal import SelfReal
 	from interpreting.objects.SelfException import SelfException
 	from Messages import Messages
