@@ -1,6 +1,7 @@
 from Messages import Messages
 from interpreting.objects.SelfException import SelfException
 from parsing.nodes.Node import Node
+from parsing.nodes.message_nodes.UnaryMessageNode import UnaryMessageNode
 
 class CodeNode(Node):
 	def __init__(self, expressions):
@@ -14,27 +15,43 @@ class CodeNode(Node):
 
 	def interpret(self, context):
 		return_context = None
-		if self.contained_in_block:
-			return_context = context.parent_slots[""].value
-			while return_context.is_block_method:
-				return_context = return_context.parent_slots[""].value
-			if return_context.has_returned:
-				raise SelfException(Messages.ENCLOSING_METHOD_HAS_RETURNED.value)
 
-		for expression in self.expressions:
-			result = expression.interpret(context)
-			if result.nonlocal_return:
-				if result.nonlocal_return_context is context:
-					result.set_nonlocal_return(False)
+		while True:
+			return_context = None
+			if self.contained_in_block:
+				return_context = context.parent_slots[""].value
+				while return_context.is_block_method:
+					return_context = return_context.parent_slots[""].value
+				if return_context.has_returned:
+					raise SelfException(Messages.ENCLOSING_METHOD_HAS_RETURNED.value)
 
-				return result
+			continue_while = False
+			for expression in self.expressions:
+				if (type(expression) is UnaryMessageNode) and (expression.message == '_Restart'):
+					if expression.expression:
+						expression.expression.interpret(context)
+					continue_while = True
+					break
+				else:
+					result = expression.interpret(context)
+					if result.nonlocal_return:
+						if result.nonlocal_return_context is context:
+							result.set_nonlocal_return(False)
 
-		result.nonlocal_return_context = return_context
+						return result
 
-		if self.has_caret and self.contained_in_block:
-			result.set_nonlocal_return(True)
+			result.nonlocal_return_context = return_context
 
-		return result
+			if continue_while:
+				continue
+
+			if self.has_caret and self.contained_in_block:
+				result.set_nonlocal_return(True)
+				result.nonlocal_return_context = context.parent_slots[""].value
+				while result.nonlocal_return_context.is_block_method:
+					result.nonlocal_return_context = result.nonlocal_return_context.parent_slots[""].value
+
+			return result
 
 	def verify_syntax(self):
 		for expression in self.expressions:
