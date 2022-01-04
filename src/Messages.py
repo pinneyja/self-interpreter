@@ -23,3 +23,4 @@ class Messages(Enum):
 	NO_DELEGATEE_SLOT = "No '{}' delegatee slot was found."
 	ENCLOSING_METHOD_HAS_RETURNED = "Cannot run a block after its enclosing method has returned."
 	BAD_TYPE_ERROR = "The '{}' primitive failed. Either the receiver or one of its arguments are of a bad type."
+	LOBBY_OBJECT_FAILED = "Failed to assign '{}' from lobby. Objects may not function as intended."
