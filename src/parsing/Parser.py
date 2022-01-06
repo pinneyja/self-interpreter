@@ -252,7 +252,8 @@ class Parser:
 			p[0] = RegularObjectNode(p[3], p[5])
 
 	def p_object_annotation(self, p):
-		'object-annotation : LCBRAC RCBRAC EQUAL string'
+		'''object-annotation : LCBRAC RCBRAC EQUAL string
+							 | LCBRAC RCBRAC EQUAL string PERIOD'''
 		p[0] = p[4]
 
 	def p_block(self, p):

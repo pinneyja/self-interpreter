@@ -26,7 +26,7 @@ CopyDowns:
 globals modules init. copy 
 SlotsToOmit: comment directory fileInTimeString myComment postFileIn revision subpartNames.
 
-\x7fIsComplete: '
+\x7fIsComplete: '.
             | ) .
         } | ) 
 
@@ -66,7 +66,7 @@ SlotsToOmit: comment directory fileInTimeString myComment postFileIn revision su
         
          block = bootstrap setObjectAnnotationOf: bootstrap stub -> 'traits' -> 'block' -> () From: ( |
              {} = 'ModuleInfo: Creator: traits block.
-'
+'.
             | ) .
         } | ) 
 
@@ -447,7 +447,7 @@ for the sake of compatibility. -- Ausch\x7fModuleInfo: Module: block InitialCont
         
          timingResults = bootstrap setObjectAnnotationOf: bootstrap stub -> 'traits' -> 'block' -> 'timingResults' -> () From: ( |
              {} = 'ModuleInfo: Creator: traits block timingResults.
-'
+'.
             | ) .
         } | ) 
 
