@@ -70,6 +70,15 @@ def test_directed_resend():
 
 	assert str(interpreted_node) == str(expected_output)
 
+	# (| p1* = (|x = 1| 2). m = (| | p1.x) |) m
+	expected_output = SelfInteger(1)
+	p1_slot = ParentSlotNode('p1', '=', RegularObjectNode([DataSlotNode('x', '=', IntegerNode(1))], CodeNode([IntegerNode(2)])))
+	m_slot = DataSlotNode('m', '=', RegularObjectNode(None, CodeNode([UnaryMessageNode(ResendNode("p1"), 'x')])))
+	parsed_node = CodeNode([UnaryMessageNode(RegularObjectNode([p1_slot, m_slot]), 'm')])
+	interpreted_node = interpreter.interpret(parsed_node)
+
+	assert str(interpreted_node) == str(expected_output)
+
 def test_bad_directed_resend():
 	interpreter = Interpreter()
 

@@ -116,9 +116,10 @@ class SelfObject:
 			raise SelfException(Messages.NO_DELEGATEE_SLOT.value.format(del_name))
 		
 		if del_name in self.slots:
-			matching_slot = self.slots[del_name].call_method(None).lookup(sel, set())
+			matching_slot = self.slots[del_name].value.lookup(sel, set())
 		else:
-			matching_slot = self.parent_slots[del_name].call_method(None).lookup(sel, set())
+			matching_slot = self.parent_slots[del_name].value.lookup(sel, set())
+		matching_slot.receiver = self
 		return matching_slot.call_method(self, arg_list)
 	
 	def copy_slots_of(self, self_obj):

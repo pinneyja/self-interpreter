@@ -16,9 +16,9 @@ class BinaryMessageNode(Node):
 		if self.expression:
 			if type(self.expression) is ResendNode:
 				if self.expression.receiver == "resend":
-					return context.parent_slots["self"].call_method(None).undirected_resend(self.message, [interpreted_arg])
+					return context.parent_slots["self"].value.undirected_resend(self.message, [interpreted_arg])
 				else:
-					return context.parent_slots["self"].call_method(None).directed_resend(self.expression.receiver, self.message, [interpreted_arg])
+					return context.parent_slots["self"].value.directed_resend(self.expression.receiver, self.message, [interpreted_arg])
 
 			interpreted = self.expression.interpret(context)
 			if interpreted.nonlocal_return:
@@ -29,7 +29,12 @@ class BinaryMessageNode(Node):
 		else:
 			if interpreted_arg.nonlocal_return:
 				return interpreted_arg
-			return context.pass_binary_message(self.message, interpreted_arg)
+			if self.message in context.slots or self.message in context.parent_slots or self.message in context.arg_slots:
+				return context.pass_binary_message(self.message, interpreted_arg)
+			elif "self" in context.parent_slots and not context.is_block_method:
+				return context.parent_slots["self"].value.pass_binary_message(self.message, interpreted_arg)
+			else:
+				return context.pass_binary_message(self.message, interpreted_arg)
 
 	def verify_syntax(self):
 		if self.expression:
