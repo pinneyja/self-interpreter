@@ -2,6 +2,7 @@ from interpreting.Interpreter import *
 from parsing.nodes.object_nodes.RegularObjectNode import *
 from parsing.nodes.message_nodes.UnaryMessageNode import *
 from parsing.nodes.object_nodes.IntegerNode import *
+from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
 from Messages import *
 
 def test_basic_valid_implicit_message_passing():
@@ -59,3 +60,18 @@ def test_implicit_binary_message_passing_in_method_slot():
 	interpreted_result = interpreter.interpret(unary_message)
 
 	assert str(interpreted_result) == str(SelfInteger(1))
+
+def test_self_is_set_correctly():
+	interpreter = Interpreter()
+	parser = Parser()
+	parsed_result = parser.parse("(| p: a = (| | _Eq: a). x = (| | p: self)|) x")
+
+	assert str(interpreter.interpret(parsed_result)) == str(SelfBoolean(True))
+
+
+def test_can_add_slots_in_method():
+	interpreter = Interpreter()
+	parser = Parser()
+	result = interpreter.interpret(parser.parse("_AddSlots: (| m = (| | _AddSlots: (| x <- 1 |) ) |). m. x"))
+
+	assert str(result) == str(SelfInteger(1))

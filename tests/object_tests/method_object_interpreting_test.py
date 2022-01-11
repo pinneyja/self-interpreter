@@ -1,3 +1,4 @@
+from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
 from parsing.nodes.object_nodes.RegularObjectNode import *
 from parsing.nodes.slot_nodes.DataSlotNode import *
 from parsing.nodes.object_nodes.IntegerNode import *
@@ -81,3 +82,19 @@ def test_call_method_multiple_times_with_local_variable():
 
 	interpreted_block = interpreter.interpret(parser.parse("_AddSlots: (|y = (| x <- 1| x: (x + 1). x) |). y. y"))
 	assert str(SelfInteger(2)) == str(interpreted_block)
+
+def test_correct_self_slot_created():
+	parser = Parser()
+	interpreter = Interpreter()
+
+	result = interpreter.interpret(parser.parse("(| p: a = (| | self _Eq: a). x = (| | p: self)|) x"))
+	assert str(result) == str(SelfBoolean(True))
+
+def test_correct_self_slot_created_resends():
+	parser = Parser()
+	interpreter = Interpreter()
+
+	result1 = interpreter.interpret(parser.parse("(| x* = (|y = (| | self)|). z = (| | x.y _Eq: self)|) z"))
+	result2 = interpreter.interpret(parser.parse("(| x* = (|y = (| | self)|). z = (| | x y _Eq: x)|) z"))
+	assert str(result1) == str(SelfBoolean(True))
+	assert str(result2) == str(SelfBoolean(True))
