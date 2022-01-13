@@ -75,3 +75,10 @@ def test_can_add_slots_in_method():
 	result = interpreter.interpret(parser.parse("_AddSlots: (| m = (| | _AddSlots: (| x <- 1 |) ) |). m. x"))
 
 	assert str(result) == str(SelfInteger(1))
+
+def test_self_gives_lobby():
+	interpreter = Interpreter()
+	parser = Parser()
+	parsed_result = parser.parse("self _Eq: lobby")
+
+	assert str(interpreter.interpret(parsed_result)) == str(SelfBoolean(True))

@@ -12,7 +12,9 @@ class Interpreter:
 
 	def interpret(self, syntaxTree):
 		try:
-			result = syntaxTree.interpret(self.lobby)
+			activation_object = SelfObject()
+			activation_object.parent_slots["self"] = SelfSlot("self", self.lobby, True)
+			result = syntaxTree.interpret(activation_object)
 		except (SelfException, SelfParsingError) as e:
 			raise e
 		except Exception as e:
