@@ -23,7 +23,7 @@ def test_interprets_empty_block():
 	empty_block_node = CodeNode([BlockNode()])
 	empty_block = SelfObject({
 		"value" : SelfSlot("value", SelfObject(parent_slots={
-				"" : SelfSlot("", SelfLobby(), is_immutable=True)
+				"" : SelfSlot("", SelfObject(parent_slots={"self" : SelfSlot("self", SelfLobby(), is_immutable=True)}), is_immutable=True)
 			}), is_immutable=True)
 	})
 	interpreted_empty_block = interpreter.interpret(empty_block_node)
@@ -37,7 +37,7 @@ def test_interprets_code_block():
 	code_block_node = CodeNode([BlockNode(code=CodeNode([IntegerNode(1), IntegerNode(2)]))])
 	code_block = SelfObject({
 		"value" : SelfSlot("value", SelfObject(parent_slots={
-				"" : SelfSlot("", SelfLobby(), is_immutable=True)
+				"" : SelfSlot("", SelfObject(parent_slots={"self" : SelfSlot("self", SelfLobby(), is_immutable=True)}), is_immutable=True)
 			}, code=CodeNode([IntegerNode(1), IntegerNode(2)])), is_immutable=True)
 	})
 	interpreted_code_block = interpreter.interpret(code_block_node)
@@ -65,7 +65,7 @@ def test_interprets_code_args_block():
 			},
 			parent_slots={
 				"b" : SelfSlot("b"),
-				"" : SelfSlot("", SelfLobby(), is_immutable=True)
+				"" : SelfSlot("", SelfObject(parent_slots={"self" : SelfSlot("self", SelfLobby(), is_immutable=True)}), is_immutable=True)
 			}, 
 			code=CodeNode([IntegerNode(1), IntegerNode(2)])), 
 			is_immutable=True, 
@@ -98,7 +98,7 @@ def test_interprets_block_with_more_than_one_argument():
 				"c" : SelfSlot("c")
 			},
 			parent_slots={
-				"" : SelfSlot("", SelfLobby(), is_immutable=True)
+				"" : SelfSlot("", SelfObject(parent_slots={"self" : SelfSlot("self", SelfLobby(), is_immutable=True)}), is_immutable=True)
 			}, 
 			code=CodeNode([BinaryMessageNode(BinaryMessageNode(UnaryMessageNode(None, "a"), "+", UnaryMessageNode(None, "b")), "+", UnaryMessageNode(None, "c"))])), 
 			is_immutable=True, 
