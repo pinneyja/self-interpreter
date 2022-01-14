@@ -103,8 +103,9 @@ class Parser:
 	precedence = (
 		('right', 'LOWER'),
 		('right', 'HIGHER'),
-		('nonassoc', 'LARROW','EQUAL'),
+		('nonassoc', 'LARROW', 'EQUAL'),
 		('right', 'SMALL_KEYWORD', 'CAP_KEYWORD'),
+		('nonassoc', 'OPERATOR_EQUAL', 'OPERATOR_LARROW'),
 		('left', 'OPERATOR'),
 		('nonassoc', 'IDENTIFIER')
 	)
@@ -187,11 +188,11 @@ class Parser:
 
 	def p_binary_message(self, p):
 		'''binary-message : expression OPERATOR expression
-						  | expression LARROW expression
-						  | expression EQUAL expression
+						  | expression LARROW expression %prec OPERATOR_LARROW
+						  | expression EQUAL expression %prec OPERATOR_EQUAL
 						  | OPERATOR expression
-						  | LARROW expression
-						  | EQUAL expression'''
+						  | LARROW expression %prec OPERATOR_LARROW
+						  | EQUAL expression %prec OPERATOR_EQUAL'''
 		if (len(p) == 4):
 			p[0] = BinaryMessageNode(p[1], p[2], p[3])
 		else:
