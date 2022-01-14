@@ -146,3 +146,21 @@ def test_assignment_has_higher_precedence_than_keyword():
 	parsed_object = parser.parse("(| x = 1 m: 2 |)")
 
 	assert str(object_node) == str(parsed_object)
+
+def test_keyword_has_higher_precedence_than_equal_operator():
+	parser = Parser()
+
+	binary_message_node = BinaryMessageNode(IntegerNode(1), '=', IntegerNode(2))
+	keyword_message_node = CodeNode([KeywordMessageNode(binary_message_node, ["ifTrue:"], [IntegerNode(3)])])
+	parsed_object = parser.parse("1 = 2 ifTrue: 3")
+
+	assert str(keyword_message_node) == str(parsed_object)
+
+def test_keyword_has_higher_precedence_than_larrow_operator():
+	parser = Parser()
+
+	binary_message_node = BinaryMessageNode(IntegerNode(1), '<-', IntegerNode(2))
+	keyword_message_node = CodeNode([KeywordMessageNode(binary_message_node, ["ifTrue:"], [IntegerNode(3)])])
+	parsed_object = parser.parse("1 <- 2 ifTrue: 3")
+
+	assert str(keyword_message_node) == str(parsed_object)
