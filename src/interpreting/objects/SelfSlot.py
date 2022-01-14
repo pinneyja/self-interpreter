@@ -20,7 +20,8 @@ class SelfSlot:
 	def call_method(self, receiver, args=None):
 		if self.value.code:
 			clone = self.value.clone()
-			clone.parent_slots["self"] = SelfSlot("self", receiver, True)
+			if not clone.is_block_method:
+				clone.parent_slots["self"] = SelfSlot("self", receiver, True)
 			for i, key in enumerate(clone.arg_slots):
 				clone.slots[key] = SelfSlot(key, args[i])
 			result = self.value.code.interpret(clone)
