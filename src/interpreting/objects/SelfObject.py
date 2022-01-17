@@ -5,7 +5,7 @@ from interpreting.objects.SelfException import SelfException
 import copy
 
 class SelfObject:
-	def __init__(self, slots = None, arg_slots = None, parent_slots = None, code = None, annotation = None):
+	def __init__(self, slots = None, arg_slots = None, parent_slots = None, code = None, annotation = None, code_string = None, alt_string = None):
 		if slots is None:
 			slots = OrderedDict()
 		
@@ -24,6 +24,8 @@ class SelfObject:
 		self.nonlocal_return_context = None
 		self.is_block_method = False
 		self.has_returned = False
+		self.code_string = code_string
+		self.alt_string = alt_string
 
 	def __str__(self):
 		output  = f"SelfObject:{{ '{self.annotation}' Slots = ["
@@ -119,7 +121,6 @@ class SelfObject:
 			matching_slot = self.slots[del_name].value.lookup(sel, set())
 		else:
 			matching_slot = self.parent_slots[del_name].value.lookup(sel, set())
-		matching_slot.receiver = self
 		return matching_slot.call_method(self, arg_list)
 	
 	def copy_slots_of(self, self_obj):
@@ -133,3 +134,31 @@ class SelfObject:
 		clone.arg_slots = {key : self.arg_slots[key].clone() for key in self.arg_slots}
 		clone.parent_slots = {key : self.parent_slots[key].clone() for key in self.parent_slots}
 		return clone
+
+	def as_dict(self, visited):
+		is_unvisited = self not in visited
+		visited.append(self)
+
+		parent_slots = {key + '*' : self.parent_slots[key].as_dict(visited, is_unvisited) for key in self.parent_slots}
+		arg_slots = {':' + key : self.arg_slots[key].as_dict(visited, is_unvisited) for key in self.arg_slots}
+		slots = {key : self.slots[key].as_dict(visited, is_unvisited) for key in self.slots if key not in self.arg_slots}
+		all_slots = parent_slots
+		all_slots.update(arg_slots)
+		all_slots.update(slots)
+		
+		if "*" in all_slots:
+			all_slots["(parent)*"] = all_slots["*"]
+			all_slots.pop("*")
+
+		dict = {
+			'type' : self.__class__.__name__,
+			'annotation' : self.annotation,
+			'slots' : all_slots,
+			'code_string' : self.code_string,
+			'code' : self.code,
+			'alt_string' : False 
+		}
+
+		if self.alt_string:
+			dict['alt_string'] = True
+		return dict

@@ -8,13 +8,13 @@ class SelfLobby(SelfObject):
 	def __init__(self):
 		slots = {
 			"lobby": SelfSlot("lobby", self),
-			"mixins": SelfSlot("mixins", SelfObject()),
-			"shell": SelfSlot("shell", SelfObject()),
-			"traits": SelfSlot("traits", SelfObject())
+			"mixins": SelfSlot("mixins", SelfObject(annotation="mixins", alt_string=True)),
+			"shell": SelfSlot("shell", SelfObject(annotation="shell", alt_string=True)),
+			"traits": SelfSlot("traits", SelfObject(annotation="traits", alt_string=True))
 			}
 		parent_slots = {
-			"defaultBehavior": SelfSlot("defaultBehavior", SelfObject()),
-			"globals": SelfSlot("globals", SelfObject()),
+			"defaultBehavior": SelfSlot("defaultBehavior", SelfObject(annotation="defaultBehavior", alt_string=True)),
+			"globals": SelfSlot("globals", SelfObject(annotation="globals", alt_string=True)),
 			}
 		super().__init__(slots, parent_slots=parent_slots)
 		SelfLobby.lobby = self
@@ -40,3 +40,8 @@ class SelfLobby(SelfObject):
 		if not SelfLobby.lobby:
 			SelfLobby.lobby = SelfLobby()
 		return SelfLobby.lobby
+
+	def as_dict(self, visited):
+		dict = super().as_dict(visited)
+		dict['alt_string'] = True
+		return dict

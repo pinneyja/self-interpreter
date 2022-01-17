@@ -32,3 +32,13 @@ class SelfSlot:
 
 	def clone(self):
 		return copy.copy(self)
+
+	def as_dict(self, visited, include_value):
+		dict = {
+			'type' : self.__class__.__name__,
+			'name' : self.name,
+			'annotations' : self.annotations,
+			'value' : self.value.as_dict(visited) if self.value and include_value else None,
+			'is_immutable' : self.is_immutable
+		}
+		return dict

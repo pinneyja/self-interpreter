@@ -22,6 +22,11 @@ class SelfTrue(SelfObject):
 	def get_value(self):
 		return True
 
+	def as_dict(self, visited):
+		dict = super().as_dict(visited)
+		dict['alt_string'] = True
+		return dict
+
 	@staticmethod
 	def instance():
 		if  SelfTrue._instance:
@@ -44,6 +49,11 @@ class SelfFalse(SelfObject):
 
 	def get_value(self):
 		return False
+
+	def as_dict(self, visited):
+		dict = super().as_dict(visited)
+		dict['alt_string'] = True
+		return dict
 
 	@staticmethod
 	def instance():

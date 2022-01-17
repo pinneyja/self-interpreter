@@ -1,10 +1,14 @@
+from os import system
 from interpreting.Interpreter import *
+from interpreting.printingutils.SelfObjectPrinter import SelfObjectPrinter
 from parsing.Parser import *
 
 def main():
 	isParser = False
 	parser = Parser()
 	interpreter = Interpreter()
+	printer = SelfObjectPrinter()
+	system("")
 
 	mode = input('Select mode (i)nterpret or (p)arse: ')
 	if mode == "p":
@@ -25,7 +29,7 @@ def main():
 			if isParser:
 				print(parser.parse(s))
 			else:
-				print(interpreter.interpret(parser.parse(s)))
+				print(printer.get_object_string(interpreter.interpret(parser.parse(s))))
 		except SelfParsingError as selfParsingError:
 			print(selfParsingError)
 		except SelfException as selfException:

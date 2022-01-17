@@ -117,3 +117,6 @@ dmypy.json
 # Ply auto files
 parser.out
 parsetab.py
+
+#config file
+PersonalConfig.py

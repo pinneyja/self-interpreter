@@ -11,4 +11,5 @@ class SelfSmallInt(SelfObject):
 		arg_slots = OrderedDict()
 		arg_slots['arg'] = SelfSlot('arg')
 		code = KeywordMessageNode(UnaryMessageNode(None, "self"), ['_IntAdd:'], [UnaryMessageNode(None, 'arg')])
-		self.slots['+'] = SelfSlot('+', SelfObject(arg_slots=arg_slots, code=code))
+		code_string = "self _IntAdd: arg"
+		self.slots['+'] = SelfSlot('+', SelfObject(arg_slots=arg_slots, code=code, code_string=code_string))
