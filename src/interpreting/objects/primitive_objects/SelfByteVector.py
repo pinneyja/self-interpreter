@@ -12,3 +12,9 @@ class SelfByteVector(SelfObject):
 
 	def __str__(self):
 		return "SelfByteVector: {}".format(self.value)
+
+	def as_dict(self, visited):
+		dict = super().as_dict(visited)
+		dict['annotation'] = self.value
+		dict['alt_string'] = True
+		return dict

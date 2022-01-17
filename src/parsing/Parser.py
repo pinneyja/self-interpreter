@@ -21,6 +21,7 @@ class Parser:
 	def __init__(self):
 		self.lexer = lex.lex(module = self)
 		self.parser = yacc.yacc(module = self)
+		self.parse_string = None
 
 	# Ignored characters
 
@@ -242,7 +243,9 @@ class Parser:
 		if(len(p) == 7):
 			p[0] = RegularObjectNode(p[4], object_annotation=p[3])
 		else:
-			p[0] = RegularObjectNode(p[4], p[6], object_annotation=p[3])
+			code_start = p.lexspan(6)[0]
+			p_start = p.lexspan(7)[0]
+			p[0] = RegularObjectNode(p[4], p[6], object_annotation=p[3], code_string=self.parse_string[code_start:p_start])
 
 	def p_regular_object_slotted(self, p):
 		'''regular-object : LPAREN PIPE slot-list PIPE RPAREN
@@ -250,7 +253,9 @@ class Parser:
 		if(len(p) == 6):
 			p[0] = RegularObjectNode(p[3])
 		else:
-			p[0] = RegularObjectNode(p[3], p[5])
+			code_start = p.lexspan(5)[0]
+			p_start = p.lexspan(6)[0]
+			p[0] = RegularObjectNode(p[3], p[5], code_string=self.parse_string[code_start:p_start])
 
 	def p_object_annotation(self, p):
 		'''object-annotation : LCBRAC RCBRAC EQUAL string
@@ -263,11 +268,15 @@ class Parser:
 				 | LBRAC code RBRAC
 				 | LBRAC RBRAC'''
 		if len(p) == 7:
-			p[0] = BlockNode(p[3], p[5])
+			code_start = p.lexspan(5)[0]
+			p_start = p.lexspan(6)[0]
+			p[0] = BlockNode(p[3], p[5], code_string=self.parse_string[code_start:p_start])
 		elif len(p) == 6:
 			p[0] = BlockNode(p[3])
 		elif len(p) == 4:
-			p[0] = BlockNode(code=p[2])
+			code_start = p.lexspan(2)[0]
+			p_start = p.lexspan(3)[0]
+			p[0] = BlockNode(code=p[2], code_string=self.parse_string[code_start:p_start])
 		else:
 			p[0] = BlockNode()
 
@@ -380,6 +389,8 @@ class Parser:
 		raise SelfParsingError(Messages.SYNTAX_ERROR_AT_TOKEN.value.format(p.value if p else None))
 
 	def parse(self, string):
-		abstract_syntax_tree = self.parser.parse(string)
+		self.parse_string = string
+		abstract_syntax_tree = self.parser.parse(string, tracking=True)
 		abstract_syntax_tree.verify_syntax()
+		self.parse_string = None
 		return abstract_syntax_tree

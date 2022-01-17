@@ -13,7 +13,7 @@ from parsing.nodes.slot_nodes.ParentSlotNode import ParentSlotNode
 from parsing.utils.AnnotatedList import AnnotatedList
 
 class RegularObjectNode(Node):
-	def __init__(self, slot_list_annotated=None, code=None, object_annotation=None):
+	def __init__(self, slot_list_annotated=None, code=None, object_annotation=None, code_string = None):
 		super().__init__()
 		slot_list = []
 		if slot_list_annotated is not None:
@@ -29,6 +29,7 @@ class RegularObjectNode(Node):
 
 		self.slot_list = slot_list
 		self.code = code
+		self.code_string = code_string
 		self.allowable_argument_slot_count = 0
 
 	def __str__(self):
@@ -55,9 +56,10 @@ class RegularObjectNode(Node):
 					arg_slots = OrderedDict()
 					arg_slots[arg_slot_name] = SelfSlot(arg_slot_name)
 					code = KeywordMessageNode(None, ["_Assignment:", "Value:"], [StringNode(slot.name), UnaryMessageNode(None, arg_slot_name)])
-					interpreted_slot_list[slot_name] = SelfSlot(slot_name, SelfObject(arg_slots=arg_slots, code=code), keyword_list=[slot_name])
+					code_string = f"_Assignment: '{slot.name}' Value: {arg_slot_name}"
+					interpreted_slot_list[slot_name] = SelfSlot(slot_name, SelfObject(arg_slots=arg_slots, code=code, code_string=code_string), keyword_list=[slot_name])
 
-		return SelfObject(interpreted_slot_list, interpreted_arg_slot_list, interpreted_parent_slot_list, self.code, self.object_annotation)
+		return SelfObject(interpreted_slot_list, interpreted_arg_slot_list, interpreted_parent_slot_list, self.code, self.object_annotation, self.code_string)
 	
 	def set_allowable_argument_slot_count(self, allowable_argument_slot_count):
 		self.allowable_argument_slot_count = allowable_argument_slot_count
