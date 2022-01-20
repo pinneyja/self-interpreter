@@ -34,7 +34,13 @@ class BinaryMessageNode(Node):
 			elif "self" in context.parent_slots and not context.is_block_method:
 				return context.parent_slots["self"].value.pass_binary_message(self.message, interpreted_arg)
 			else:
-				return context.pass_binary_message(self.message, interpreted_arg)
+				if "" in context.parent_slots and (self.message in context.parent_slots[""].value.slots or self.message in context.parent_slots[""].value.parent_slots or self.message in context.parent_slots[""].value.arg_slots):
+					return context.parent_slots[""].value.pass_binary_message(self.message, interpreted_arg)
+				while not "self" in context.parent_slots[""].value.parent_slots:
+					context = context.parent_slots[""].value
+					if "" in context.parent_slots and (self.message in context.parent_slots[""].value.slots or self.message in context.parent_slots[""].value.parent_slots or self.message in context.parent_slots[""].value.arg_slots):
+						return context.parent_slots[""].value.pass_binary_message(self.message, interpreted_arg)
+				return context.parent_slots[""].value.parent_slots["self"].value.pass_binary_message(self.message, interpreted_arg)
 
 	def verify_syntax(self):
 		if self.expression:

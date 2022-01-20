@@ -82,3 +82,29 @@ def test_self_gives_lobby():
 	parsed_result = parser.parse("self _Eq: lobby")
 
 	assert str(interpreter.interpret(parsed_result)) == str(SelfBoolean(True))
+
+def test_implicit_receiver_in_blocks():
+	interpreter = Interpreter()
+	parser = Parser()
+
+	parsed_result = parser.parse("[|:x| [[x] value] value] value: 1")
+	assert str(interpreter.interpret(parsed_result)) == str(SelfInteger(1))
+
+	parsed_result = parser.parse("[|:x| [|:x| [x] value] value: 2] value: 1")
+	assert str(interpreter.interpret(parsed_result)) == str(SelfInteger(2))
+
+	parsed_result = parser.parse("[|:x| [|:x| [|:x| x] value: 3] value: 2] value: 1")
+	assert str(interpreter.interpret(parsed_result)) == str(SelfInteger(3))
+
+def test_implicit_receiver_in_blocks_in_methods():
+	interpreter = Interpreter()
+	parser = Parser()
+
+	parsed_result = parser.parse("(|x=1. m = (| | [|:x| [|:x| x] value: 2] value: 3)|) m")
+	assert str(interpreter.interpret(parsed_result)) == str(SelfInteger(2))
+
+	parsed_result = parser.parse("(|x=1. m = (| | [|:x| [x] value] value: 3)|) m")
+	assert str(interpreter.interpret(parsed_result)) == str(SelfInteger(3))
+
+	parsed_result = parser.parse("(|x=1. m = (| | [[x] value] value)|) m")
+	assert str(interpreter.interpret(parsed_result)) == str(SelfInteger(1))
