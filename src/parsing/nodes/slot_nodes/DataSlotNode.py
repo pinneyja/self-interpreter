@@ -1,5 +1,7 @@
+from interpreting.objects.SelfException import SelfException
 from interpreting.objects.SelfSlot import SelfSlot
 from parsing.nodes.Node import Node
+from interpreting.objects.primitive_objects.SelfLobby import SelfLobby
 
 class DataSlotNode(Node):
 	def __init__(self, name, operator = None, expression = None, annotations = None):
@@ -16,7 +18,14 @@ class DataSlotNode(Node):
 
 	def interpret(self, context):
 		if (not self.expression):
-			return SelfSlot(self.name, annotations=self.annotations)
+			try:
+				lobby = SelfLobby.get_lobby()
+				globals = lobby.parent_slots["globals"].value
+				nil = globals.pass_unary_message("nil")
+				self.expression = nil
+			except:
+				pass
+			return SelfSlot(self.name, self.expression, annotations=self.annotations)
 		else:
 			return SelfSlot(self.name, self.expression.interpret(context), self.operator == "=", annotations=self.annotations)
 
