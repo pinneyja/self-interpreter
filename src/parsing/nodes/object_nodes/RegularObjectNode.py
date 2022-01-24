@@ -1,5 +1,4 @@
 from typing import OrderedDict
-import warnings
 from Messages import Messages
 from interpreting.objects.SelfException import SelfException
 from interpreting.objects.SelfObject import SelfObject
@@ -76,7 +75,7 @@ class RegularObjectNode(Node):
 			traits_block = SelfLobby.get_lobby().slots["traits"].value.pass_unary_message("block")
 			parent_slots["parent"] = SelfSlot("parent", traits_block)
 		except SelfException as e:
-			warnings.warn(Messages.LOBBY_OBJECT_FAILED.value.format("traits block"))
+			pass
 
 		if len(interpreted_arg_slot_list) == 0:
 			block_method = SelfObject(interpreted_slot_list, interpreted_arg_slot_list, interpreted_parent_slot_list, self.code, code_string=self.code_string)
