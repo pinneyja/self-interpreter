@@ -45,13 +45,13 @@ def test_interprets_code_block():
 	assert str(code_block) == str(interpreted_code_block)
 
 def test_interprets_code_args_block():
-	# [|:arg. a = 2. b*| 1. 2]
+	# [|:arg. a = 2. b* = 1| 1. 2]
 	interpreter = Interpreter()
 
 	slots = [
 		ArgumentSlotNode("arg"),
 		DataSlotNode("a", "=", IntegerNode(2)),
-		ParentSlotNode("b")
+		ParentSlotNode("b", "=", IntegerNode(1))
 	]
 	code_block_node = CodeNode([BlockNode(slots, CodeNode([IntegerNode(1), IntegerNode(2)]))])
 
@@ -64,7 +64,7 @@ def test_interprets_code_args_block():
 				"arg" : SelfSlot("arg")
 			},
 			parent_slots={
-				"b" : SelfSlot("b"),
+				"b" : SelfSlot("b", SelfInteger(1), is_immutable=True),
 				"" : SelfSlot("", SelfObject(parent_slots={"self" : SelfSlot("self", SelfLobby(), is_immutable=True)}), is_immutable=True)
 			}, 
 			code=CodeNode([IntegerNode(1), IntegerNode(2)])), 
@@ -172,3 +172,13 @@ def test_interprets_block_in_context_complicated():
 	interpreted_code_block = interpreter.interpret(code_block_node)
 
 	assert str(expected) == str(interpreted_code_block)
+
+
+def test_block_assignment_slot():
+	# [| a. | a: 1. a] value
+	interpreter = Interpreter()
+	slots = [
+		DataSlotNode("a"),
+	]
+	code_block_node = CodeNode([UnaryMessageNode(BlockNode(slots, CodeNode([KeywordMessageNode(None, ["a:"], [IntegerNode(1)]), UnaryMessageNode(None, "a")])), "value")])
+	assert str(interpreter.interpret(code_block_node)) == str(SelfInteger(1))
