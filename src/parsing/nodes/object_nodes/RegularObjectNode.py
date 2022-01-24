@@ -1,7 +1,10 @@
 from typing import OrderedDict
+import warnings
 from Messages import Messages
+from interpreting.objects.SelfException import SelfException
 from interpreting.objects.SelfObject import SelfObject
 from interpreting.objects.SelfSlot import SelfSlot
+from interpreting.objects.primitive_objects.SelfLobby import SelfLobby
 from parsing.SelfParsingError import SelfParsingError
 from parsing.nodes.Node import Node
 from parsing.nodes.message_nodes.KeywordMessageNode import KeywordMessageNode
@@ -13,7 +16,7 @@ from parsing.nodes.slot_nodes.ParentSlotNode import ParentSlotNode
 from parsing.utils.AnnotatedList import AnnotatedList
 
 class RegularObjectNode(Node):
-	def __init__(self, slot_list_annotated=None, code=None, object_annotation=None, code_string = None):
+	def __init__(self, slot_list_annotated=None, code=None, object_annotation=None, code_string = None, block_node = False):
 		super().__init__()
 		slot_list = []
 		if slot_list_annotated is not None:
@@ -30,6 +33,7 @@ class RegularObjectNode(Node):
 		self.slot_list = slot_list
 		self.code = code
 		self.code_string = code_string
+		self.block_node = block_node
 		self.allowable_argument_slot_count = 0
 
 	def __str__(self):
@@ -59,7 +63,36 @@ class RegularObjectNode(Node):
 					code_string = f"_Assignment: '{slot.name}' Value: {arg_slot_name}"
 					interpreted_slot_list[slot_name] = SelfSlot(slot_name, SelfObject(arg_slots=arg_slots, code=code, code_string=code_string), keyword_list=[slot_name])
 
+		if self.block_node:
+			return self.interpret_block_node(context, interpreted_slot_list, interpreted_arg_slot_list, interpreted_parent_slot_list)
+
 		return SelfObject(interpreted_slot_list, interpreted_arg_slot_list, interpreted_parent_slot_list, self.code, self.object_annotation, self.code_string)
+	
+	def interpret_block_node(self, context, interpreted_slot_list, interpreted_arg_slot_list, interpreted_parent_slot_list):
+		parent_slots = OrderedDict()
+		slots = OrderedDict()
+		interpreted_parent_slot_list[""] = SelfSlot("", context, True)
+		try:
+			traits_block = SelfLobby.get_lobby().slots["traits"].value.pass_unary_message("block")
+			parent_slots["parent"] = SelfSlot("parent", traits_block)
+		except SelfException as e:
+			warnings.warn(Messages.LOBBY_OBJECT_FAILED.value.format("traits block"))
+
+		if len(interpreted_arg_slot_list) == 0:
+			block_method = SelfObject(interpreted_slot_list, interpreted_arg_slot_list, interpreted_parent_slot_list, self.code, code_string=self.code_string)
+			block_method.is_block_method = True
+			slots["value"] = SelfSlot("value", block_method, True)
+		else:
+			method_name = "value:" + "With:"*(len(interpreted_arg_slot_list) - 1)
+			block_method = SelfObject(interpreted_slot_list, interpreted_arg_slot_list, interpreted_parent_slot_list, self.code, code_string=self.code_string)
+			block_method.is_block_method = True
+			slots[method_name] = SelfSlot(
+				method_name, 
+				block_method,
+				True, 
+				["value:"] + ["With:"]*(len(interpreted_arg_slot_list) - 1))
+
+		return SelfObject(slots, parent_slots=parent_slots)
 	
 	def set_allowable_argument_slot_count(self, allowable_argument_slot_count):
 		self.allowable_argument_slot_count = allowable_argument_slot_count
