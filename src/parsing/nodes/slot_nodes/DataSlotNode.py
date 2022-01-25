@@ -18,14 +18,14 @@ class DataSlotNode(Node):
 
 	def interpret(self, context):
 		if (not self.expression):
+			nil = None
 			try:
 				lobby = SelfLobby.get_lobby()
 				globals = lobby.parent_slots["globals"].value
 				nil = globals.pass_unary_message("nil")
-				self.expression = nil
 			except:
 				pass
-			return SelfSlot(self.name, self.expression, annotations=self.annotations)
+			return SelfSlot(self.name, nil, annotations=self.annotations)
 		else:
 			return SelfSlot(self.name, self.expression.interpret(context), self.operator == "=", annotations=self.annotations)
 
