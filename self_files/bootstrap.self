@@ -1,5 +1,8 @@
 globals _AddSlots: (| bootstrap = (). modules = (|init=(|copy = ()|)|)|).
 globals _AddSlots: (| true = 1 _IntEQ: 1. false = 0 _IntEQ: 1.|).
+globals modules _AddSlots: (|boolean=(|postFileIn=(| | 'postFileIn')|). block=(|postFileIn=(| | 'postFileIn')|)|).
+globals modules _AddSlots: (|smallInt=(|postFileIn=(| | 'postFileIn')|). integer=(|postFileIn=(| | 'postFileIn')|). number=(|postFileIn=(| | 'postFileIn')|)|).
+globals _AddSlots: (|raiseError = ()|).
 globals modules _AddSlots: (|boolean=(|postFileIn=(| | 'postFileIn')|). block=(|postFileIn=(| | 'postFileIn')|).
   nil=(|postFileIn=(| | 'postFileIn')|)|).
 traits _AddSlots: (|block = (). orderedOddball=(|parent* = lobby. value=(| | self)|). clonable = (|parent* = lobby|)|).

@@ -1,4 +1,5 @@
 from interpreting.Interpreter import *
+from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
 
 def test_nested_slot_and_object_annotations():
 	# (| {} = 'obj1' {'s1' x = 1 {'s2' y = 2}} z = 3|)

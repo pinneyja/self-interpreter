@@ -1,32 +1,31 @@
 from interpreting.Interpreter import Interpreter
 from parsing.Parser import Parser
 from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
+import pytest
 
-def test_blocks_sum_numbers_zero_to_ten():
+@pytest.fixture(scope="module")
+def interpreter():
 	interpreter = Interpreter()
+	interpreter.initializeBootstrap()
+	return interpreter
+
+def test_blocks_sum_numbers_zero_to_ten(interpreter):
 	parser = Parser()
 
 	expected = SelfInteger(55)
-	
-	interpreter.initializeBootstrap()
 	actual = interpreter.interpret(parser.parse("lobby _AddSlots: (| i <- 0. sum <-0 |). [sum: sum + i. (i _IntEQ: 10) ifTrue: [^ sum] False: [i: i + 1]] loop"))
 
 	assert str(actual) == str(expected)
 
-def test_blocks_sum_numbers_zero_to_ten_with_while_false():
-	interpreter = Interpreter()
+def test_blocks_sum_numbers_zero_to_ten_with_while_false(interpreter):
 	parser = Parser()
 
 	expected = SelfInteger(55)
-	
-	interpreter.initializeBootstrap()
 	actual = interpreter.interpret(parser.parse("_AddSlots: (| i <- 0. sum <- 0 |). [sum: sum + i. i: i + 1. i _IntEQ: 11] whileFalse: []. sum"))
 
 	assert str(actual) == str(expected)
 
-def test_loops_on_condition():
-	interpreter = Interpreter()
-	interpreter.initializeBootstrap()
+def test_loops_on_condition(interpreter):
 	parser = Parser()
 
 	expected = SelfInteger(10)
@@ -39,9 +38,7 @@ def test_loops_on_condition():
 		"(| m = (| x <- 0 | [x: x + 1] untilTrue: [x _IntGT: 9]. x) |) m"))
 	assert str(actual) == str(expected)
 
-def test_block_exit():
-	interpreter = Interpreter()
-	interpreter.initializeBootstrap()
+def test_block_exit(interpreter):
 	parser = Parser()
 
 	expected = SelfInteger(10)
@@ -54,9 +51,7 @@ def test_block_exit():
 		"(| m = (| x <- 0 | [|:exit| (x _IntGE: 10) ifTrue: exit. x: x + 1] loopExit. x) |) m"))
 	assert str(actual) == str(expected)
 
-def test_block_exit_with_value():
-	interpreter = Interpreter()
-	interpreter.initializeBootstrap()
+def test_block_exit_with_value(interpreter):
 	parser = Parser()
 
 	expected = SelfInteger(10)

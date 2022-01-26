@@ -12,7 +12,7 @@ def test_basic_valid_implicit_message_passing():
 	unary_message = CodeNode([UnaryMessageNode(None, "lobby")])
 	interpreted_result = interpreter.interpret(unary_message)
 	
-	assert str(interpreted_result) == str(SelfLobby())
+	assert str(interpreted_result) == str(SelfLobby.get_lobby())
 
 def test_implicit_message_passing_in_method_slot():
 	# (| object1 = (| int1 = 1 | int1)|) object1

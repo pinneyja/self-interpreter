@@ -3,6 +3,7 @@ from parsing.nodes.slot_nodes.DataSlotNode import *
 from parsing.nodes.object_nodes.IntegerNode import *
 from parsing.nodes.message_nodes.UnaryMessageNode import *
 from interpreting.Interpreter import *
+from parsing.utils.SelfSnippets import addPlusString
 
 def test_basic_keyword_message_passing():
 	# (| x: a Y: b = (| | a) |) x: 1 Y: ()
@@ -27,6 +28,8 @@ def test_one_keyword_message_passing():
 def test_multiple_keyword_message_passing():
 	# (| x: a Y: b = (| | a + b) |) x: 1 Y: 2
 	interpreter = Interpreter()
+	parser = Parser()
+	interpreter.interpret(parser.parse(addPlusString))
 
 	keyword_method_object = RegularObjectNode(code=CodeNode([ BinaryMessageNode(UnaryMessageNode(None, "a"), "+", UnaryMessageNode(None, "b")) ]))
 	keyword_slot = KeywordSlotNode(["x:", "Y:"], keyword_method_object, ["a", "b"])
@@ -37,6 +40,8 @@ def test_multiple_keyword_message_passing():
 def test_multiple_identical_keyword_message_passing():
 	# (| x: a Y: b Y: c = (| | a + b + c) |) x: 1 Y: 2 Y: 3
 	interpreter = Interpreter()
+	parser = Parser()
+	interpreter.interpret(parser.parse(addPlusString))
 
 	keyword_method_object = RegularObjectNode(code=CodeNode([ BinaryMessageNode(BinaryMessageNode(UnaryMessageNode(None, "a"), "+", UnaryMessageNode(None, "b")), "+", UnaryMessageNode(None, "c")) ]))
 	keyword_slot = KeywordSlotNode(["x:", "Y:", "Y:"], keyword_method_object, ["a", "b", "c"])

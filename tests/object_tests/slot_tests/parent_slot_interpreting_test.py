@@ -1,4 +1,5 @@
 from interpreting.Interpreter import *
+from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
 from Messages import *
 
 def test_basic_parent_slot():

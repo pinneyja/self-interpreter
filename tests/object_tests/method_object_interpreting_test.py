@@ -5,6 +5,7 @@ from parsing.nodes.object_nodes.IntegerNode import *
 from parsing.nodes.message_nodes.UnaryMessageNode import *
 from interpreting.Interpreter import *
 from Messages import *
+from parsing.utils.SelfSnippets import addPlusString
 
 def test_simply_unary_method_call():
 	# (|x = (| | 1)|) x
@@ -72,6 +73,7 @@ def test_method_code_parent_lookup_using_self_slot():
 def test_call_method_multiple_times():
 	parser = Parser()
 	interpreter = Interpreter()
+	interpreter.interpret(parser.parse(addPlusString))
 
 	interpreted_block = interpreter.interpret(parser.parse("_AddSlots: (|y = (| | 1 + 2 ) |). y. y"))
 	assert str(SelfInteger(3)) == str(interpreted_block)
@@ -79,6 +81,7 @@ def test_call_method_multiple_times():
 def test_call_method_multiple_times_with_local_variable():
 	parser = Parser()
 	interpreter = Interpreter()
+	interpreter.interpret(parser.parse(addPlusString))
 
 	interpreted_block = interpreter.interpret(parser.parse("_AddSlots: (|y = (| x <- 1| x: (x + 1). x) |). y. y"))
 	assert str(SelfInteger(2)) == str(interpreted_block)

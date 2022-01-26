@@ -1,0 +1,1 @@
+addPlusString = "traits _AddSlots: (| smallInt = (| + x = (| | _IntAdd: x ) |) |)"

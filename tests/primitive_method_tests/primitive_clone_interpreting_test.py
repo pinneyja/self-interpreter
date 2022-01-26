@@ -1,6 +1,8 @@
 from parsing.Parser import Parser
 from interpreting.Interpreter import *
 from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
+from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
+from parsing.utils.SelfSnippets import addPlusString
 
 def test_clone_simple():
 	parser = Parser()
@@ -12,6 +14,7 @@ def test_clone_simple():
 def test_clone_with_mutation():
 	parser = Parser()
 	interpreter = Interpreter()
+	interpreter.interpret(parser.parse(addPlusString))
 
 	interpreted_result = interpreter.interpret(parser.parse("_AddSlots: (|obj1 = (|x<-1. z<-2|)|). _AddSlots: (|obj2 = obj1 _Clone|). obj1 x: 5. obj1 x + obj2 x"))
 	assert str(interpreted_result) == str(SelfInteger(6))

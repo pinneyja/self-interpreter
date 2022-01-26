@@ -1,7 +1,11 @@
 from interpreting.Interpreter import *
+from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
+from parsing.utils.SelfSnippets import addPlusString
 
 def test_undirected_resend():
 	interpreter = Interpreter()
+	parser = Parser()
+	interpreter.interpret(parser.parse(addPlusString))
 
 	# (| p* = (| x: a Y: b = (| | a + b) |). x = (| | resend.x: 1 Y: 2) |) x
 	expected_output = SelfInteger(3)
@@ -56,6 +60,8 @@ def test_bad_undirected_resend():
 	
 def test_directed_resend():
 	interpreter = Interpreter()
+	parser = Parser()
+	interpreter.interpret(parser.parse(addPlusString))
 
 	# (| p1* = (| x: a Y: b = (| | a + b) |). p2* = (| x: a Y: b = (| | a + b + 1) |). x = (| | p1.x: 1 Y: 2) |) x
 	expected_output = SelfInteger(3)

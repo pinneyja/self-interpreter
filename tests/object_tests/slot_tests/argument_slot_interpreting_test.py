@@ -1,4 +1,5 @@
 from interpreting.Interpreter import *
+from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
 
 def test_basic_argument_slot():
 	# (|+ = (|:arg| arg)|)
