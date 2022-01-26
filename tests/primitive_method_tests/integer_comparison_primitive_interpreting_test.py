@@ -1,5 +1,6 @@
 from interpreting.Interpreter import *
 from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
+from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
 
 def test_interprets_NE():
 	interpreter = Interpreter()

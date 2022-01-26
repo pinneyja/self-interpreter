@@ -1,5 +1,6 @@
 from typing import OrderedDict
 from interpreting.Interpreter import Interpreter
+from parsing.Parser import Parser
 from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
 from interpreting.objects.SelfObject import SelfObject
 from interpreting.objects.SelfSlot import SelfSlot
@@ -15,6 +16,7 @@ from parsing.nodes.message_nodes.UnaryMessageNode import UnaryMessageNode
 from parsing.nodes.message_nodes.BinaryMessageNode import BinaryMessageNode
 from parsing.nodes.message_nodes.KeywordMessageNode import KeywordMessageNode
 from parsing.nodes.object_nodes.RegularObjectNode import RegularObjectNode
+from parsing.utils.SelfSnippets import addPlusString
 
 def test_interprets_empty_block():
 	# []
@@ -23,7 +25,7 @@ def test_interprets_empty_block():
 	empty_block_node = CodeNode([BlockNode()])
 	empty_block = SelfObject({
 		"value" : SelfSlot("value", SelfObject(parent_slots={
-				"" : SelfSlot("", SelfObject(parent_slots={"self" : SelfSlot("self", SelfLobby(), is_immutable=True)}), is_immutable=True)
+				"" : SelfSlot("", SelfObject(parent_slots={"self" : SelfSlot("self", SelfLobby.get_lobby(), is_immutable=True)}), is_immutable=True)
 			}), is_immutable=True)
 	})
 	interpreted_empty_block = interpreter.interpret(empty_block_node)
@@ -37,7 +39,7 @@ def test_interprets_code_block():
 	code_block_node = CodeNode([BlockNode(code=CodeNode([IntegerNode(1), IntegerNode(2)]))])
 	code_block = SelfObject({
 		"value" : SelfSlot("value", SelfObject(parent_slots={
-				"" : SelfSlot("", SelfObject(parent_slots={"self" : SelfSlot("self", SelfLobby(), is_immutable=True)}), is_immutable=True)
+				"" : SelfSlot("", SelfObject(parent_slots={"self" : SelfSlot("self", SelfLobby.get_lobby(), is_immutable=True)}), is_immutable=True)
 			}, code=CodeNode([IntegerNode(1), IntegerNode(2)])), is_immutable=True)
 	})
 	interpreted_code_block = interpreter.interpret(code_block_node)
@@ -79,6 +81,8 @@ def test_interprets_block_with_more_than_one_argument():
 	# [|:a. :b. :c| ((a + b) + c)]
 	# [|:a. :b. :c| ((a + b) + c)] value: 1 With: 2 With: 3
 	interpreter = Interpreter()
+	parser = Parser()
+	interpreter.interpret(parser.parse(addPlusString))
 
 	slots = [
 		ArgumentSlotNode("a"),
@@ -98,7 +102,7 @@ def test_interprets_block_with_more_than_one_argument():
 				"c" : SelfSlot("c")
 			},
 			parent_slots={
-				"" : SelfSlot("", SelfObject(parent_slots={"self" : SelfSlot("self", SelfLobby(), is_immutable=True)}), is_immutable=True)
+				"" : SelfSlot("", SelfObject(parent_slots={"self" : SelfSlot("self", SelfLobby.get_lobby(), is_immutable=True)}), is_immutable=True)
 			}, 
 			code=CodeNode([BinaryMessageNode(BinaryMessageNode(UnaryMessageNode(None, "a"), "+", UnaryMessageNode(None, "b")), "+", UnaryMessageNode(None, "c"))])), 
 			is_immutable=True, 
@@ -115,6 +119,8 @@ def test_interprets_block_with_more_than_one_argument():
 def test_interprets_block_in_context():
 	# (|a = 1. x = (|b=2| [a + b] value) |) x
 	interpreter = Interpreter()
+	parser = Parser()
+	interpreter.interpret(parser.parse(addPlusString))
 	
 	inner_code_block_node = CodeNode([UnaryMessageNode(BlockNode(code=CodeNode([BinaryMessageNode(UnaryMessageNode(None, "a"), "+", UnaryMessageNode(None, "b"))])), "value")])
 	inner_slots = [DataSlotNode("b", "=", IntegerNode(2))]
@@ -158,6 +164,8 @@ def test_block_saves_context_from_creation():
 def test_interprets_block_in_context_complicated():
 	# (| doIt: block = (| | (block value: 1) + (block value: 2)) |) doIt: [|:arg| arg + arg]
 	interpreter = Interpreter()
+	parser = Parser()
+	interpreter.interpret(parser.parse(addPlusString))
 	
 	part1 = KeywordMessageNode(UnaryMessageNode(None, "block"), ["value:"], [IntegerNode(1)])
 	part2 = KeywordMessageNode(UnaryMessageNode(None, "block"), ["value:"], [IntegerNode(2)])

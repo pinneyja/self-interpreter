@@ -14,13 +14,14 @@ def handleEq(receiver, argument_list):
 	from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
 	from interpreting.objects.primitive_objects.SelfReal import SelfReal
 	from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
-	from interpreting.primitive_methods.IntPrimitives import handleIntEQ
+	from interpreting.primitive_methods.SmallIntPrimitives import handleIntEQ
+	from interpreting.primitive_methods.SmallIntPrimitives import handleIntIfFail
 	from interpreting.primitive_methods.FloatPrimitives import handleFloatEQ
 
 	if type(receiver) != type(argument_list[0]):
 		return SelfBoolean(False)
 	elif type(receiver) is SelfInteger:
-		return handleIntEQ(receiver, argument_list)
+		return handleIntIfFail(handleIntEQ, '_Eq:')(receiver, argument_list)
 	elif type(receiver) is SelfReal:
 		return handleFloatEQ(receiver, argument_list)
 	else:

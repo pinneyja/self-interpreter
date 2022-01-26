@@ -1,3 +1,4 @@
+from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
 from interpreting.Interpreter import *
 
 def test_define_empty_obj():

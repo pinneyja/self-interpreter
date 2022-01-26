@@ -1,4 +1,3 @@
-from interpreting.objects.traits.SelfSmallInt import SelfSmallInt
 from Messages import Messages
 from interpreting.objects.SelfObject import SelfObject
 import warnings

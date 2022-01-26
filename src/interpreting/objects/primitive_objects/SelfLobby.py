@@ -1,6 +1,5 @@
 from ..SelfObject import *
 from ..SelfSlot import *
-from .SelfInteger import *
 
 class SelfLobby(SelfObject):
 	lobby = None
