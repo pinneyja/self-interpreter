@@ -2,6 +2,9 @@ from os import system
 from interpreting.Interpreter import *
 from interpreting.printingutils.SelfObjectPrinter import SelfObjectPrinter
 from parsing.Parser import *
+from sys import platform
+if platform == "linux":
+	import readline
 
 def main():
 	isParser = False
