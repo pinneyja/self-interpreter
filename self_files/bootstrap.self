@@ -1,11 +1,25 @@
 globals _AddSlots: (| bootstrap = (). modules = (|init=(|copy = ()|)|)|).
 globals _AddSlots: (| true = 1 _IntEQ: 1. false = 0 _IntEQ: 1.|).
-globals modules _AddSlots: (|boolean=(|postFileIn=(| | 'postFileIn')|). block=(|postFileIn=(| | 'postFileIn')|)|).
-globals modules _AddSlots: (|smallInt=(|postFileIn=(| | 'postFileIn')|). integer=(|postFileIn=(| | 'postFileIn')|). number=(|postFileIn=(| | 'postFileIn')|)|).
 globals _AddSlots: (|raiseError = ()|).
-globals modules _AddSlots: (|boolean=(|postFileIn=(| | 'postFileIn')|). block=(|postFileIn=(| | 'postFileIn')|).
-  nil=(|postFileIn=(| | 'postFileIn')|)|).
-traits _AddSlots: (|block = (). orderedOddball=(|parent* = lobby. value=(| | self)|). clonable = (|parent* = lobby|)|).
+
+globals modules _AddSlots: (|
+  boolean=(|postFileIn=(| | 'postFileIn')|).
+  block=(|postFileIn=(| | 'postFileIn')|).
+  nil=(|postFileIn=(| | 'postFileIn')|).
+  smallInt=(|postFileIn=(| | 'postFileIn')|).
+  integer=(|postFileIn=(| | 'postFileIn')|).
+  number=(|postFileIn=(| | 'postFileIn')|).
+  vector=(|postFileIn=(| | 'postFileIn')|).
+  indexable=(|postFileIn=(| | 'postFileIn')|).
+  |).
+
+traits _AddSlots: (|
+  block = ().
+  orderedOddball=(|parent* = lobby. value=(| | self)|).
+  clonable = (|parent* = lobby|).
+  vector = ().
+  collection = (|parent* = lobby|). "TODO: remove once we have collections"
+  |).
 
 bootstrap _AddSlots: (|addSlotsTo: destObj From: object = (| | destObj _AddSlots: object) |).
 bootstrap _AddSlots: (|remove: slotName From: object = (| | 1) |).
@@ -14,7 +28,9 @@ bootstrap _AddSlots: (|stub = (|parent* = lobby|)|).
 bootstrap stub _AddSlots: (| -> n = (| | followThrough: n IfNeedToMakeObject: [|:x| x makeObject] )|).
 bootstrap stub _AddSlots: (| name <- ''. object <- lobby|).
 
-globals _AddSlots: (|nil = (| value = (| | self)|)|).
+vector _AddSlots: (|parent* = traits vector|).
+
+nil _AddSlots: (| value = (| | self)|).
 
 bootstrap stub _AddSlots: (| followThrough: n IfNeedToMakeObject: b = 
   (|r| 

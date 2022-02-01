@@ -1,6 +1,7 @@
 from interpreting.primitive_methods.SmallIntPrimitives import *
 from interpreting.primitive_methods.FloatPrimitives import *
 from interpreting.primitive_methods.ObjectPrimitives import *
+from interpreting.primitive_methods.ObjectVectorPrimitives import *
 
 primitive_dict = {
 	'_IntNE:' : handleIntIfFail(handleIntNE, '_IntNE:'),
@@ -40,5 +41,14 @@ primitive_dict = {
 	'_IsStringIfFalse:' : handleIsString,
 	'_Clone' : handleClone,
 	'_Define:' : handleDefine,
-	'_GetSlot:' : handleGetSlot
+	'_GetSlot:' : handleGetSlot,
+	'_Clone:Filler:' : handleCloneFiller,
+	'_Clone:Filler:IfFail:' : handleCloneFiller,
+	'_At:' : handleAt,
+	'_At:IfFail:' : handleAt,
+	'_At:Put:' : handleAtPut,
+	'_At:Put:IfFail:' : handleAtPut,
+	'_Size' : handleSize,
+	'_CopyRangeDstPos:Src:SrcPos:Length:' : handleCopyRangeDstPosSrcSrcPosLength,
+	'_CopyRangeDstPos:Src:SrcPos:Length:IfFail:' : handleCopyRangeDstPosSrcSrcPosLength
 }
