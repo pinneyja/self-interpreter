@@ -2,10 +2,16 @@ from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
 from interpreting.Interpreter import Interpreter
 from parsing.Parser import Parser
 from parsing.utils.SelfSnippets import addPlusString
+import pytest
 
-def test_basic_loop_with_restart():
-	# lobby _AddSlots: (| x <- 0. y <-0 |). [x: x + 1. y: y + 1. (x _IntEQ: 3) ifTrue: [^ y] False: ['no']. _Restart] value
+@pytest.fixture(scope="module")
+def interpreter():
 	interpreter = Interpreter()
+	interpreter.initializeBootstrap()
+	return interpreter
+
+def test_basic_loop_with_restart(interpreter):
+	# lobby _AddSlots: (| x <- 0. y <-0 |). [x: x + 1. y: y + 1. (x _IntEQ: 3) ifTrue: [^ y] False: ['no']. _Restart] value
 	parser = Parser()
 	interpreter.interpret(parser.parse(addPlusString))
 
@@ -16,9 +22,8 @@ def test_basic_loop_with_restart():
 	assert str(interpreted_result) == str(expected_result)
 	assert str(interpreted_result_two) == str(expected_result)
 
-def test_sum_numbers_zero_to_ten():
+def test_sum_numbers_zero_to_ten(interpreter):
 	# lobby _AddSlots: (| i <- 0. sum <-0 |). [sum: sum + i. (i _IntEQ: 10) ifTrue: [^ sum] False: ['no']. i: i + 1. _Restart] value
-	interpreter = Interpreter()
 	parser = Parser()
 	interpreter.interpret(parser.parse(addPlusString))
 
