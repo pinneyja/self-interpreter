@@ -429,3 +429,26 @@ def test_number_mean(interpreter):
 
 	assert str(SelfInteger(8)) == str(actual_one)
 	assert str(SelfInteger(0)) == str(actual_two)
+
+def test_to_do(interpreter):
+	parser = Parser()
+
+	interpreter.interpret(parser.parse("_AddSlots: (| x <- 0|)"))
+	actual_one = interpreter.interpret(parser.parse("x: 0. 1 to: 10 ByPositive: 1 Do: [|:a. :b| x: x + a]. x"))
+	actual_two = interpreter.interpret(parser.parse("x: 0. 1 to: 10 ByPositive: 2 Do: [|:a. :b| x: x + a]. x"))
+	actual_three = interpreter.interpret(parser.parse("x: 0. -1 to: -10 ByNegative: -1 Do: [|:a. :b| x: x + a]. x"))
+	actual_four = interpreter.interpret(parser.parse("x: 0. -1 to: -10 ByNegative: -2 Do: [|:a. :b| x: x + a]. x"))
+
+	assert str(SelfInteger(55)) == str(actual_one)
+	assert str(SelfInteger(25)) == str(actual_two)
+	assert str(SelfInteger(-55)) == str(actual_three)
+	assert str(SelfInteger(-25)) == str(actual_four)
+
+def test_find_first(interpreter):
+	parser = Parser()
+
+	actual_one = interpreter.interpret(parser.parse("10 findFirst: [|:x. :i| (x * x) = 49] IfPresent: [|:x. :i| x] IfAbsent: -1"))
+	actual_two = interpreter.interpret(parser.parse("10 findFirst: [|:x. :i| (x * x) = 50] IfPresent: [|:x. :i| x] IfAbsent: -1"))
+
+	assert str(SelfInteger(7)) == str(actual_one)
+	assert str(SelfInteger(-1)) == str(actual_two)

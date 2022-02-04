@@ -11,6 +11,7 @@ globals modules _AddSlots: (|
   collection=(|postFileIn=(| | 'postFileIn')|).
   smallInt=(|postFileIn=(| | 'postFileIn')|).
   integer=(|postFileIn=(| | 'postFileIn')|).
+  integerIteration=(|postFileIn=(| | 'postFileIn')|).
   number=(|postFileIn=(| | 'postFileIn')|).
   vector=(|postFileIn=(| | 'postFileIn')|).
   indexable=(|postFileIn=(| | 'postFileIn')|).

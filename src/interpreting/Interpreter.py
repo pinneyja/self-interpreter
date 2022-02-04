@@ -30,6 +30,7 @@ class Interpreter:
 		self.interpret(parser.parse("'self_files/block.self' _RunScript."))
 		self.interpret(parser.parse("'self_files/smallInt.self' _RunScript."))
 		self.interpret(parser.parse("'self_files/integer.self' _RunScript."))
+		self.interpret(parser.parse("'self_files/integerIteration.self' _RunScript."))
 		self.interpret(parser.parse("'self_files/number.self' _RunScript."))
 		self.interpret(parser.parse("'self_files/collection.self' _RunScript."))
 		self.interpret(parser.parse("'self_files/list.self' _RunScript."))
