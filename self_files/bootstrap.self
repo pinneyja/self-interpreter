@@ -1,11 +1,14 @@
 globals _AddSlots: (| bootstrap = (). modules = (|init=(|copy = ()|)|)|).
 globals _AddSlots: (| true = 1 _IntEQ: 1. false = 0 _IntEQ: 1.|).
+defaultBehavior _AddSlots: (| clone= (| | _Clone). == = (| :a | _Eq: a). value: a = (| | value). value: a With: b = (| | value: a). value: a With: b With: c = (| | value: a With: b). value: a With: b With: c With: d = (| | value: a With: b With: c). |).
 globals _AddSlots: (|raiseError = ()|).
 
 globals modules _AddSlots: (|
   boolean=(|postFileIn=(| | 'postFileIn')|).
   block=(|postFileIn=(| | 'postFileIn')|).
   nil=(|postFileIn=(| | 'postFileIn')|).
+  rootTraits=(|postFileIn=(| | 'postFileIn')|).
+  collection=(|postFileIn=(| | 'postFileIn')|).
   smallInt=(|postFileIn=(| | 'postFileIn')|).
   integer=(|postFileIn=(| | 'postFileIn')|).
   number=(|postFileIn=(| | 'postFileIn')|).
@@ -18,7 +21,6 @@ traits _AddSlots: (|
   orderedOddball=(|parent* = lobby. value=(| | self)|).
   clonable = (|parent* = lobby|).
   vector = ().
-  collection = (|parent* = lobby|). "TODO: remove once we have collections"
   |).
 
 bootstrap _AddSlots: (|addSlotsTo: destObj From: object = (| | destObj _AddSlots: object) |).

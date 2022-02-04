@@ -68,7 +68,7 @@ class SelfObjectPrinter:
 
 	@staticmethod
 	def get_if_non_none(fstring:str, dict:dict, item:str, default:str = ''):
-		return fstring.format(dict[item]) if item in dict and dict[item] else default
+		return fstring.format(dict[item]) if item in dict and dict[item] is not None else default
 	
 	@staticmethod
 	def get_terminal_size():
