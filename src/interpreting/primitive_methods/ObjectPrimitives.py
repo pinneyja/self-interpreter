@@ -113,3 +113,8 @@ def handleGetSlot(receiver, argument_list):
 	else:
 		receiver.slots[slot] = SelfSlot(slot, SelfObject())
 		return receiver.slots[slot].value
+
+def handleCurrentTimeString(receiver, argument_list):
+	import time
+	from interpreting.objects.primitive_objects.SelfString import SelfString
+	return SelfString(str(time.localtime()))

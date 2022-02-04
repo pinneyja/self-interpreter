@@ -42,6 +42,7 @@ primitive_dict = {
 	'_Clone' : handleClone,
 	'_Define:' : handleDefine,
 	'_GetSlot:' : handleGetSlot,
+	'_CurrentTimeString' : handleCurrentTimeString,
 	'_Clone:Filler:' : handleCloneFiller,
 	'_Clone:Filler:IfFail:' : handleCloneFiller,
 	'_At:' : handleAt,
