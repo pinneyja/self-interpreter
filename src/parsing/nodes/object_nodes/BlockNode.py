@@ -1,6 +1,7 @@
 from typing import OrderedDict
 from parsing.nodes.Node import Node
 from parsing.nodes.object_nodes.RegularObjectNode import RegularObjectNode
+from parsing.nodes.CodeNode import CodeNode
 
 class BlockNode(Node):
 	def __init__(self, slot_list=None, code=None, code_string=None):
@@ -15,6 +16,8 @@ class BlockNode(Node):
 
 		if self.code:
 			self.code.set_contained_in_block(True)
+		else:
+			self.code = CodeNode([RegularObjectNode()])
 
 	def __str__(self):
 		return f"BlockObject: (slot-list={self.slot_list} code={{{self.code}}})"

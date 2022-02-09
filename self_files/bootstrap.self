@@ -1,6 +1,6 @@
 globals _AddSlots: (| bootstrap = (). modules = (|init=(|copy = ()|)|)|).
 globals _AddSlots: (| true = 1 _IntEQ: 1. false = 0 _IntEQ: 1.|).
-defaultBehavior _AddSlots: (| clone= (| | _Clone). == = (| :a | _Eq: a). value: a = (| | value). value: a With: b = (| | value: a). value: a With: b With: c = (| | value: a With: b). value: a With: b With: c With: d = (| | value: a With: b With: c). |).
+
 globals _AddSlots: (|raiseError = ()|).
 
 globals modules _AddSlots: (|
@@ -15,6 +15,7 @@ globals modules _AddSlots: (|
   number=(|postFileIn=(| | 'postFileIn')|).
   vector=(|postFileIn=(| | 'postFileIn')|).
   indexable=(|postFileIn=(| | 'postFileIn')|).
+  defaultBehavior=(|postFileIn=(| | 'postFileIn')|).
   |).
 
 traits _AddSlots: (|
@@ -32,8 +33,6 @@ bootstrap stub _AddSlots: (| -> n = (| | followThrough: n IfNeedToMakeObject: [|
 bootstrap stub _AddSlots: (| name <- ''. object <- lobby|).
 
 vector _AddSlots: (|parent* = traits vector|).
-
-nil _AddSlots: (| value = (| | self)|).
 
 bootstrap stub _AddSlots: (| followThrough: n IfNeedToMakeObject: b = 
   (|r| 

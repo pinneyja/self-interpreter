@@ -40,6 +40,7 @@ primitive_dict = {
 	'_IdentityHash' : handleIdentityHash,
 	'_IsStringIfFalse:' : handleIsString,
 	'_Clone' : handleClone,
+	'_CloneIfFail:' : handleClone,
 	'_Define:' : handleDefine,
 	'_GetSlot:' : handleGetSlot,
 	'_CurrentTimeString' : handleCurrentTimeString,
