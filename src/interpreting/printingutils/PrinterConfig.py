@@ -1,5 +1,5 @@
 CONFIG = {
-    'MAX_OBJECT_DEPTH': 3,
+    'MAX_OBJECT_DEPTH': 2,
     'MAX_LIST_LENGTH': 7,
     'COLOR': True,
     'TAB_SIZE': 2,
@@ -8,7 +8,7 @@ CONFIG = {
     'MAX_ANNOTATION_SIZE': 30,
     'USE_CODE_STRING': True,
     'USE_ALT_STRING' : False, 
-    'REMOVE_ANNOTATIONS' : False
+    'REMOVE_ANNOTATIONS' : True
 }
 
 # For any color, '\033[38;2;r;g;bm' (replace r, g, b with rgb). Remember to end with ENDC.

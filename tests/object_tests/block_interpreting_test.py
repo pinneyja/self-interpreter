@@ -26,7 +26,7 @@ def test_interprets_empty_block():
 	empty_block = SelfObject({
 		"value" : SelfSlot("value", SelfObject(parent_slots={
 				"" : SelfSlot("", SelfObject(parent_slots={"self" : SelfSlot("self", SelfLobby.get_lobby(), is_immutable=True)}), is_immutable=True)
-			}), is_immutable=True)
+			}, code=CodeNode([RegularObjectNode()])), is_immutable=True)
 	})
 	interpreted_empty_block = interpreter.interpret(empty_block_node)
 
