@@ -1,6 +1,5 @@
 globals _AddSlots: (| bootstrap = (). modules = (|init=(|copy = ()|)|)|).
 globals _AddSlots: (| true = 1 _IntEQ: 1. false = 0 _IntEQ: 1.|).
-
 globals _AddSlots: (|raiseError = ()|).
 
 globals modules _AddSlots: (|
@@ -8,6 +7,7 @@ globals modules _AddSlots: (|
   block=(|postFileIn=(| | 'postFileIn')|).
   nil=(|postFileIn=(| | 'postFileIn')|).
   rootTraits=(|postFileIn=(| | 'postFileIn')|).
+  collector=(|postFileIn=(| | 'postFileIn')|).
   collection=(|postFileIn=(| | 'postFileIn')|).
   smallInt=(|postFileIn=(| | 'postFileIn')|).
   integer=(|postFileIn=(| | 'postFileIn')|).
