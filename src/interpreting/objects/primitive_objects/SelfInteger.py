@@ -1,3 +1,4 @@
+import warnings
 from interpreting.objects.SelfSlot import SelfSlot
 from interpreting.objects.SelfObject import SelfObject
 from interpreting.objects.primitive_objects.SelfLobby import SelfLobby
