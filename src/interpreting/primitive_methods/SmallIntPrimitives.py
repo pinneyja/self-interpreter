@@ -105,6 +105,7 @@ def handleIntIfFail(method, primitive_name):
 	def error_handler(receiver, argument_list):
 		from interpreting.objects.SelfException import SelfException
 		from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
+		from interpreting.objects.primitive_objects.SelfString import SelfString
 		from interpreting.objects.SelfObject import SelfObject
 		from Messages import Messages
 
@@ -115,10 +116,20 @@ def handleIntIfFail(method, primitive_name):
 
 		if type(receiver) is not SelfInteger or type(argument) is not SelfInteger:
 			if if_fail and type(if_fail) is SelfObject:
-				return if_fail.pass_unary_message("value")
+				return if_fail.pass_keyword_message("value:With:", [SelfString("badTypeError"), SelfString(primitive_name)])
 			else:
 				raise SelfException(Messages.INVALID_PRIMITIVE_OPERANDS.value.format(primitive_name, receiver, argument))
 
 		return method(receiver, argument)
 	
 	return error_handler
+
+def handleIntAsFloat(receiver, argument_list):
+	from interpreting.objects.SelfException import SelfException
+	from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
+	from interpreting.objects.primitive_objects.SelfFloat import SelfFloat
+	from Messages import Messages
+
+	if type(receiver) is not SelfInteger:
+		raise SelfException(Messages.BAD_TYPE_ERROR.value.format('_IntAsFloat'))
+	return SelfFloat(float(receiver.value))

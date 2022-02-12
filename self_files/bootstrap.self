@@ -12,6 +12,7 @@ globals modules _AddSlots: (|
   smallInt=(|postFileIn=(| | 'postFileIn')|).
   integer=(|postFileIn=(| | 'postFileIn')|).
   integerIteration=(|postFileIn=(| | 'postFileIn')|).
+  float=(|postFileIn=(| | 'postFileIn')|).
   number=(|postFileIn=(| | 'postFileIn')|).
   vector=(|postFileIn=(| | 'postFileIn')|).
   indexable=(|postFileIn=(| | 'postFileIn')|).

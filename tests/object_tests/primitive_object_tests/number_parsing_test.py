@@ -65,7 +65,7 @@ def test_case_sensitivity():
 	assert str(expected_node) == str(parsed_node_lower)
 	assert str(expected_node) == str(parsed_node_upper)
 
-	expected_node = CodeNode([RealNode(100.0)])
+	expected_node = CodeNode([FloatNode(100.0)])
 	parsed_node_lower = parser.parse("10e1")
 	parsed_node_upper = parser.parse("10E1")
 	assert str(expected_node) == str(parsed_node_lower)
@@ -74,34 +74,34 @@ def test_case_sensitivity():
 def test_float_overflow():
 	parser = Parser()
 
-	expected_node = CodeNode([RealNode(float("inf"))])
+	expected_node = CodeNode([FloatNode(float("inf"))])
 	parsed_node = parser.parse("10e1000")
 	assert str(expected_node) == str(parsed_node)
 
-	expected_node = CodeNode([RealNode(float("-inf"))])
+	expected_node = CodeNode([FloatNode(float("-inf"))])
 	parsed_node = parser.parse("-10e1000")
 	assert str(expected_node) == str(parsed_node)
 
 def test_regular_float():
 	parser = Parser()
 
-	expected_node = CodeNode([RealNode(12.0)])
+	expected_node = CodeNode([FloatNode(12.0)])
 	parsed_node = parser.parse("1.2e1")
 	assert str(expected_node) == str(parsed_node)
 
-	expected_node = CodeNode([RealNode(-12.0)])
+	expected_node = CodeNode([FloatNode(-12.0)])
 	parsed_node = parser.parse("-1.2e1")
 	assert str(expected_node) == str(parsed_node)
 
-	expected_node = CodeNode([RealNode(120.0)])
+	expected_node = CodeNode([FloatNode(120.0)])
 	parsed_node = parser.parse("1.2e+2")
 	assert str(expected_node) == str(parsed_node)
 
-	expected_node = CodeNode([RealNode(1.2)])
+	expected_node = CodeNode([FloatNode(1.2)])
 	parsed_node = parser.parse("12e-1")
 	assert str(expected_node) == str(parsed_node)
 
-	expected_node = CodeNode([RealNode(0.00000000122)])
+	expected_node = CodeNode([FloatNode(0.00000000122)])
 	parsed_node = parser.parse("12.2e-10")
 	assert str(expected_node) == str(parsed_node)
 

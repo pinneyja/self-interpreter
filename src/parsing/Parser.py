@@ -7,7 +7,7 @@ from parsing.nodes.message_nodes.ResendNode import ResendNode
 from parsing.nodes.message_nodes.UnaryMessageNode import UnaryMessageNode
 from parsing.nodes.object_nodes.BlockNode import BlockNode
 from parsing.nodes.object_nodes.IntegerNode import IntegerNode
-from parsing.nodes.object_nodes.RealNode import RealNode
+from parsing.nodes.object_nodes.FloatNode import FloatNode
 from parsing.nodes.object_nodes.StringNode import StringNode
 from parsing.nodes.slot_nodes.ArgumentSlotNode import ArgumentSlotNode
 from parsing.nodes.slot_nodes.BinarySlotNode import BinarySlotNode
@@ -170,11 +170,11 @@ class Parser:
 	
 	def p_constant_decimal(self, p):
 		'constant : DECIMAL'
-		p[0] = RealNode(p[1])
+		p[0] = FloatNode(p[1])
 	
 	def p_constant_float(self, p):
 		'constant : FLOAT'
-		p[0] = RealNode(p[1])
+		p[0] = FloatNode(p[1])
 
 	def p_constant_string(self, p):
 		'constant : string'

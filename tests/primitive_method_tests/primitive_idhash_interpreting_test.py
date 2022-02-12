@@ -20,7 +20,7 @@ def test_idhash_numbers():
 	for i in range(10):
 		number = random.uniform(-9999999, 9999999)
 
-		parser_result = CodeNode([UnaryMessageNode(RealNode(number), "_IdentityHash")])
+		parser_result = CodeNode([UnaryMessageNode(FloatNode(number), "_IdentityHash")])
 		interpreted_result_1 = interpreter.interpret(parser_result)
 		interpreted_result_2 = interpreter.interpret(parser_result)
 
@@ -32,7 +32,7 @@ def test_eq_numval_have_eq_hashes():
 
 	# 1 _IdentityHash _Eq: 1.0 _IdentityHash
 	id_msg_int = UnaryMessageNode(IntegerNode(1), '_IdentityHash')
-	id_msg_float = UnaryMessageNode(RealNode(1.0), '_IdentityHash')
+	id_msg_float = UnaryMessageNode(FloatNode(1.0), '_IdentityHash')
 	eq_msg = KeywordMessageNode(id_msg_int, ["_Eq:"], [id_msg_float])
 	parsed_node = CodeNode([eq_msg])
 	interpreted_result = interpreter.interpret(parsed_node)

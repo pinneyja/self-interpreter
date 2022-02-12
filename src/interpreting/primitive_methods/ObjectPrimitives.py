@@ -12,7 +12,7 @@ def handleAssignment(receiver, argument_list):
 
 def handleEq(receiver, argument_list):
 	from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
-	from interpreting.objects.primitive_objects.SelfReal import SelfReal
+	from interpreting.objects.primitive_objects.SelfFloat import SelfFloat
 	from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
 	from interpreting.primitive_methods.SmallIntPrimitives import handleIntEQ
 	from interpreting.primitive_methods.SmallIntPrimitives import handleIntIfFail
@@ -22,8 +22,8 @@ def handleEq(receiver, argument_list):
 		return SelfBoolean(False)
 	elif type(receiver) is SelfInteger:
 		return handleIntIfFail(handleIntEQ, '_Eq:')(receiver, argument_list)
-	elif type(receiver) is SelfReal:
-		return handleFloatEQ(receiver, argument_list)
+	elif type(receiver) is SelfFloat:
+		return handleFloatEQ(receiver, argument_list[0])
 	else:
 		return SelfBoolean(receiver == argument_list[0])
 
@@ -84,10 +84,10 @@ def handleIsString(receiver, argument_list=None):
 
 def handleClone(receiver, argument_list=None):
 	from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
-	from interpreting.objects.primitive_objects.SelfReal import SelfReal
+	from interpreting.objects.primitive_objects.SelfFloat import SelfFloat
 	from interpreting.objects.primitive_objects.SelfString import SelfString
 
-	if type(receiver) == SelfInteger or type(receiver) == SelfReal or type(receiver) == SelfString:
+	if type(receiver) == SelfInteger or type(receiver) == SelfFloat or type(receiver) == SelfString:
 		return receiver
 
 	return receiver.clone()
