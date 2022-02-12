@@ -1,7 +1,7 @@
-from interpreting.objects.primitive_objects.SelfReal import SelfReal
+from interpreting.objects.primitive_objects.SelfFloat import SelfFloat
 from parsing.nodes.Node import Node
 
-class RealNode(Node):
+class FloatNode(Node):
 	def __init__(self, value):
 		super().__init__()
 		self.value = value
@@ -10,7 +10,7 @@ class RealNode(Node):
 		return "Real: ('{}')".format(self.value)
 
 	def interpret(self, context):
-		return SelfReal(self.value)
+		return SelfFloat(self.value)
 	
 	def verify_syntax(self):
 		self.value = float(self.value)

@@ -1,6 +1,6 @@
 from interpreting.Interpreter import *
 from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
-from parsing.nodes.object_nodes.RealNode import *
+from parsing.nodes.object_nodes.FloatNode import *
 
 def test_eq_numbers():
 	# 1 _Eq: 1
@@ -17,19 +17,19 @@ def test_eq_numbers():
 	assert str(interpreted_result) == str(expected_result)
 
 	# 1.02e1 _Eq: 1.02e1
-	parser_result = CodeNode([KeywordMessageNode(RealNode(10.2), ["_Eq:"], [RealNode(10.2)])])
+	parser_result = CodeNode([KeywordMessageNode(FloatNode(10.2), ["_Eq:"], [FloatNode(10.2)])])
 	expected_result = SelfBoolean(True)
 	interpreted_result = interpreter.interpret(parser_result)
 	assert str(interpreted_result) == str(expected_result)
 
 	# 1.02e1 _Eq: 1.02e2
-	parser_result = CodeNode([KeywordMessageNode(RealNode(10.2), ["_Eq:"], [RealNode(102.0)])])
+	parser_result = CodeNode([KeywordMessageNode(FloatNode(10.2), ["_Eq:"], [FloatNode(102.0)])])
 	expected_result = SelfBoolean(False)
 	interpreted_result = interpreter.interpret(parser_result)
 	assert str(interpreted_result) == str(expected_result)
 
 	# 1.02e1 _Eq: 1.01e1
-	parser_result = CodeNode([KeywordMessageNode(RealNode(10.2), ["_Eq:"], [RealNode(10.1)])])
+	parser_result = CodeNode([KeywordMessageNode(FloatNode(10.2), ["_Eq:"], [FloatNode(10.1)])])
 	expected_result = SelfBoolean(False)
 	interpreted_result = interpreter.interpret(parser_result)
 	assert str(interpreted_result) == str(expected_result)
@@ -37,7 +37,7 @@ def test_eq_numbers():
 def test_eq_different_types():
 	# 10 _Eq: 1e1
 	interpreter = Interpreter()
-	parser_result = CodeNode([KeywordMessageNode(IntegerNode(10), ["_Eq:"], [RealNode(10.0)])])
+	parser_result = CodeNode([KeywordMessageNode(IntegerNode(10), ["_Eq:"], [FloatNode(10.0)])])
 	expected_result = SelfBoolean(False)
 	interpreted_result = interpreter.interpret(parser_result)
 	assert str(interpreted_result) == str(expected_result)
