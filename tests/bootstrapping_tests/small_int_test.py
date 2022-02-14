@@ -1,14 +1,6 @@
-from interpreting.Interpreter import Interpreter
 from parsing.Parser import Parser
 from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
 from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
-import pytest
-
-@pytest.fixture(scope="module")
-def interpreter():
-	interpreter = Interpreter()
-	interpreter.initializeBootstrap()
-	return interpreter
 
 def test_small_int_min_max(interpreter):
 	parser = Parser()
