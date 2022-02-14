@@ -1,14 +1,6 @@
-from interpreting.Interpreter import Interpreter
 from parsing.Parser import Parser
 from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
 from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
-import pytest
-
-@pytest.fixture(scope="module")
-def interpreter():
-	interpreter = Interpreter()
-	interpreter.initializeBootstrap()
-	return interpreter
 
 def test_booleans_simple(interpreter):
 	parser = Parser()

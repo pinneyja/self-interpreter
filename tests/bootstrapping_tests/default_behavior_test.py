@@ -1,15 +1,7 @@
-from interpreting.Interpreter import Interpreter
 from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
 from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
 from interpreting.objects.SelfObject import SelfObject
 from parsing.Parser import Parser
-import pytest
-
-@pytest.fixture(scope="module")
-def interpreter():
-	interpreter = Interpreter()
-	interpreter.initializeBootstrap()
-	return interpreter
 
 def test_neq_comparison(interpreter):
 	parser = Parser()

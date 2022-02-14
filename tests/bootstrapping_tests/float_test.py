@@ -1,15 +1,7 @@
-from interpreting.Interpreter import Interpreter
 from parsing.Parser import Parser
 from interpreting.objects.primitive_objects.SelfFloat import SelfFloat
 from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
 from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
-import pytest
-
-@pytest.fixture(scope="module")
-def interpreter():
-	interpreter = Interpreter()
-	interpreter.initializeBootstrap()
-	return interpreter
 
 def test_float_add(interpreter):
 	parser = Parser()

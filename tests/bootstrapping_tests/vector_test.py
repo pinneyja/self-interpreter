@@ -1,16 +1,7 @@
-from interpreting.Interpreter import Interpreter
 from parsing.Parser import Parser
 from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
 from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
 from interpreting.objects.primitive_objects.SelfObjectVector import SelfObjectVector
-import pytest
-
-@pytest.fixture(scope="module")
-def interpreter():
-	interpreter = Interpreter()
-	parser = Parser()
-	interpreter.initializeBootstrap()
-	return interpreter
 
 def test_vector_at(interpreter):
 	parser = Parser()

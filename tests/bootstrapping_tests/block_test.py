@@ -1,13 +1,5 @@
-from interpreting.Interpreter import Interpreter
 from parsing.Parser import Parser
 from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
-import pytest
-
-@pytest.fixture(scope="module")
-def interpreter():
-	interpreter = Interpreter()
-	interpreter.initializeBootstrap()
-	return interpreter
 
 def test_blocks_sum_numbers_zero_to_ten(interpreter):
 	parser = Parser()
