@@ -17,6 +17,7 @@ globals modules _AddSlots: (|
   vector=(|postFileIn=(| | 'postFileIn')|).
   indexable=(|postFileIn=(| | 'postFileIn')|).
   defaultBehavior=(|postFileIn=(| | 'postFileIn')|).
+  string=(|postFileIn=(| | 'postFileIn')|).
   |).
 
 traits _AddSlots: (|
@@ -24,6 +25,9 @@ traits _AddSlots: (|
   orderedOddball=(|parent* = lobby. value=(| | self)|).
   clonable = (|parent* = lobby|).
   vector = ().
+  byteVector = ().
+  canonicalString = ().
+  mutableString = ().
   |).
 
 bootstrap _AddSlots: (|addSlotsTo: destObj From: object = (| | destObj _AddSlots: object) |).
@@ -34,6 +38,9 @@ bootstrap stub _AddSlots: (| -> n = (| | followThrough: n IfNeedToMakeObject: [|
 bootstrap stub _AddSlots: (| name <- ''. object <- lobby|).
 
 vector _AddSlots: (|parent* = traits vector|).
+byteVector _AddSlots: (|parent* = traits byteVector|).
+string _AddSlots: (|parent* = traits canonicalString|).
+mutableString _AddSlots: (|parent* = traits mutableString|).
 
 bootstrap stub _AddSlots: (| followThrough: n IfNeedToMakeObject: b = 
   (|r| 

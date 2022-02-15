@@ -23,7 +23,7 @@ def main():
 		except (SelfException, SelfParsingError) as selfError:
 			print(selfError)
 			print(Messages.BOOTSTRAP_FAILED.value)
-		except Exception as pythonException:
+		except Exception:
 			traceback.print_exc()
 			print(Messages.BOOTSTRAP_FAILED.value)
 
@@ -41,11 +41,9 @@ def main():
 				print(parser.parse(s))
 			else:
 				print(printer.get_object_string(interpreter.interpret(parser.parse(s))))
-		except SelfParsingError as selfParsingError:
-			print(selfParsingError)
-		except SelfException as selfException:
-			print(selfException)
-		except Exception as pythonException:
+		except (SelfParsingError, SelfException) as selfError:
+			print(selfError)
+		except Exception:
 			traceback.print_exc()
 
 main()

@@ -34,3 +34,73 @@ def handleCopyRangeDstPosSrcSrcPosLength(receiver, argument_list=None):
 	receiver.indexable[dstPos:dstPos+length] = src.indexable[srcPos:srcPos+length]
 
 	return receiver
+
+def handleByteSize(receiver, argument_list):
+	from interpreting.objects.primitive_objects.SelfByteVector import SelfByteVector
+	from interpreting.objects.primitive_objects.SelfString import SelfString
+	from interpreting.objects.SelfException import SelfException
+	from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
+	from Messages import Messages
+
+	if type(receiver) is SelfByteVector or type(receiver) is SelfString:
+		return SelfInteger(len(receiver.indexable))
+	else:
+		raise SelfException(Messages.BAD_TYPE_ERROR.value.format("_ByteSize"))
+
+def handleByteAt(receiver, argument_list):
+	return receiver.indexable[argument_list[0].value]
+
+def handleByteAtIfFail(receiver, argument_list):
+	return handleIfFail(handleByteAt, receiver, argument_list, 1)
+
+def handleByteAtPut(receiver, argument_list):
+	index = argument_list[0].value
+	new = argument_list[1]
+
+	receiver.indexable[index] = new
+	return receiver
+
+def handleByteAtPutIfFail(receiver, argument_list):
+	return handleIfFail(handleByteAtPut, receiver, argument_list, 2)
+
+def handleCloneBytesFiller(receiver, argument_list):
+	return handleCloneFiller(receiver, argument_list)
+
+def handleCloneBytesFillerIfFail(receiver, argument_list):
+	return handleIfFail(handleCloneBytesFiller, receiver, argument_list, 2)
+
+def handleByteVectorConcatenatePrototype(receiver, argument_list):
+	add_to_end = argument_list[0].indexable
+	prototype = argument_list[1]
+
+	result = prototype.clone()
+	result.indexable = receiver.indexable + add_to_end
+	return result
+
+def handleByteVectorConcatenatePrototypeIfFail(receiver, argument_list):
+	return handleIfFail(handleByteVectorConcatenatePrototype, receiver, argument_list, 2)
+
+def handleByteVectorCompare(receiver, argument_list):
+	from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
+	
+	other = argument_list[0]
+	us = list(map(lambda x: x.value, receiver.indexable))
+	them = list(map(lambda x: x.value, other.indexable))
+
+	if us > them:
+		return SelfInteger(1)
+	elif us < them:
+		return SelfInteger(-1)
+	else:
+		return SelfInteger(0)
+
+def handleByteVectorCompareIfFail(receiver, argument_list):
+	return handleIfFail(handleByteVectorCompare, receiver, argument_list, 1)
+
+def handleIfFail(method, receiver, argument_list, index):
+	from interpreting.objects.SelfException import SelfException
+
+	try:
+		return method(receiver, argument_list)
+	except SelfException:
+		return argument_list[index].pass_unary_message("value")

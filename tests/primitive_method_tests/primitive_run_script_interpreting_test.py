@@ -1,9 +1,17 @@
+from Messages import Messages
 from interpreting.Interpreter import Interpreter
 from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
 from interpreting.objects.SelfException import SelfException
 from parsing.Parser import Parser
+import pytest
 
 filename = "self_files/test.self"
+
+@pytest.fixture(scope="module")
+def interpreter():
+	interpreter = Interpreter()
+	interpreter.initializeBootstrap()
+	return interpreter
 
 def read_file():
 	with open(filename, "r") as f:
@@ -57,3 +65,9 @@ def test_partially_executes_script():
 	except SelfException as selfException:
 		assert str(selfException) == str(SelfException("Lookup error, 'badMessage' not found"))
 		assert str(interpreter.interpret(Parser().parse("x"))) == str(SelfInteger(2))
+
+def test_error_no_file(interpreter):
+	parser = Parser()
+	filename = "nonexistantFileName"
+	with pytest.raises(SelfException, match=Messages.FILE_NOT_FOUND.value.format(filename)):
+		interpreter.interpret(parser.parse(f"'{filename}' _RunScript"))

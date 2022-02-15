@@ -11,31 +11,16 @@ class Interpreter:
 		self.lobby = lobby
 
 	def interpret(self, syntaxTree):
-		try:
-			activation_object = SelfObject()
-			activation_object.parent_slots["self"] = SelfSlot("self", self.lobby, True)
-			result = syntaxTree.interpret(activation_object)
-		except (SelfException, SelfParsingError) as e:
-			raise e
-		# except Exception as e:
-		# 	raise SelfException(Messages.GENERIC_ERROR.value.format(str(e)))
+		activation_object = SelfObject()
+		activation_object.parent_slots["self"] = SelfSlot("self", self.lobby, True)
+		result = syntaxTree.interpret(activation_object)
 		return result
 
 	def initializeBootstrap(self):
 		parser = Parser()
-		self.interpret(parser.parse("'self_files/bootstrap.self' _RunScript."))
-		self.interpret(parser.parse("'self_files/rootTraits.self' _RunScript."))
-		self.interpret(parser.parse("'self_files/nil.self' _RunScript."))
-		self.interpret(parser.parse("'self_files/boolean.self' _RunScript."))
-		self.interpret(parser.parse("'self_files/block.self' _RunScript."))
-		self.interpret(parser.parse("'self_files/smallInt.self' _RunScript."))
-		self.interpret(parser.parse("'self_files/integer.self' _RunScript."))
-		self.interpret(parser.parse("'self_files/defaultBehavior.self' _RunScript."))
-		self.interpret(parser.parse("'self_files/integerIteration.self' _RunScript."))
-		self.interpret(parser.parse("'self_files/float.self' _RunScript."))
-		self.interpret(parser.parse("'self_files/number.self' _RunScript."))
-		self.interpret(parser.parse("'self_files/collector.self' _RunScript."))
-		self.interpret(parser.parse("'self_files/collection.self' _RunScript."))
-		self.interpret(parser.parse("'self_files/list.self' _RunScript."))
-		self.interpret(parser.parse("'self_files/vector.self' _RunScript."))
-		self.interpret(parser.parse("'self_files/indexable.self' _RunScript."))
+		files_to_load = ["bootstrap", "rootTraits", "nil", "boolean", "block", "smallInt", "integer", "defaultBehavior", "integerIteration", "number", "collector", "collection", "list", "vector", "indexable", "string", "float"]
+
+		for file_name in files_to_load:
+			self.interpret(parser.parse(f"'self_files/{file_name}.self' _RunScript."))
+
+		self.interpret(parser.parse("traits string initializeAscii"))
