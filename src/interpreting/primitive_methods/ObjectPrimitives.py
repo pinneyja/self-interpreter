@@ -5,7 +5,14 @@ def handleAddSlots(receiver, argument_list):
 	return receiver
 	
 def handleAssignment(receiver, argument_list):
-	slot_name = argument_list[0].value
+	from interpreting.objects.primitive_objects.SelfString import SelfString
+	from interpreting.objects.SelfException import SelfException
+	from Messages import Messages
+
+	if type(argument_list[0]) is not SelfString:
+		raise SelfException(Messages.INVALID_PRIMITIVE_OPERANDS.value.format("_Assignment:Value:", receiver, argument_list))
+
+	slot_name = argument_list[0].get_value()
 	value = argument_list[1]
 	receiver.set_slot(slot_name, value)
 	return receiver
@@ -17,11 +24,14 @@ def handleEq(receiver, argument_list):
 	from interpreting.primitive_methods.SmallIntPrimitives import handleIntEQ
 	from interpreting.primitive_methods.SmallIntPrimitives import handleIntIfFail
 	from interpreting.primitive_methods.FloatPrimitives import handleFloatEQ
+	from interpreting.objects.primitive_objects.SelfString import SelfString
 
 	if type(receiver) != type(argument_list[0]):
 		return SelfBoolean(False)
 	elif type(receiver) is SelfInteger:
 		return handleIntIfFail(handleIntEQ, '_Eq:')(receiver, argument_list)
+	elif type(receiver) is SelfString:
+		return SelfBoolean(str(receiver) == str(argument_list[0]))
 	elif type(receiver) is SelfFloat:
 		return handleFloatEQ(receiver, argument_list[0])
 	else:
@@ -43,7 +53,7 @@ def handleRunScript(receiver, argument_list):
 	parser = Parser()
 	interpreter = Interpreter(SelfLobby.get_lobby())
 	try:
-		with open(receiver.value, 'r') as script_file:
+		with open(receiver.get_value(), 'r') as script_file:
 			file_contents = script_file.read().strip()
 			file_lines = re.split('\n', file_contents)
 
@@ -68,7 +78,19 @@ def handleRunScript(receiver, argument_list):
 				file_line_index += 1
 			return interpreted_result
 	except FileNotFoundError:
-		raise SelfException(Messages.FILE_NOT_FOUND.value.format(receiver.value))
+		raise SelfException(Messages.FILE_NOT_FOUND.value.format(receiver.get_value()))
+
+def handleRunScriptIfFail(receiver, argument_list):
+	from interpreting.objects.SelfException import SelfException
+	from interpreting.objects.SelfObject import SelfObject
+
+	try:
+		return handleRunScript(receiver, argument_list[:-1])
+	except SelfException as selfException:
+		if type(argument_list[0]) is SelfObject:
+			return argument_list[0].pass_unary_message("value")
+		else:
+			raise selfException
 
 def handleIdentityHash(receiver, argument_list=None):
 	from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
@@ -104,8 +126,14 @@ def handleDefine(receiver, argument_list):
 def handleGetSlot(receiver, argument_list):
 	from interpreting.objects.SelfSlot import SelfSlot
 	from interpreting.objects.SelfObject import SelfObject
-	
-	slot = argument_list[0].value
+	from interpreting.objects.primitive_objects.SelfString import SelfString
+	from interpreting.objects.SelfException import SelfException
+	from Messages import Messages
+
+	if type(argument_list[0]) is not SelfString:
+		raise SelfException(Messages.INVALID_PRIMITIVE_OPERANDS.value.format("_GetSlot:", receiver, argument_list))
+
+	slot = argument_list[0].get_value()
 	if slot in receiver.slots:
 		return receiver.slots[slot].value
 	elif slot in receiver.parent_slots:
@@ -118,3 +146,17 @@ def handleCurrentTimeString(receiver, argument_list):
 	import time
 	from interpreting.objects.primitive_objects.SelfString import SelfString
 	return SelfString(str(time.localtime()))
+
+def handleThrowError(receiver, argument_list):
+	from interpreting.objects.primitive_objects.SelfString import SelfString
+	from interpreting.objects.SelfException import SelfException
+	from interpreting.printingutils.SelfObjectPrinter import SelfObjectPrinter
+	from Messages import Messages
+
+	if type(receiver) is SelfString:
+		if argument_list[0].get_value() == "cannot modify an immutable string":
+			raise SelfException(Messages.IMMUTABLE_ERROR.value)
+
+	printer = SelfObjectPrinter()
+	error_message = printer.get_object_string(argument_list[0])
+	raise SelfException(Messages.GENERIC_ERROR.value.format(error_message))

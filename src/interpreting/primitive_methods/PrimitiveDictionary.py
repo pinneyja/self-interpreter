@@ -2,6 +2,7 @@ from interpreting.primitive_methods.SmallIntPrimitives import *
 from interpreting.primitive_methods.FloatPrimitives import *
 from interpreting.primitive_methods.ObjectPrimitives import *
 from interpreting.primitive_methods.ObjectVectorPrimitives import *
+from interpreting.primitive_methods.StringPrimitives import *
 
 primitive_dict = {
 	'_IntNE:' : handleIntIfFail(handleIntNE, '_IntNE:'),
@@ -69,6 +70,7 @@ primitive_dict = {
 	'_AddSlots:' : handleAddSlots,
 	'_Assignment:Value:' : handleAssignment,
 	'_RunScript' : handleRunScript,
+	'_RunScriptIfFail:' : handleRunScriptIfFail,
 	'_Eq:' : handleEq,
 	'_IdentityHash' : handleIdentityHash,
 	'_IsStringIfFalse:' : handleIsString,
@@ -85,5 +87,21 @@ primitive_dict = {
 	'_At:Put:IfFail:' : handleAtPut,
 	'_Size' : handleSize,
 	'_CopyRangeDstPos:Src:SrcPos:Length:' : handleCopyRangeDstPosSrcSrcPosLength,
-	'_CopyRangeDstPos:Src:SrcPos:Length:IfFail:' : handleCopyRangeDstPosSrcSrcPosLength
+	'_CopyRangeDstPos:Src:SrcPos:Length:IfFail:' : handleCopyRangeDstPosSrcSrcPosLength,
+	'_StringCanonicalize' : handleStringCanonicalize,
+	'_StringPrint' : handleStringPrint,
+	'_ByteSize' : handleByteSize,
+	'_ByteAt:' : handleByteAt,
+	'_ByteAt:IfFail:' : handleByteAtIfFail,
+	'_ByteAt:Put:' : handleByteAtPut,
+	'_ByteAt:Put:IfFail:' : handleByteAtPutIfFail,
+	'_CloneBytes:Filler:' : handleCloneBytesFiller,
+	'_CloneBytes:Filler:IfFail:' : handleCloneBytesFillerIfFail,
+	'_ByteVectorConcatenate:Prototype:' : handleByteVectorConcatenatePrototype,
+	'_ByteVectorConcatenate:Prototype:IfFail:' : handleByteVectorConcatenatePrototypeIfFail,
+	'_ByteVectorCompare:' : handleByteVectorCompare,
+	'_ByteVectorCompare:IfFail:' : handleByteVectorCompareIfFail,
+	'_CopyByteRangeDstPos:Src:SrcPos:Length:' : handleCopyRangeDstPosSrcSrcPosLength,
+	'_CopyByteRangeDstPos:Src:SrcPos:Length:IfFail:' : handleCopyRangeDstPosSrcSrcPosLength,
+	'_ThrowError:' : handleThrowError
 }
