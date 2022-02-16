@@ -14,17 +14,13 @@ def test_neq_comparison(interpreter):
 	actual = interpreter.interpret(parser.parse("0 != 1"))
 	assert str(actual) == str(expected)
 
-	# This test case is blocked by float.self, should we leave commented to remember to add it in later?
+	expected = SelfBoolean(False)
+	actual = interpreter.interpret(parser.parse("1 != 1.0"))
+	assert str(actual) == str(expected)
 
-	# expected = SelfBoolean(False)
-	# actual = interpreter.interpret(parser.parse("1 != 1.0"))
-	# assert str(actual) == str(expected)
-
-	# Same case here, this test case is blocked by traits clonable
-
-	# expected = SelfBoolean(True)
-	# actual = interpreter.interpret(parser.parse("[] != []"))
-	# assert str(actual) == str(expected)
+	expected = SelfBoolean(True)
+	actual = interpreter.interpret(parser.parse("[] != []"))
+	assert str(actual) == str(expected)
 
 def test_nil_comparison(interpreter):
 	parser = Parser()
@@ -71,6 +67,14 @@ def test_nil_comparison(interpreter):
 
 	expected = SelfBoolean(True)
 	actual = interpreter.interpret(parser.parse("0 isNotNil"))
+	assert str(actual) == str(expected)
+
+	expected = SelfBoolean(True)
+	actual = interpreter.interpret(parser.parse("nil ifNil: true IfNotNil: false"))
+	assert str(actual) == str(expected)
+
+	expected = SelfBoolean(False)
+	actual = interpreter.interpret(parser.parse("0 ifNil: true IfNotNil: false"))
 	assert str(actual) == str(expected)
 
 def test_value_with(interpreter):
