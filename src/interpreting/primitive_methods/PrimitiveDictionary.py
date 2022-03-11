@@ -103,5 +103,6 @@ primitive_dict = {
 	'_ByteVectorCompare:IfFail:' : handleByteVectorCompareIfFail,
 	'_CopyByteRangeDstPos:Src:SrcPos:Length:' : handleCopyRangeDstPosSrcSrcPosLength,
 	'_CopyByteRangeDstPos:Src:SrcPos:Length:IfFail:' : handleCopyRangeDstPosSrcSrcPosLength,
-	'_ThrowError:' : handleThrowError
+	'_ThrowError:' : handleThrowError,
+	'_Print' : handlePrint
 }

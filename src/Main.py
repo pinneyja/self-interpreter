@@ -11,7 +11,7 @@ def main():
 	isParser = False
 	parser = Parser()
 	interpreter = Interpreter()
-	printer = SelfObjectPrinter()
+	printer = SelfObjectPrinter.instance()
 	system("")
 
 	mode = input('Select mode (i)nterpret or (p)arse: ')
