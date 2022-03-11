@@ -136,12 +136,18 @@ class SelfObject:
 		return clone
 
 	def as_dict(self, visited):
+		from interpreting.printingutils.PrinterConfig import CONFIG
 		is_unvisited = self not in visited
 		visited.append(self)
 
-		parent_slots = {key + '*' : self.parent_slots[key].as_dict(visited, is_unvisited) for key in self.parent_slots}
-		arg_slots = {':' + key : self.arg_slots[key].as_dict(visited, is_unvisited) for key in self.arg_slots}
-		slots = {key : self.slots[key].as_dict(visited, is_unvisited) for key in self.slots if key not in self.arg_slots}
+		i = [0]
+		def length_check(i):
+			i[0] += 1
+			return i[0] - 1 < CONFIG['MAX_LIST_LENGTH'] + 2
+
+		parent_slots = {key + '*' : self.parent_slots[key].as_dict(visited, is_unvisited) for key in self.parent_slots if length_check(i)}
+		arg_slots = {':' + key : self.arg_slots[key].as_dict(visited, is_unvisited) for key in self.arg_slots if length_check(i)}
+		slots = {key : self.slots[key].as_dict(visited, is_unvisited) for key in self.slots if key not in self.arg_slots if length_check(i)}
 		all_slots = parent_slots
 		all_slots.update(arg_slots)
 		all_slots.update(slots)
