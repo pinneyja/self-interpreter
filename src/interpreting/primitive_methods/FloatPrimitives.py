@@ -54,28 +54,25 @@ def handleFloatOperator(receiver, argument, operator, object_type):
 
 	return object_type(float_result)
 
-def handleFloatIfFail(method, primitive_name):
-	def error_handler(receiver, argument_list):
-		from interpreting.objects.SelfException import SelfException
-		from interpreting.objects.primitive_objects.SelfFloat import SelfFloat
-		from interpreting.objects.primitive_objects.SelfString import SelfString
-		from interpreting.objects.SelfObject import SelfObject
-		from Messages import Messages
+def handleFloatIfFail(receiver, argument_list, method, primitive_name):
+	from interpreting.objects.SelfException import SelfException
+	from interpreting.objects.primitive_objects.SelfFloat import SelfFloat
+	from interpreting.objects.primitive_objects.SelfString import SelfString
+	from interpreting.objects.SelfObject import SelfObject
+	from Messages import Messages
 
-		argument = argument_list[0]
-		if_fail = None
-		if len(argument_list) > 1:
-			if_fail = argument_list[1]
+	argument = argument_list[0]
+	if_fail = None
+	if len(argument_list) > 1:
+		if_fail = argument_list[1]
 
-		if type(receiver) is not SelfFloat or type(argument) is not SelfFloat:
-			if if_fail and type(if_fail) is SelfObject:
-				return if_fail.pass_keyword_message("value:With:", [SelfString("badTypeError"), SelfString(primitive_name)])
-			else:
-				raise SelfException(Messages.INVALID_PRIMITIVE_OPERANDS.value.format(primitive_name, receiver, argument))
+	if type(receiver) is not SelfFloat or type(argument) is not SelfFloat:
+		if if_fail and type(if_fail) is SelfObject:
+			return if_fail.pass_keyword_message("value:With:", [SelfString("badTypeError"), SelfString(primitive_name)])
+		else:
+			raise SelfException(Messages.INVALID_PRIMITIVE_OPERANDS.value.format(primitive_name, receiver, argument))
 
-		return method(receiver, argument)
-	
-	return error_handler
+	return method(receiver, argument)
 
 def handleFloatComparison(receiver, argument_list, operator, primitive_name):
 	from interpreting.objects.primitive_objects.SelfBooleans import SelfBoolean
@@ -142,13 +139,10 @@ def handleFloatAsInt(receiver, argument_list):
 		raise SelfException(Messages.BAD_TYPE_ERROR.value.format('_FloatAsInt'))
 	return SelfInteger(round(receiver.value))
 
-def handleNoArgFloatIfFail(no_if_fail_method, primitive_name):
-	def error_handler(receiver, argument_list):
-		from interpreting.objects.primitive_objects.SelfFloat import SelfFloat
-		from interpreting.objects.primitive_objects.SelfString import SelfString
+def handleNoArgFloatIfFail(receiver, argument_list, no_if_fail_method, primitive_name):
+	from interpreting.objects.primitive_objects.SelfFloat import SelfFloat
+	from interpreting.objects.primitive_objects.SelfString import SelfString
 
-		if type(receiver) is not SelfFloat:
-			return if_fail.pass_keyword_message("value:With:", [SelfString("badTypeError"), SelfString(primitive_name)])
-		return no_if_fail_method(receiver, argument_list)
-
-	return error_handler
+	if type(receiver) is not SelfFloat:
+		return argument_list[0].pass_keyword_message("value:With:", [SelfString("badTypeError"), SelfString(primitive_name)])
+	return no_if_fail_method(receiver, argument_list)

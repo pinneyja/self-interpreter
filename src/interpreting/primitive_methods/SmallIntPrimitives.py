@@ -101,28 +101,25 @@ def handleIntOperator(receiver, argument, operator, object_type):
 
 	return object_type(integer_result)
 
-def handleIntIfFail(method, primitive_name):
-	def error_handler(receiver, argument_list):
-		from interpreting.objects.SelfException import SelfException
-		from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
-		from interpreting.objects.primitive_objects.SelfString import SelfString
-		from interpreting.objects.SelfObject import SelfObject
-		from Messages import Messages
+def handleIntIfFail(receiver, argument_list, method, primitive_name):
+	from interpreting.objects.SelfException import SelfException
+	from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
+	from interpreting.objects.primitive_objects.SelfString import SelfString
+	from interpreting.objects.SelfObject import SelfObject
+	from Messages import Messages
 
-		argument = argument_list[0]
-		if_fail = None
-		if len(argument_list) > 1:
-			if_fail = argument_list[1]
+	argument = argument_list[0]
+	if_fail = None
+	if len(argument_list) > 1:
+		if_fail = argument_list[1]
 
-		if type(receiver) is not SelfInteger or type(argument) is not SelfInteger:
-			if if_fail and type(if_fail) is SelfObject:
-				return if_fail.pass_keyword_message("value:With:", [SelfString("badTypeError"), SelfString(primitive_name)])
-			else:
-				raise SelfException(Messages.INVALID_PRIMITIVE_OPERANDS.value.format(primitive_name, receiver, argument))
+	if type(receiver) is not SelfInteger or type(argument) is not SelfInteger:
+		if if_fail and type(if_fail) is SelfObject:
+			return if_fail.pass_keyword_message("value:With:", [SelfString("badTypeError"), SelfString(primitive_name)])
+		else:
+			raise SelfException(Messages.INVALID_PRIMITIVE_OPERANDS.value.format(primitive_name, receiver, argument))
 
-		return method(receiver, argument)
-	
-	return error_handler
+	return method(receiver, argument)
 
 def handleIntAsFloat(receiver, argument_list):
 	from interpreting.objects.SelfException import SelfException

@@ -29,7 +29,7 @@ def handleEq(receiver, argument_list):
 	if type(receiver) != type(argument_list[0]):
 		return SelfBoolean(False)
 	elif type(receiver) is SelfInteger:
-		return handleIntIfFail(handleIntEQ, '_Eq:')(receiver, argument_list)
+		return handleIntIfFail(receiver, argument_list, handleIntEQ, '_Eq:')
 	elif type(receiver) is SelfString:
 		return SelfBoolean(str(receiver) == str(argument_list[0]))
 	elif type(receiver) is SelfFloat:
