@@ -4,9 +4,21 @@ from interpreting.printingutils.PrinterConfig import add_color, setup_config, CO
 import os
 
 class SelfObjectPrinter:
+	_instance = None
 
 	def __init__(self):
-		setup_config()
+		if SelfObjectPrinter._instance:
+			raise Exception("This class is a singleton!")
+		else:
+			SelfObjectPrinter._instance = self
+			setup_config()
+
+	@staticmethod
+	def instance():
+		if  SelfObjectPrinter._instance:
+			return SelfObjectPrinter._instance
+		else:
+			return SelfObjectPrinter()
 
 	def get_object_string(self, object:SelfObject):
 		object_dict = object.as_dict([])

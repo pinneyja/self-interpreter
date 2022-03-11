@@ -157,6 +157,12 @@ def handleThrowError(receiver, argument_list):
 		if argument_list[0].get_value() == "cannot modify an immutable string":
 			raise SelfException(Messages.IMMUTABLE_ERROR.value)
 
-	printer = SelfObjectPrinter()
+	printer = SelfObjectPrinter.instance()
 	error_message = printer.get_object_string(argument_list[0])
 	raise SelfException(Messages.GENERIC_ERROR.value.format(error_message))
+
+def handlePrint(receiver, argument_list=None):
+	from interpreting.printingutils.SelfObjectPrinter import SelfObjectPrinter
+	printer = SelfObjectPrinter.instance()
+	print(printer.get_object_string(receiver))
+	return receiver

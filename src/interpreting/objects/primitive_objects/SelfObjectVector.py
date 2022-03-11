@@ -11,11 +11,11 @@ class SelfObjectVector(SelfObject):
 
 	def as_dict(self, visited):
 		is_unvisited = self not in visited
-		dict = super().as_dict(visited)
-		dict["slots"] = {}
+		d = super().as_dict(visited)
+		d["slots"] = {}
 		for i in range(len(self.indexable)):
 			new_visited = visited.copy()
 			name = "<" + str(i) + ">"
 			slot = SelfSlot(name, self.indexable[i])
-			dict["slots"][name] = slot.as_dict(new_visited, is_unvisited)
-		return dict
+			d["slots"][name] = slot.as_dict(new_visited, is_unvisited)
+		return d
