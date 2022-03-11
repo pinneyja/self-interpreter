@@ -1,5 +1,6 @@
 from os import system
 from interpreting.Interpreter import *
+from interpreting.printingutils.PrinterConfig import CONFIG
 from interpreting.printingutils.SelfObjectPrinter import SelfObjectPrinter
 from parsing.Parser import *
 from sys import platform
@@ -40,7 +41,11 @@ def main():
 			if isParser:
 				print(parser.parse(s))
 			else:
-				print(printer.get_object_string(interpreter.interpret(parser.parse(s))))
+				obj = interpreter.interpret(parser.parse(s))
+				if CONFIG['USE_TEST_PRINTER']:
+					print(obj)
+				else:
+					print(printer.get_object_string(obj))
 		except (SelfParsingError, SelfException) as selfError:
 			print(selfError)
 		except Exception:

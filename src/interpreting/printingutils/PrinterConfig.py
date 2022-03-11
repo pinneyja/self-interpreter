@@ -8,7 +8,8 @@ CONFIG = {
     'MAX_ANNOTATION_SIZE': 30,
     'USE_CODE_STRING': True,
     'USE_ALT_STRING' : False, 
-    'REMOVE_ANNOTATIONS' : True
+    'REMOVE_ANNOTATIONS' : True,
+    'USE_TEST_PRINTER' : False
 }
 
 # For any color, '\033[38;2;r;g;bm' (replace r, g, b with rgb). Remember to end with ENDC.
