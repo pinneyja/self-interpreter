@@ -3,6 +3,14 @@ def handleAddSlots(receiver, argument_list):
 	receiver.slots.update(slot_container_object.slots)
 	receiver.parent_slots.update(slot_container_object.parent_slots)
 	return receiver
+
+def handleRemoveSlot(receiver, argument_list):
+	slot_name = argument_list[0].get_value()
+	if slot_name in receiver.slots:
+		del receiver.slots[slot_name]
+	elif slot_name in receiver.parent_slots:
+		del receiver.parent_slots[slot_name]
+	return receiver
 	
 def handleAssignment(receiver, argument_list):
 	from interpreting.objects.primitive_objects.SelfString import SelfString
@@ -115,10 +123,13 @@ def handleClone(receiver, argument_list=None):
 	return receiver.clone()
 
 def handleDefine(receiver, argument_list):
-	from interpreting.objects.SelfObject import SelfObject
+	from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
+	from interpreting.objects.primitive_objects.SelfFloat import SelfFloat
 	from interpreting.objects.SelfException import SelfException
 	from Messages import Messages
-	if type(receiver) is not SelfObject or type(argument_list[0]) is not SelfObject:
+	if type(receiver) is SelfInteger or type(argument_list[0]) is SelfInteger:
+		raise SelfException(Messages.BAD_TYPE_ERROR.value.format('_Define:'))
+	if type(receiver) is SelfFloat or type(argument_list[0]) is SelfFloat:
 		raise SelfException(Messages.BAD_TYPE_ERROR.value.format('_Define:'))
 	receiver.copy_slots_of(argument_list[0])
 	return receiver

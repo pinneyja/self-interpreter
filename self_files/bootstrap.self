@@ -18,6 +18,7 @@ globals modules _AddSlots: (|
   indexable=(|postFileIn=(| | 'postFileIn')|).
   defaultBehavior=(|postFileIn=(| | 'postFileIn')|).
   string=(|postFileIn=(| | 'postFileIn')|).
+  setAndDictionary=(|postFileIn=(| | 'postFileIn'). parent* = lobby|).
   |).
 
 traits _AddSlots: (|
@@ -31,8 +32,8 @@ traits _AddSlots: (|
   |).
 
 bootstrap _AddSlots: (|addSlotsTo: destObj From: object = (| | destObj _AddSlots: object) |).
-bootstrap _AddSlots: (|remove: slotName From: object = (| | 1) |).
-bootstrap _AddSlots: (|define: destObj ToBe: object = (| | destObj) |).
+bootstrap _AddSlots: (|remove: slotName From: object = (| | object _RemoveSlot: slotName IfFail: [|:a. :b| object]) |).
+bootstrap _AddSlots: (|define: destObj ToBe: object = (| | destObj _Define: object) |).
 bootstrap _AddSlots: (|stub = (|parent* = lobby|)|).
 bootstrap stub _AddSlots: (| -> n = (| | followThrough: n IfNeedToMakeObject: [|:x| x makeObject] )|).
 bootstrap stub _AddSlots: (| name <- ''. object <- lobby|).

@@ -138,18 +138,6 @@ def test_define_bad_type_receiver():
 	except SelfException as e:
 		assert str(e) == Messages.BAD_TYPE_ERROR.value.format('_Define:')
 
-	# () _Define: 'bad'
-	receiver = StringNode('bad')
-	value = RegularObjectNode()
-	define_msg = KeywordMessageNode(receiver, ['_Define:'], [value])
-	parsed_node = CodeNode([define_msg])
-
-	try:
-		interpreted_node = interpreter.interpret(parsed_node)
-		assert False
-	except SelfException as e:
-		assert str(e) == Messages.BAD_TYPE_ERROR.value.format('_Define:')
-
 def test_retrieve_receiver_after_define():
 	interpreter = Interpreter()
 	# _AddSlots: (| x = (|a = 1|) |). x _Define: (|b = 2|). x b
