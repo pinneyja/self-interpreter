@@ -41,6 +41,7 @@ primitive_dict = {
 	'_FloatTruncate' : handleFloatTruncate,
 	'_FloatAsInt' : handleFloatAsInt,
 	'_AddSlots:' : handleAddSlots,
+	'_RemoveSlot:' : handleRemoveSlot,
 	'_Assignment:Value:' : handleAssignment,
 	'_RunScript' : handleRunScript,
 	'_RunScriptIfFail:' : handleRunScriptIfFail,

@@ -23,6 +23,9 @@ class SelfString(SelfByteVector):
 	def __str__(self):
 		return f"SelfString: (indexable={list(map(str, self.indexable))})"
 
+	def __hash__(self):
+		return hash(self.get_value())
+
 	def as_dict(self, visited):
 		from interpreting.printingutils.PrinterConfig import CONFIG
 		d = {}
