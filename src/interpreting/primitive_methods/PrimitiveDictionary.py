@@ -3,6 +3,7 @@ from interpreting.primitive_methods.FloatPrimitives import *
 from interpreting.primitive_methods.ObjectPrimitives import *
 from interpreting.primitive_methods.ObjectVectorPrimitives import *
 from interpreting.primitive_methods.StringPrimitives import *
+from interpreting.primitive_methods.GraphicsPrimitives import *
 
 primitive_dict = {
 	'_IntNE:' : handleIntNE,
@@ -72,7 +73,8 @@ primitive_dict = {
 	'_ByteVectorCompare:IfFail:' : handleByteVectorCompareIfFail,
 	'_CopyByteRangeDstPos:Src:SrcPos:Length:' : handleCopyRangeDstPosSrcSrcPosLength,
 	'_ThrowError:' : handleThrowError,
-	'_Print' : handlePrint
+	'_Print' : handlePrint,
+	'_CallMethodByProxy:Arguments:' : handleCallMethodByProxy
 }
 
 class IfFailGenerator():

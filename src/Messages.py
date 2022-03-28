@@ -27,3 +27,4 @@ class Messages(Enum):
 	FILE_NOT_FOUND = "Could not find the file '{}'."
 	IMMUTABLE_ERROR = "Can not modify an immutable string."
 	BOOTSTRAP_FAILED = "Bootstrap initialization failed. Unexpected behavior may occur."
+	PROXY_ERROR = "An error occurred while calling the proxy method '{}'."
