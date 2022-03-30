@@ -18,7 +18,7 @@ class Interpreter:
 
 	def initializeBootstrap(self):
 		parser = Parser()
-		files_to_load = ["bootstrap", "rootTraits", "nil", "boolean", "block", "smallInt", "integer", "defaultBehavior", "integerIteration", "number", "collector", "collection", "list", "vector", "indexable", "string", "float", "setAndDictionary"]
+		files_to_load = ["bootstrap", "rootTraits", "nil", "boolean", "block", "smallInt", "integer", "defaultBehavior", "integerIteration", "number", "collector", "collection", "list", "vector", "indexable", "string", "float", "setAndDictionary", "canvas"]
 
 		for file_name in files_to_load:
 			self.interpret(parser.parse(f"'self_files/{file_name}.self' _RunScript."))

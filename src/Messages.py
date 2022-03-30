@@ -28,3 +28,5 @@ class Messages(Enum):
 	IMMUTABLE_ERROR = "Can not modify an immutable string."
 	BOOTSTRAP_FAILED = "Bootstrap initialization failed. Unexpected behavior may occur."
 	PROXY_ERROR = "An error occurred while calling the proxy method '{}'."
+	ADD_WIDGET_ERROR = "An error occurred while adding a widget."
+	REMOVE_WIDGET_ERROR = "An error occurred while removing a widget."

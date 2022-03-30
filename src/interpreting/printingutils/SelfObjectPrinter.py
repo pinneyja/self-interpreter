@@ -85,3 +85,7 @@ class SelfObjectPrinter:
 	@staticmethod
 	def get_terminal_size():
 		return os.get_terminal_size().columns
+
+	@staticmethod
+	def set_color(should_have_color):
+		CONFIG['COLOR'] = should_have_color
