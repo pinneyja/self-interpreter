@@ -3,6 +3,7 @@ from interpreting.objects.SelfSlot import SelfSlot
 from interpreting.objects.primitive_objects.SelfByteVector import SelfByteVector
 from interpreting.objects.primitive_objects.SelfObjectVector import SelfObjectVector
 from interpreting.objects.primitive_objects.SelfString import SelfString
+from interpreting.objects.gui_objects.SelfCanvas import SelfCanvas
 
 class SelfLobby(SelfObject):
 	lobby = None
@@ -22,7 +23,8 @@ class SelfLobby(SelfObject):
 					"nil": SelfSlot("nil", SelfObject(annotation="nil", alt_string=True)),
 					"byteVector": SelfSlot("byteVector", SelfByteVector("")),
 					"string": SelfSlot("string", SelfString("", add_traits=False)),
-					"mutableString": SelfSlot("mutableString", SelfString("", add_traits=False))},
+					"mutableString": SelfSlot("mutableString", SelfString("", add_traits=False)),
+					"canvas": SelfSlot("canvas", SelfCanvas(None))},
 				annotation="globals", alt_string=True)),
 			}
 		super().__init__(slots, parent_slots=parent_slots)
