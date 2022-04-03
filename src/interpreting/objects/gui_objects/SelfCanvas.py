@@ -14,9 +14,11 @@ class SelfCanvas(SelfObject):
 			self.kivy_widget.add_widget(self_widget.kivy_widget)
 		except Exception:
 			raise SelfException(Messages.ADD_WIDGET_ERROR.value)
+		return self
 
 	def remove_widget(self, self_widget):
 		try:
 			self.kivy_widget.remove_widget(self_widget.kivy_widget)
 		except Exception:
 			raise SelfException(Messages.REMOVE_WIDGET_ERROR.value)
+		return self
