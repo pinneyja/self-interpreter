@@ -7,5 +7,6 @@ def handleCallMethodByProxy(receiver, argument_list):
 
 	try:
 		return getattr(receiver, method)(arguments)
-	except Exception:
+	except Exception as e:
+		print(e)
 		raise SelfException(Messages.PROXY_ERROR.value.format(method))

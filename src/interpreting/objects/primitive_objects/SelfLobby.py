@@ -1,5 +1,6 @@
 from interpreting.objects.SelfObject import SelfObject
 from interpreting.objects.SelfSlot import SelfSlot
+from interpreting.objects.gui_objects.SelfButton import SelfButton
 from interpreting.objects.primitive_objects.SelfByteVector import SelfByteVector
 from interpreting.objects.primitive_objects.SelfObjectVector import SelfObjectVector
 from interpreting.objects.primitive_objects.SelfString import SelfString
@@ -24,6 +25,7 @@ class SelfLobby(SelfObject):
 					"byteVector": SelfSlot("byteVector", SelfByteVector("")),
 					"string": SelfSlot("string", SelfString("", add_traits=False)),
 					"mutableString": SelfSlot("mutableString", SelfString("", add_traits=False)),
+					"button": SelfSlot("button", SelfButton()),
 					"canvas": SelfSlot("canvas", SelfCanvas(None))},
 				annotation="globals", alt_string=True)),
 			}
