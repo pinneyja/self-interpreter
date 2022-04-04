@@ -1,25 +1,12 @@
 from interpreting.objects.primitive_objects.SelfString import SelfString
 from interpreting.objects.SelfObject import SelfObject
-from kivy.uix.button import Button
+from kivy.uix.label import Label
 
-class SelfButton(SelfObject):
+class SelfLabel(SelfObject):
 	def __init__(self, slots = None):
 		super().__init__(slots=slots)
 
-		self.kivy_widget = Button(text="New Button", size_hint=(0.2, 0.1), pos_hint={'x': 0.0, 'y': 0.0})
-		self.kivy_widget.bind(on_press=self.on_press_callback, on_release=self.on_release_callback)
-
-	def on_press_callback(self, event):
-		try:
-			self.pass_unary_message("onPress")
-		except Exception as e:
-			print(e)
-
-	def on_release_callback(self, event):
-		try:
-			self.pass_unary_message("onRelease")
-		except Exception as e:
-			print(e)
+		self.kivy_widget = Label(text="New Label", size_hint=(0.2, 0.1), pos_hint={'x': 0.0, 'y': 0.0})
 
 	def get_text(self, _):
 		return SelfString(self.kivy_widget.text)
@@ -58,9 +45,8 @@ class SelfButton(SelfObject):
 
 	def clone(self):
 		clone = super().clone()
-		clone.kivy_widget = Button(text=self.kivy_widget.text, size_hint=self.kivy_widget.size_hint, pos_hint=self.kivy_widget.pos_hint)
-		clone.kivy_widget.bind(on_press=clone.on_press_callback, on_release=clone.on_release_callback)
+		clone.kivy_widget = Label(text=self.kivy_widget.text, size_hint=self.kivy_widget.size_hint, pos_hint=self.kivy_widget.pos_hint)
 		return clone
 
 	def __str__(self):
-		return "SelfButton"
+		return f"SelfLabel: text='{self.kivy_widget.text}' size_hint={self.kivy_widget.size_hint} pos_hint={self.kivy_widget.pos_hint}"
