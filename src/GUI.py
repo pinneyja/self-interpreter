@@ -1,14 +1,12 @@
+import traceback
 from interpreting.Interpreter import *
 from interpreting.printingutils.PrinterConfig import CONFIG
 from interpreting.printingutils.SelfObjectPrinter import SelfObjectPrinter
 from parsing.Parser import *
 
 from kivy.app import App
-from kivy.lang import Builder
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
-from kivy.uix.label import Label
-from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.boxlayout import BoxLayout
 
 class SelfGUIApp(App):
@@ -25,6 +23,7 @@ class SelfGUIApp(App):
 		try:
 			self.interpreter.initializeBootstrap()
 		except (SelfException, SelfParsingError) as selfError:
+			traceback.print_exc()
 			print(selfError)
 			print(Messages.BOOTSTRAP_FAILED.value)
 			bootstrap_failed = True
@@ -45,9 +44,8 @@ class SelfGUIApp(App):
 		self.output = TextInput(text=Messages.BOOTSTRAP_FAILED.value if bootstrap_failed else '')
 		self.replContainer.add_widget(self.output)
 
-		self.layout = FloatLayout()
+		self.layout = self.interpreter.interpret(self.parser.parse("canvas")).kivy_widget
 		self.layout.add_widget(self.replContainer)
-		self.interpreter.interpret(self.parser.parse("canvas")).kivy_widget = self.layout
 
 		return self.layout
 
@@ -56,7 +54,8 @@ class SelfGUIApp(App):
 			obj = self.interpreter.interpret(self.parser.parse(self.textBox.text))
 			res = self.printer.get_object_string(obj)
 		except Exception as e:
-			res = str(e)
+			traceback.print_exc()
+			res = str(e)	
 
 		self.output.text = res
 

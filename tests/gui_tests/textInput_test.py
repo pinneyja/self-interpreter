@@ -15,7 +15,7 @@ def test_textInput_text(interpreter):
 	assert str(SelfString(expected_textInput_text)) == str(actual_textInput_text)
 	assert str(original_textInput_text) == str(original_textInput_text_updated)
 
-def test_textInput_position(interpreter):
+def test_textInput_position_inheritance(interpreter):
 	parser = Parser()
 
 	interpreter.interpret(parser.parse("lobby _AddSlots: (| testTextInput = (textInput clone) |). lobby testTextInput"))
@@ -30,7 +30,7 @@ def test_textInput_position(interpreter):
 	assert str(SelfFloat(0.0)) == str(originalPositionX)
 	assert str(SelfFloat(0.0)) == str(originalPositionY)
 
-def test_textInput_size(interpreter):
+def test_textInput_size_inheritance(interpreter):
 	parser = Parser()
 
 	interpreter.interpret(parser.parse("lobby _AddSlots: (| testTextInput = (textInput clone) |). lobby testTextInput"))
@@ -42,5 +42,5 @@ def test_textInput_size(interpreter):
 
 	assert str(SelfFloat(0.5)) == str(newWidth)
 	assert str(SelfFloat(0.5)) == str(newHeight)
-	assert str(SelfFloat(0.2)) == str(originalWidth)
-	assert str(SelfFloat(0.1)) == str(originalHeight)
+	assert str(SelfFloat(1.0)) == str(originalWidth)
+	assert str(SelfFloat(1.0)) == str(originalHeight)

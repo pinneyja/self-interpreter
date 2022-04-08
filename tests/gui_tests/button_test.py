@@ -29,22 +29,7 @@ def test_button_on_press_and_on_release(interpreter):
 
 	assert str(SelfInteger(12)) == str(actual)
 
-def test_button_position(interpreter):
-	parser = Parser()
-
-	testButton = interpreter.interpret(parser.parse("lobby _AddSlots: (| testButton = (button clone) |). lobby testButton"))
-	interpreter.interpret(parser.parse("testButton position: (|x = 0.5. y = 0.5|)."))
-	newPositionX = interpreter.interpret(parser.parse("testButton position x."))
-	newPositionY = interpreter.interpret(parser.parse("testButton position y."))
-	originalPositionX = interpreter.interpret(parser.parse("button position x."))
-	originalPositionY = interpreter.interpret(parser.parse("button position y."))
-
-	assert str(SelfFloat(0.5)) == str(newPositionX)
-	assert str(SelfFloat(0.5)) == str(newPositionY)
-	assert str(SelfFloat(0.0)) == str(originalPositionX)
-	assert str(SelfFloat(0.0)) == str(originalPositionY)
-
-def test_button_size(interpreter):
+def test_button_inheritance(interpreter):
 	parser = Parser()
 
 	testButton = interpreter.interpret(parser.parse("lobby _AddSlots: (| testButton = (button clone) |). lobby testButton"))
@@ -56,5 +41,5 @@ def test_button_size(interpreter):
 
 	assert str(SelfFloat(0.5)) == str(newWidth)
 	assert str(SelfFloat(0.5)) == str(newHeight)
-	assert str(SelfFloat(0.2)) == str(originalWidth)
-	assert str(SelfFloat(0.1)) == str(originalHeight)
+	assert str(SelfFloat(1.0)) == str(originalWidth)
+	assert str(SelfFloat(1.0)) == str(originalHeight)
