@@ -1,9 +1,0 @@
-button _AddSlots: (| p* = lobby |)
-button _AddSlots: (| text = (| | _CallMethodByProxy: 'get_text' Arguments: nil) |).
-button _AddSlots: (| text: t = (| | _CallMethodByProxy: 'set_text' Arguments: t) |).
-button _AddSlots: (| onPress = (| | 'onPress triggered') |).
-button _AddSlots: (| onRelease = (| | 'onRelease triggered') |).
-button _AddSlots: (| position: pos = (| | _CallMethodByProxy: 'set_position' Arguments: pos) |).
-button _AddSlots: (| position = (| | _CallMethodByProxy: 'get_position' Arguments: nil) |).
-button _AddSlots: (| size: newSize = (| | _CallMethodByProxy: 'set_size' Arguments: newSize) |).
-button _AddSlots: (| size = (| | _CallMethodByProxy: 'get_size' Arguments: nil) |).

@@ -531,7 +531,7 @@ SlotsToOmit: comment directory fileInTimeString myComment postFileIn revision su
         
          firstLinkFor: elem IfPresent: presentBlock IfAbsent: absentBlock = ( |
             | 
-            firstLinkSatisfying: [|:lnk| elem = lnk value]
+            firstLinkSatisfying: [|:lnk| elem == lnk value]
                       IfPresent: presentBlock
                        IfAbsent: absentBlock).
         } | ) 
