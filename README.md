@@ -47,11 +47,11 @@
 
 ## About The Project
 <div id="about-the-project"></div>
-Self is an object-oriented programming language designed around the use of prototypes, objects that are reused to derive behavior for other objects. It comes with its own environment, virtual machine, and GUI to execute in, the latter of which is defined in Self code.
+<p>[Self](https://selflanguage.org/) is an object-oriented programming language designed around the use of prototypes, objects that are reused to derive behavior for other objects. It comes with its own environment, virtual machine, and GUI to execute in, the latter of which is defined in Self code. To learn more about how Self works, checkout out the [Self Handbook](https://handbook.selflanguage.org/2017.1/index.html).
 
 As of the time of writing, the Self virtual machine is incapable of running directly on most modern operating systems such as Windows. To get working on an OS such as Windows, it requires users to set up a virtual machine that instead emulates older, 32-bit versions of Linux. For those who are interested in Self or adjacent languages like Smalltalk, this can be an unfortunate barrier of entry. This system, designed to parse and interpret Self inputs in a similar manner to the Self environment and virtual machine, is meant to address this problem. The project is built in Python, which is compatible with most modern platforms (e.g. Windows, Linux, macOS).
 
-The Self Interpreter project is an interpreter for the Self language, built as a senior design project at the Rose-Hulman Institute of Technology. Its main purpose is to serve as an educational tool to inform computer science students of alternative programming paradigms but can also be used for most of your Self needs.
+The Self Interpreter project is an interpreter for the Self language, built as a senior design project at the Rose-Hulman Institute of Technology. Its main purpose is to serve as an educational tool to inform computer science students of alternative programming paradigms but can also be used for most of your Self needs.</p>
 
 ### Authors
 <div id="authors"></div>
@@ -60,8 +60,6 @@ The Self Interpreter project is an interpreter for the Self language, built as a
 * [Luke McNeil](https://www.linkedin.com/in/luke-mcneil-9a9795196/)
 * [Nathaniel Blanco](https://www.linkedin.com/in/nathaniel-blanco-06a694194/)
 * [Jacob Pinney](https://www.linkedin.com/in/jacob-pinney/)
-
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Built With
 <div id="built-with"></div>
@@ -101,6 +99,8 @@ This project is a work in progress. As a result, you may experience some issues 
 * Error handling functions
 * Methods defined outside of objects (i.e. only using parentheses to define a method)
 
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 ## Getting Started
 <div id="getting-started"></div>
 
@@ -125,9 +125,14 @@ The following must be installed with the given minimum versions.
 ### Installation
 <div id="installation"></div>
 
-1. Clone the repo
+1. Clone the repo:
+ * SSH:
    ```sh
-   git clone TODO_INSERT_REPO_HERE
+   git clone git@github.com:pinneyja/self-interpreter.git
+   ```
+ * HTTP:
+   ```sh
+   git clone https://github.com/pinneyja/self-interpreter.git
    ```
 2. Run the interpreter in CLI or GUI mode:
  * CLI: Run the interpreter command-line interface
@@ -149,8 +154,6 @@ The following must be installed with the given minimum versions.
 3. While using the GUI, navigate using the on screen menus and evaluators.
 4. To mass import Self code, add files to the `self_files/` directory. Then, use the `_RunScript` primitive to import your custom code!
 5. Have fun and play around!
-
-<p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Code Snippits
 <div id="code-snippits"></div>
@@ -175,6 +178,8 @@ The following must be installed with the given minimum versions.
            | binarySearchHelper: startVector Value: searchValue FirstIndex: 0 LastIndex: (startVector size) - 1)
    |)
    ```
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Video Demo
 <div id="video-demo"></div>
