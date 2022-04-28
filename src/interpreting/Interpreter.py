@@ -21,7 +21,7 @@ class Interpreter:
 		files_to_load = ["bootstrap", "rootTraits", "nil", "boolean", "block", "smallInt", "integer", "defaultBehavior",
 			"integerIteration", "number", "collector", "collection", "list", "vector", "indexable", "string", "float",
 			"setAndDictionary", "gui_files/mixins_gui_text_widget", "gui_files/traits_gui_widget", "gui_files/mixins_gui_superwidget",
-			"gui_files/canvas", "gui_files/button", "gui_files/container", "gui_files/label", "gui_files/textInput"]
+			"gui_files/canvas", "gui_files/button", "gui_files/container", "gui_files/label", "gui_files/textInput", "gui_files/scrollableContainer"]
 
 		for file_name in files_to_load:
 			self.interpret(parser.parse(f"'self_files/{file_name}.self' _RunScript."))

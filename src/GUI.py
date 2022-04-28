@@ -8,6 +8,7 @@ from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
+from kivy.core.window import Window
 
 class SelfGUIApp(App):
 	def __init__(self):
@@ -58,9 +59,11 @@ class SelfGUIApp(App):
 			res = str(e)	
 
 		self.output.text = res
+		self.output.cursor = (0, 0)
 
 def main():
 	app = SelfGUIApp()
 	app.run()
+	print("Running with window size: ", str(Window.size))
 
 main()

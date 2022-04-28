@@ -1,5 +1,6 @@
 from interpreting.objects.SelfObject import SelfObject
 from interpreting.objects.SelfSlot import SelfSlot
+from interpreting.objects.gui_objects.SelfScrollableContainer import SelfScrollableContainer
 from interpreting.objects.gui_objects.SelfTextInput import SelfTextInput
 from interpreting.objects.gui_objects.SelfButton import SelfButton
 from interpreting.objects.gui_objects.SelfLabel import SelfLabel
@@ -32,7 +33,8 @@ class SelfLobby(SelfObject):
 					"textInput": SelfSlot("textInput", SelfTextInput()),
 					"button": SelfSlot("button", SelfButton()),
 					"label": SelfSlot("label", SelfLabel()),
-					"canvas": SelfSlot("canvas", SelfCanvas(None))},
+					"canvas": SelfSlot("canvas", SelfCanvas(None)),
+					"scrollableContainer": SelfSlot("scrollableContainer", SelfScrollableContainer())},
 				annotation="globals", alt_string=True)),
 			}
 		super().__init__(slots, parent_slots=parent_slots)

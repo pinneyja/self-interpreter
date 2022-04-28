@@ -7,6 +7,13 @@ Builder.load_string('''
 	text_size: self.TEXT_AREA[0]*self.width, self.TEXT_AREA[1]*self.height
 	valign: 'middle'
 	font_size: min(self.MAX_FONT_SIZE, (self.width*self.height)/self.FONT_SCALE_RATE)
+	background_color: 0, 0, 0, 0
+	canvas.before:
+        Color:
+            rgba: self.background_color
+        Rectangle:
+            pos: self.pos
+            size: self.size
 ''')
 
 class SelfLabel(SelfTextGUIObject):

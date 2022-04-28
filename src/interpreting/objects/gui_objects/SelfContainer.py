@@ -1,6 +1,6 @@
 from kivy.uix.behaviors import DragBehavior
 from kivy.uix.boxlayout import BoxLayout
-from kivy.properties import ListProperty 
+from kivy.properties import ListProperty
 from kivy.lang import Builder
 from interpreting.objects.gui_objects.SelfGUIObject import SelfGUIObject
 from interpreting.objects.SelfObject import SelfObject
@@ -15,7 +15,6 @@ Builder.load_string('''
         Color:
             rgba: self.background_color
         Rectangle:
-            # self here refers to the widget i.e FloatLayout
             pos: self.pos
             size: self.size
 ''')
@@ -59,14 +58,6 @@ class SelfContainer(SelfGUIObject):
 			'y': SelfSlot('y', SelfFloat(pos[1]/parent_height)),
 		})
 
-	def set_color(self, arg_object):
-		r = arg_object.slots['r'].value.get_value()
-		g = arg_object.slots['g'].value.get_value()
-		b = arg_object.slots['b'].value.get_value()
-		a = arg_object.slots['a'].value.get_value()
-		self.kivy_widget.set_color(r, g, b, a)
-		return self
-
 	def clone(self):
 		clone = super().clone()
 		clone.kivy_widget = SelfObjectWindow(
@@ -82,6 +73,3 @@ class SelfObjectWindow(DragBehavior, BoxLayout):
 		super().__init__(**kwargs)
 		self.background_color = [0.1, 0.4, 0.4, 1]
 		self.size_hint = (1.0, 1.0)
-
-	def set_color(self, r, g, b, a):
-		self.background_color = [r, g, b, a]

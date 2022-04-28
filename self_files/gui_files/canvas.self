@@ -13,7 +13,7 @@ canvas _AddSlots: (|
 		outliner _AddSlots: (| object = object|).
 		fillOutlinerSkeleton: outliner Object: object.
 
-		slotsContainer: container wcopy.
+		slotsContainer: scrollableContainer wcopy.
 		slotsContainer setSizeWidth: 1 Height: 4.
 		outliner addWidget: slotsContainer.
 		outliner _AddSlots: (|slotsContainer = slotsContainer|).
@@ -27,7 +27,7 @@ canvas _AddSlots: (|
 			indexableLabel setSizeWidth: 1 Height: 0.5.
 			outliner addWidget: indexableLabel.
 
-			indexableContainer: container wcopy.
+			indexableContainer: scrollableContainer wcopy.
 			indexableContainer setSizeWidth: 1 Height: 4.
 			outliner addWidget: indexableContainer.
 			outliner _AddSlots: (|indexableContainer = indexableContainer|).
@@ -108,14 +108,16 @@ canvas _AddSlots: (|
 				methodCode _AddSlots: (| originalCode <- methodObject code|).
 				methodCode text: methodObject code.
 
-				methodButtons: container wcopy setSizeWidth: 0.25 Height: 1.
-				updateButton: button clone text: 'update'.
+				methodButtons: container wcopy setSizeWidth: 0.1 Height: 1.
+				updateButton: button clone text: ''.
+				updateButton setColorR: 0.1 G: 0.7 B: 0.5 A: 1.
 				updateButton _AddSlots: (| methodCode = methodCode. methodLabel = methodLabel. |).
 				updateButton _AddSlots: (|onRelease = (| addSlotsCommand. | 
 					addSlotsCommand: '_AddSlots: (| ' , methodLabel text , ' = (' , methodCode text , ')|)'.
 					gui_parent gui_parent gui_parent gui_parent object _RunCodeInContext: addSlotsCommand.
 				) |).
-				resetButton: button clone text: 'reset'.
+				resetButton: button clone text: ''.
+				resetButton setColorR: 0.6 G: 0.2 B: 0.3 A: 1.
 				resetButton _AddSlots: (| methodCode = methodCode |).
 				resetButton _AddSlots: (|onRelease = (| | methodCode text: methodCode originalCode)|).
 				methodButtons addWidget: updateButton.
