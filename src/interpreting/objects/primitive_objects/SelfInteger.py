@@ -13,6 +13,7 @@ class SelfInteger(SelfObject):
 			self.slots.update(slots)
 
 		self.value = value
+		self.name = str(self.get_value())
 		if (type(value) is not int):
 			warnings.warn(Messages.NUMBER_NOT_VERIFIED.value.format('integer', self.value))
 			self.value = int(value)

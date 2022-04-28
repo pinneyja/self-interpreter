@@ -6,6 +6,7 @@ from interpreting.objects.SelfObject import SelfObject
 class SelfGUIObject(SelfObject):
 	def __init__(self):
 		super().__init__()
+		self.name = "a gui object"
 		if self.__class__ is SelfGUIObject.__class__:
 			raise NotImplementedError()
 

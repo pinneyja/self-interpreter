@@ -13,6 +13,7 @@ class SelfFloat(SelfObject):
 			self.slots.update(slots)
 
 		self.value = value
+		self.name = str(self.get_value())
 		if (type(value) is not float):
 			warnings.warn(Messages.NUMBER_NOT_VERIFIED.value.format('float', self.value))
 			self.value = float(value)

@@ -34,7 +34,7 @@ class SelfGUIApp(App):
 
 		self.replContainer = BoxLayout(size_hint=(1, 0.25), pos_hint={'x':0, 'y':0.75})
 
-		self.textBox = TextInput(text='')
+		self.textBox = TextInput(text='canvas addOutliner: (|x<-1. m1: x M2: y = (| local. | x + y). m3:M4: = (| :x. :y. local. | x + y). ** x = (| local. | x * x). m = (| | 1 + 2). p*=1.|)')
 		self.replContainer.add_widget(self.textBox)
 
 		b = Button(text="Do It", size_hint_x=0.15)

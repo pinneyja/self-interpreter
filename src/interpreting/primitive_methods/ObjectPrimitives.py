@@ -1,15 +1,35 @@
 def handleAddSlots(receiver, argument_list):
+	from interpreting.objects.primitive_objects.SelfLobby import SelfLobby
+	from interpreting.Interpreter import Interpreter
+	from parsing.Parser import Parser
+
 	slot_container_object = argument_list[0]
 	receiver.slots.update(slot_container_object.slots)
 	receiver.parent_slots.update(slot_container_object.parent_slots)
+	if receiver.gui_representation:
+		parser = Parser()
+		interpreter = Interpreter(SelfLobby.get_lobby())
+		interpreter.interpret(parser.parse("canvas")).pass_keyword_message("fillOutlinerSlots:Object:", [receiver.gui_representation, receiver])
 	return receiver
 
 def handleRemoveSlot(receiver, argument_list):
 	slot_name = argument_list[0].get_value()
+	removed = False
 	if slot_name in receiver.slots:
+		removed = True
 		del receiver.slots[slot_name]
 	elif slot_name in receiver.parent_slots:
+		removed = True
 		del receiver.parent_slots[slot_name]
+	if removed:
+		if receiver.gui_representation:
+			from interpreting.objects.primitive_objects.SelfLobby import SelfLobby
+			from interpreting.Interpreter import Interpreter
+			from parsing.Parser import Parser
+			
+			parser = Parser()
+			interpreter = Interpreter(SelfLobby.get_lobby())
+			interpreter.interpret(parser.parse("canvas")).pass_keyword_message("fillOutlinerSlots:Object:", [receiver.gui_representation, receiver])
 	return receiver
 	
 def handleAssignment(receiver, argument_list):
@@ -150,7 +170,9 @@ def handleGetSlot(receiver, argument_list):
 	elif slot in receiver.parent_slots:
 		return receiver.parent_slots[slot].value
 	else:
-		receiver.slots[slot] = SelfSlot(slot, SelfObject())
+		obj = SelfObject()
+		obj.name = slot
+		receiver.slots[slot] = SelfSlot(slot, obj)
 		return receiver.slots[slot].value
 
 def handleCurrentTimeString(receiver, argument_list):
@@ -177,3 +199,70 @@ def handlePrint(receiver, argument_list=None):
 	printer = SelfObjectPrinter.instance()
 	print(printer.get_object_string(receiver))
 	return receiver
+
+def handleGetSlotsHelper(slot_list):
+	from interpreting.objects.primitive_objects.SelfObjectVector import SelfObjectVector
+	from interpreting.objects.primitive_objects.SelfString import SelfString
+	from interpreting.objects.primitive_objects.SelfLobby import SelfLobby
+	from interpreting.Interpreter import Interpreter
+	from parsing.Parser import Parser
+
+	slotNames = []
+	for name in slot_list:
+		if slot_list[name].value.code is None:
+			slotNames.append(SelfString(name))
+	parser = Parser()
+	interpreter = Interpreter(SelfLobby.get_lobby())
+	result_vector = interpreter.interpret(parser.parse("vector clone"))	
+	result_vector.indexable = slotNames
+	return result_vector
+
+def handleGetDataSlotsAsVector(receiver, argument_list=None):
+	return handleGetSlotsHelper(receiver.slots)
+
+def handleGetParentSlotsAsVector(receiver, argument_list=None):
+	return handleGetSlotsHelper(receiver.parent_slots)
+
+def handleGetMethodSlotsAsVector(receiver, argument_list=None):
+	from interpreting.objects.SelfSlot import SelfSlot
+	from interpreting.objects.SelfObject import SelfObject
+	from interpreting.objects.primitive_objects.SelfObjectVector import SelfObjectVector
+	from interpreting.objects.primitive_objects.SelfString import SelfString
+	from interpreting.objects.primitive_objects.SelfLobby import SelfLobby
+	from interpreting.Interpreter import Interpreter
+	from parsing.Parser import Parser
+	methodObjects = []
+	for name in receiver.slots:
+		if receiver.slots[name].value.code:
+			fullName = name
+			arg_slot_names = list(receiver.slots[name].value.arg_slots.keys())
+			codeSplitOnPipe = receiver.slots[name].value.code_string.split("|")
+			messageParts = name.split(":")
+			if len(codeSplitOnPipe) > 1 and ":" in codeSplitOnPipe[1]:
+				pass
+			elif name[-1] != ":" and len(arg_slot_names) == 1:
+				fullName += " " + arg_slot_names[0]
+			elif len(arg_slot_names) > 0:
+				fullName = ""
+				for i in range(len(messageParts)-1):
+					fullName += messageParts[i] + ": " + arg_slot_names[i] + " "
+			methodObjects.append(SelfObject({
+				"name": SelfSlot("name", SelfString(fullName)),
+				"code": SelfSlot("code", SelfString(receiver.slots[name].value.code_string))
+				}))
+	parser = Parser()
+	interpreter = Interpreter(SelfLobby.get_lobby())
+	result_vector = interpreter.interpret(parser.parse("vector clone"))	
+	result_vector.indexable = methodObjects
+	return result_vector
+
+def handleRunCodeInContext(receiver, argument_list=None):
+	from parsing.Parser import Parser
+	from interpreting.objects.SelfObject import SelfObject
+	from interpreting.objects.SelfSlot import SelfSlot
+
+	parser = Parser()
+	code = argument_list[0].get_value()
+	activation_object = SelfObject()
+	activation_object.parent_slots["self"] = SelfSlot("self", receiver, True)
+	return parser.parse(code).interpret(activation_object)

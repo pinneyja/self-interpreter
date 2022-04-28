@@ -74,7 +74,14 @@ primitive_dict = {
 	'_CopyByteRangeDstPos:Src:SrcPos:Length:' : handleCopyRangeDstPosSrcSrcPosLength,
 	'_ThrowError:' : handleThrowError,
 	'_Print' : handlePrint,
-	'_CallMethodByProxy:Arguments:' : handleCallMethodByProxy
+	'_CallMethodByProxy:Arguments:' : handleCallMethodByProxy,
+	'_GetDataSlotsAsVector' : handleGetDataSlotsAsVector,
+	'_GetParentSlotsAsVector' : handleGetParentSlotsAsVector,
+	'_GetMethodSlotsAsVector' : handleGetMethodSlotsAsVector,
+	'_RunCodeInContext:' : handleRunCodeInContext,
+	'_SetGUIRepresentation:' : handleSetGUIRepresentation,
+	'_GetGUIRepresentation' : handleGetGUIRepresentation,
+	'_GetName' : handleGetName
 }
 
 class IfFailGenerator():
@@ -111,11 +118,13 @@ def setup_if_fail_functions():
 	int_if_fail_functions = {"_IntNE:", "_IntMod:", "_IntMul:", "_IntAdd:", "_IntSub:", "_IntDiv:", "_IntLT:", "_IntLE:", "_IntEQ:", "_IntGT:", "_IntGE:", "_IntArithmeticShiftLeft:", "_IntArithmeticShiftRight:", "_IntLogicalShiftLeft:", "_IntLogicalShiftRight:", "_IntOr:", "_IntAnd:", "_IntXor:"}
 	float_if_fail_functions = {"_FloatMul:", "_FloatAdd:", "_FloatSub:", "_FloatDiv:", "_FloatMod:", "_FloatNE:", "_FloatLT:", "_FloatLE:", "_FloatEQ:", "_FloatGT:", "_FloatGE:"}
 	float_if_fail_no_args_functions = {"_FloatCeil", "_FloatFloor", "_FloatRound", "_FloatTruncate", "_FloatAsInt"}
+	indexable_if_fail_no_args_functions = {"_Size"}
 
 	handler_mappings = [
 		[int_if_fail_functions, handleIntIfFail],
 		[float_if_fail_functions, handleFloatIfFail], 
-		[float_if_fail_no_args_functions, handleNoArgFloatIfFail]]
+		[float_if_fail_no_args_functions, handleNoArgFloatIfFail],
+		[indexable_if_fail_no_args_functions, handleNoArgIndexableIfFail]]
 
 	for handler_map in handler_mappings:
 		for function_name in handler_map[0]:

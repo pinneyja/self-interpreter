@@ -4,6 +4,7 @@ from interpreting.objects.SelfSlot import SelfSlot
 class SelfObjectVector(SelfObject):
 	def __init__(self, slots = None, arg_slots = None, parent_slots = None, code = None, annotation = None, code_string = None, alt_string = None, indexable = None):
 		super().__init__(slots, arg_slots, parent_slots, code, annotation, code_string, alt_string)
+		self.name = "a vector"
 		if indexable:
 			self.indexable = indexable
 		else:
