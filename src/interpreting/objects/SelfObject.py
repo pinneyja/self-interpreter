@@ -26,6 +26,8 @@ class SelfObject:
 		self.has_returned = False
 		self.code_string = code_string
 		self.alt_string = alt_string
+		self.gui_representation = None
+		self.name = None
 
 	def __str__(self):
 		output  = f"SelfObject:{{ '{self.annotation}' Slots = ["
@@ -133,6 +135,7 @@ class SelfObject:
 		clone.slots = {key : self.slots[key].clone() for key in self.slots}
 		clone.arg_slots = {key : self.arg_slots[key].clone() for key in self.arg_slots}
 		clone.parent_slots = {key : self.parent_slots[key].clone() for key in self.parent_slots}
+		clone.gui_representation = None
 		return clone
 
 	def as_dict(self, visited):
@@ -168,3 +171,9 @@ class SelfObject:
 		if self.alt_string:
 			dict['alt_string'] = True
 		return dict
+
+	def get_name(self):
+		if self.name:
+			return self.name
+		else:
+			return "a slots object"

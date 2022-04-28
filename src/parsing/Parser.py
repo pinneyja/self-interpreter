@@ -243,7 +243,7 @@ class Parser:
 		if(len(p) == 7):
 			p[0] = RegularObjectNode(p[4], object_annotation=p[3])
 		else:
-			code_start = p.lexspan(6)[0]
+			code_start = p.lexspan(3)[0]
 			p_start = p.lexspan(7)[0]
 			p[0] = RegularObjectNode(p[4], p[6], object_annotation=p[3], code_string=self.parse_string[code_start:p_start])
 
@@ -253,7 +253,7 @@ class Parser:
 		if(len(p) == 6):
 			p[0] = RegularObjectNode(p[3])
 		else:
-			code_start = p.lexspan(5)[0]
+			code_start = p.lexspan(2)[0]
 			p_start = p.lexspan(6)[0]
 			p[0] = RegularObjectNode(p[3], p[5], code_string=self.parse_string[code_start:p_start])
 
@@ -268,7 +268,7 @@ class Parser:
 				 | LBRAC code RBRAC
 				 | LBRAC RBRAC'''
 		if len(p) == 7:
-			code_start = p.lexspan(5)[0]
+			code_start = p.lexspan(2)[0]
 			p_start = p.lexspan(6)[0]
 			p[0] = BlockNode(p[3], p[5], code_string=self.parse_string[code_start:p_start])
 		elif len(p) == 6:

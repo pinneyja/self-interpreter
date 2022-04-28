@@ -15,6 +15,7 @@ class SelfTrue(SelfObject):
 		else:
 			super().__init__()
 			SelfTrue._instance = self
+			self.name = "true"
 
 	def __str__(self):
 		return "true"
@@ -43,6 +44,7 @@ class SelfFalse(SelfObject):
 		else:
 			super().__init__()
 			SelfFalse._instance = self
+			self.name = "false"
 
 	def __str__(self):
 		return "false"

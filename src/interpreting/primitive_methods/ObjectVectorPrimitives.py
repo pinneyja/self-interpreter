@@ -23,7 +23,19 @@ def handleAtPut(receiver, argument_list):
 
 def handleSize(receiver, argument_list=None):
 	from interpreting.objects.primitive_objects.SelfInteger import SelfInteger
-	return SelfInteger(len(receiver.indexable))
+	from Messages import Messages
+	from interpreting.objects.SelfException import SelfException
+	if (hasattr(receiver, "indexable")):
+		return SelfInteger(len(receiver.indexable))
+	else:
+		raise SelfException(Messages.BAD_TYPE_ERROR.value.format("_Size"))
+
+def handleNoArgIndexableIfFail(receiver, argument_list, no_if_fail_method, primitive_name):
+	from interpreting.objects.primitive_objects.SelfString import SelfString
+
+	if not hasattr(receiver, "indexable"):
+		return argument_list[0].pass_keyword_message("value:With:", [SelfString("badTypeError"), SelfString(primitive_name)])
+	return no_if_fail_method(receiver, argument_list)
 
 def handleCopyRangeDstPosSrcSrcPosLength(receiver, argument_list=None):
 	dstPos = argument_list[0].value

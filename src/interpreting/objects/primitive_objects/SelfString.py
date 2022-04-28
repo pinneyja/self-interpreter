@@ -9,6 +9,7 @@ from parsing.nodes.message_nodes.UnaryMessageNode import UnaryMessageNode
 class SelfString(SelfByteVector):
 	def __init__(self, value, slots = None, add_traits = True):
 		super().__init__(value=value)
+		self.name = "'" + self.get_value() + "'"
 		if slots:
 			self.slots.update(slots)
 

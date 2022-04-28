@@ -4,5 +4,8 @@ mixins _AddSlots: (| gui_superwidget = (|
     	_CallMethodByProxy: 'remove_widget' Arguments: widget.
     	widgets remove: widget IfAbsent: ['widget not present to remove'].
 		widget gui_parent: nil. self).
-	wcopy = (| c. | c: clone. c _AddSlots: (| widgets = list copy|). c).
+	removeAllWidgets = (| |
+		widgets do: [|:w| removeWidget: w].
+	).
+	wcopy = (| c. | c: clone. c _AddSlots: (| widgets = list copyRemoveAll|). c).
 |) |).

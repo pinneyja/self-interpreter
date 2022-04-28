@@ -36,6 +36,7 @@ class SelfLobby(SelfObject):
 				annotation="globals", alt_string=True)),
 			}
 		super().__init__(slots, parent_slots=parent_slots)
+		self.name = "lobby"
 		SelfLobby.lobby = self
 
 	def __str__(self):
