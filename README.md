@@ -21,6 +21,7 @@
       <ul>
         <li><a href="#built-with">Built With</a></li>
         <li><a href="#authors">Authors</a></li>
+        <li><a href="#acknowledgements">Acknowledgements</a></li>
       </ul>
     </li>
     <li><a href="#features">Features</a>
@@ -51,7 +52,7 @@
 
 As of the time of writing, the Self virtual machine is incapable of running directly on most modern operating systems such as Windows. To get working on an OS such as Windows, it requires users to set up a virtual machine that instead emulates older, 32-bit versions of Linux. For those who are interested in Self or adjacent languages like Smalltalk, this can be an unfortunate barrier of entry. This system, designed to parse and interpret Self inputs in a similar manner to the Self environment and virtual machine, is meant to address this problem. The project is built in Python, which is compatible with most modern platforms (e.g. Windows, Linux, macOS).
 
-The Self Interpreter project is an interpreter for the Self language, built as a senior design project at the Rose-Hulman Institute of Technology. Its main purpose is to serve as an educational tool to inform computer science students of alternative programming paradigms but can also be used for most of your Self needs.</p>
+The Self Interpreter project is an interpreter for the Self language, built as a senior design project at the Rose-Hulman Institute of Technology. Its main purpose is to serve as an educational tool to inform computer science students of alternative programming paradigms but can also be used for most of your Self needs. The system is capable of reading in Self files from the existing Self implementation which is how most key objects (e.g. numbers, booleans, vectors, sets, dictionaries, etc) are built up.</p>
 
 ### Authors
 <div id="authors"></div>
@@ -60,6 +61,12 @@ The Self Interpreter project is an interpreter for the Self language, built as a
 * [Luke McNeil](https://www.linkedin.com/in/luke-mcneil-9a9795196/)
 * [Nathaniel Blanco](https://www.linkedin.com/in/nathaniel-blanco-06a694194/)
 * [Jacob Pinney](https://www.linkedin.com/in/jacob-pinney/)
+
+### Acknowledgements
+<div id="acknowledgements"></div>
+
+* [Professor Kim Tracy](https://www.linkedin.com/in/kimtracy/) - Advisor
+* [Dr. Michael Hewner](https://hewner.github.io/) - Client
 
 ### Built With
 <div id="built-with"></div>
