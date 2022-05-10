@@ -13,10 +13,11 @@ class UnaryMessageNode(Node):
 	def interpret(self, context):
 		if self.expression:
 			if type(self.expression) is ResendNode:
+				parent_slot = self.expression.get_parent(context)
 				if self.expression.receiver == "resend":
-					return context.parent_slots["self"].value.undirected_resend(self.message)
+					return parent_slot.value.undirected_resend(self.message)
 				else:
-					return context.parent_slots["self"].value.directed_resend(self.expression.receiver, self.message)
+					return parent_slot.value.directed_resend(self.expression.receiver, self.message)
 
 			interpreted = self.expression.interpret(context)
 			if interpreted.nonlocal_return:

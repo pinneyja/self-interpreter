@@ -1767,11 +1767,11 @@ so fork can set it.
             | _RunScriptIfFail: fb).
         } | ) 
 
- bootstrap addSlotsTo: bootstrap stub -> 'traits' -> 'string' -> () From: ( | {
+bootstrap addSlotsTo: bootstrap stub -> 'traits' -> 'string' -> () From: ( | {
          'Comment: behavior for performs\x7fModuleInfo: Module: string InitialContents: FollowSlot\x7fVisibility: private'
         
          sendingParent* = bootstrap stub -> 'traits' -> 'sending' -> ().
-        } | ) 
+        } | )
 
  bootstrap addSlotsTo: bootstrap stub -> 'traits' -> 'string' -> () From: ( | {
          'Category: padding\x7fModuleInfo: Module: string InitialContents: FollowSlot\x7fVisibility: public'

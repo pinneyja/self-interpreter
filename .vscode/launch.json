@@ -5,10 +5,17 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Python: Main.py",
+			"name": "Python: REPL.py",
 			"type": "python",
 			"request": "launch",
-			"program": "./src/Main.py",
+			"program": "./src/REPL.py",
+			"console": "integratedTerminal"
+		},
+		{
+			"name": "Python: GUI.py",
+			"type": "python",
+			"request": "launch",
+			"program": "./src/GUI.py",
 			"console": "integratedTerminal"
 		}
 	]
