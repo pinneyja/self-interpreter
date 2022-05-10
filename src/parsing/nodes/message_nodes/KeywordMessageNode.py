@@ -27,10 +27,12 @@ class KeywordMessageNode(Node):
 
 		if self.expression:
 			if type(self.expression) is ResendNode:
+				parent_slot = self.expression.get_parent(context)
+
 				if (self.expression.receiver == "resend"):
-					return context.parent_slots["self"].value.undirected_resend(self.message, arg_list)
+					return parent_slot.value.undirected_resend(self.message, arg_list)
 				else:
-					return context.parent_slots["self"].value.directed_resend(self.expression.receiver, self.message, arg_list)
+					return parent_slot.value.directed_resend(self.expression.receiver, self.message, arg_list)
 			return interpreted.pass_keyword_message(self.message, arg_list)
 		else:
 			if self.message in context.slots or self.message in context.parent_slots or self.message in context.arg_slots:

@@ -7,12 +7,6 @@ import pytest
 
 filename = "self_files/test.self"
 
-@pytest.fixture(scope="module")
-def interpreter():
-	interpreter = Interpreter()
-	interpreter.initializeBootstrap()
-	return interpreter
-
 def read_file():
 	with open(filename, "r") as f:
 		return f.read()
