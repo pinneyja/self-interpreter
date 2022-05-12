@@ -340,7 +340,7 @@ If it is absent, add the result of the specified block and return it.
         
          clone = ( |
             | 
-            _Clone resetLock).
+            resend.clone resetLock).
         } | ) 
 
  bootstrap addSlotsTo: bootstrap stub -> 'traits' -> 'abstractSetOrDictionary' -> () From: ( | {
@@ -638,7 +638,7 @@ set\x7fModuleInfo: Module: setAndDictionary InitialContents: FollowSlot\x7fVisib
         
          includesKey: k = ( |
             | 
-            indexOf: k IfPresent: true IfAbsent: false).
+            representationTraits.includesKey: k).
         } | ) 
 
  bootstrap addSlotsTo: bootstrap stub -> 'traits' -> 'hashTableSet' -> () From: ( | {
@@ -686,7 +686,7 @@ implemented by a hash table
          usingHashForOldKeyIfPossible: i AddKey: k Value: v = ( |
             | 
             (comparisonTraits is: k EqualTo: v) 
-              ifTrue: [at: i ReplaceKey: k Value: v. incSize.]
+              ifTrue: [resend.usingHashForOldKeyIfPossible: i AddKey: k Value: v]
                False: [add: v]).
         } | ) 
 
@@ -696,7 +696,7 @@ implemented by a hash table
          usingHashForOldKeyIfPossible: i ReplaceKey: k Value: v = ( |
             | 
             (comparisonTraits is: k EqualTo: v)
-                  ifTrue: [at: i ReplaceKey: k Value: v.]
+                  ifTrue: [resend.usingHashForOldKeyIfPossible: i ReplaceKey: k Value: v]
                    False: [remove: k.
                               add: v]).
         } | ) 
@@ -1406,7 +1406,7 @@ dictionary\x7fModuleInfo: Module: setAndDictionary InitialContents: FollowSlot\x
         
          includesKey: k = ( |
             | 
-            indexOf: k IfPresent: true IfAbsent: false).
+            representationTraits.includesKey: k).
         } | ) 
 
  bootstrap addSlotsTo: bootstrap stub -> 'traits' -> 'hashTableDictionary' -> () From: ( | {

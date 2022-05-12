@@ -105,17 +105,30 @@ def test_bad_directed_resend():
 	except SelfException as e:
 		assert str(e) == Messages.NO_DELEGATEE_SLOT.value.format("a")
 
+def test_correct_resend_reciever():
+	parser = Parser()
+	interpreter = Interpreter()
+	
+	result1 = interpreter.interpret(parser.parse("(| p* = (| m = (| | resend.m). p* = (| m = 1 |) |) |) m"))
+	assert str(result1) == str(SelfInteger(1))
+
+	result2 = interpreter.interpret(parser.parse("(| p* = (| m1 = (| | resend.m2). p* = (| m2 = 1 |). m2 = 2 |). m2 = 3 |) m1"))
+	assert str(result2) == str(SelfInteger(1))
+	
 def test_resend_in_block(interpreter):
 	parser = Parser()
 
 	actual_one = interpreter.interpret(parser.parse("_AddSlots: (|x<-1|). _AddSlots: (|p*=(|x <- 2|)|). [resend.x] value"))
 	actual_two = interpreter.interpret(parser.parse("_AddSlots: (| + = ( |:arg| 0 ) |) _AddSlots: (| p* = (| + = ( |:arg| arg ) |) |). [resend.+ 3] value"))
 	actual_three = interpreter.interpret(parser.parse("_AddSlots: (| x: a = ( | | 0 ) |) _AddSlots: (| p* = (| x: a = ( | | a ) |) |). [resend.x: 3] value"))
+	actual_four = interpreter.interpret(parser.parse("_AddSlots: (|x<-1|). _AddSlots: (|p*=(|x <- 2|)|). [[[resend.x] value] value] value"))
 
 	expected_one = SelfInteger(2)
 	expected_two = SelfInteger(3)
 	expected_three = SelfInteger(3)
+	expected_four = SelfInteger(2)
 
 	assert str(actual_one) == str(expected_one)
 	assert str(actual_two) == str(expected_two)
 	assert str(actual_three) == str(expected_three)
+	assert str(actual_four) == str(expected_four)

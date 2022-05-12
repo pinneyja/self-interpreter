@@ -50,7 +50,7 @@ SlotsToOmit: directory fileInTimeString myComment postFileIn revision subpartNam
  bootstrap addSlotsTo: bootstrap stub -> 'globals' -> 'modules' -> 'string' -> () From: ( | {
          'ModuleInfo: Module: string InitialContents: InitializeToExpression: (_CurrentTimeString)\x7fVisibility: public'
         
-         fileInTimeString <- '_CurrentTimeString'.
+         fileInTimeString <- _CurrentTimeString.
         } | ) 
 
  bootstrap addSlotsTo: bootstrap stub -> 'globals' -> 'modules' -> 'string' -> () From: ( | {
@@ -62,6 +62,17 @@ SlotsToOmit: directory fileInTimeString myComment postFileIn revision subpartNam
                 immutableString
                   canonicalString
                 mutableString'.
+        } | ) 
+
+ bootstrap addSlotsTo: bootstrap stub -> 'globals' -> 'modules' -> 'string' -> () From: ( | {
+         'ModuleInfo: Module: string InitialContents: FollowSlot'
+        
+         postFileIn = ( |
+            | 
+            traits canonicalString _RemoveSlot: 'print' IfFail: [].
+            '' initializeAscii.
+            '' initializeCachedStoreCharacters.
+            "resend.postFileIn").
         } | ) 
 
  bootstrap addSlotsTo: bootstrap stub -> 'globals' -> 'modules' -> 'string' -> () From: ( | {
@@ -82,11 +93,11 @@ SlotsToOmit: directory fileInTimeString myComment postFileIn revision subpartNam
         
          mutableString = bootstrap define: bootstrap stub -> 'globals' -> 'mutableString' -> () ToBe: bootstrap addSlotsTo: (
              bootstrap remove: 'parent' From:
-             globals byteVector copy) From: bootstrap setObjectAnnotationOf: bootstrap stub -> 'globals' -> 'mutableString' -> () From: ( |
+             globals byteVector copy ) From: bootstrap setObjectAnnotationOf: bootstrap stub -> 'globals' -> 'mutableString' -> () From: ( |
              {} = 'ModuleInfo: Creator: globals mutableString.
 
 CopyDowns:
-globals byteVector. copy
+globals byteVector. copy 
 SlotsToOmit: parent.
 
 \x7fIsComplete: '.
@@ -152,19 +163,19 @@ SlotsToOmit: parent.
          isCanonical = bootstrap stub -> 'globals' -> 'true' -> ().
         } | ) 
 
-" bootstrap addSlotsTo: bootstrap stub -> 'traits' -> 'canonicalString' -> () From: ( | {
+ bootstrap addSlotsTo: bootstrap stub -> 'traits' -> 'canonicalString' -> () From: ( | {
          'Category: comparing\x7fModuleInfo: Module: string InitialContents: FollowSlot\x7fVisibility: public'
         
          isPrefixOf: s = ( |
             | == s ifTrue: true False: [ resend.isPrefixOf: s ]).
-        } | ) TODO: Fix resends for blocks"
+        } | ) 
 
-" bootstrap addSlotsTo: bootstrap stub -> 'traits' -> 'canonicalString' -> () From: ( | {
+ bootstrap addSlotsTo: bootstrap stub -> 'traits' -> 'canonicalString' -> () From: ( | {
          'Category: comparing\x7fModuleInfo: Module: string InitialContents: FollowSlot\x7fVisibility: public'
         
          isSuffixOf: s = ( |
             | == s ifTrue: true False: [ resend.isSuffixOf: s ]).
-        } | ) TODO: Fix resends for blocks"
+        } | ) 
 
  bootstrap addSlotsTo: bootstrap stub -> 'traits' -> () From: ( | {
          'Category: core\x7fCategory: collections\x7fCategory: vectors\x7fModuleInfo: Module: string InitialContents: FollowSlot\x7fVisibility: public'
@@ -1767,11 +1778,11 @@ so fork can set it.
             | _RunScriptIfFail: fb).
         } | ) 
 
-bootstrap addSlotsTo: bootstrap stub -> 'traits' -> 'string' -> () From: ( | {
+ bootstrap addSlotsTo: bootstrap stub -> 'traits' -> 'string' -> () From: ( | {
          'Comment: behavior for performs\x7fModuleInfo: Module: string InitialContents: FollowSlot\x7fVisibility: private'
         
          sendingParent* = bootstrap stub -> 'traits' -> 'sending' -> ().
-        } | )
+        } | ) 
 
  bootstrap addSlotsTo: bootstrap stub -> 'traits' -> 'string' -> () From: ( | {
          'Category: padding\x7fModuleInfo: Module: string InitialContents: FollowSlot\x7fVisibility: public'
@@ -1902,9 +1913,7 @@ bootstrap addSlotsTo: bootstrap stub -> 'traits' -> 'string' -> () From: ( | {
 
  bootstrap read: 'stringTests' From: 'core'
 
-"Note: This was not original to this self file"
-bootstrap addSlotsTo: bootstrap stub -> 'traits' -> 'string' -> () From: ( |
-    error: errorMsg = ( | | _ThrowError: errorMsg). | )
+
 
  '-- Side effects'
 

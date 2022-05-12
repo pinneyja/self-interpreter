@@ -17,7 +17,7 @@ globals modules _AddSlots: (|
   vector=(|postFileIn=(| | 'postFileIn')|).
   indexable=(|postFileIn=(| | 'postFileIn')|).
   defaultBehavior=(|postFileIn=(| | 'postFileIn')|).
-  string=(|postFileIn=(| | 'postFileIn')|).
+  string=(|p* = lobby. postFileIn=(| | 'postFileIn')|).
   setAndDictionary=(|postFileIn=(| | 'postFileIn'). parent* = lobby|).
   |).
 
