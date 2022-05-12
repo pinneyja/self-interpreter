@@ -67,10 +67,11 @@ class RegularObjectNode(Node):
 
 		return SelfObject(interpreted_slot_list, interpreted_arg_slot_list, interpreted_parent_slot_list, self.code, self.object_annotation, self.code_string)
 	
-	def interpret_block_node(self, context, interpreted_slot_list, interpreted_arg_slot_list, interpreted_parent_slot_list):
+	def interpret_block_node(self, context:SelfObject, interpreted_slot_list, interpreted_arg_slot_list, interpreted_parent_slot_list):
 		parent_slots = OrderedDict()
 		slots = OrderedDict()
-		interpreted_parent_slot_list[""] = SelfSlot("", context, True)
+		slots["l "] = SelfSlot("l ", context.declared_ctx, True) #block object's implicit lexical parent
+		interpreted_parent_slot_list[""] = SelfSlot("", context, True) #block method object's implicit parent
 		try:
 			traits_block = SelfLobby.get_lobby().slots["traits"].value.pass_unary_message("block")
 			parent_slots["parent"] = SelfSlot("parent", traits_block)

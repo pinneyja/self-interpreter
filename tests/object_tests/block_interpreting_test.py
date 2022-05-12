@@ -24,6 +24,7 @@ def test_interprets_empty_block():
 
 	empty_block_node = CodeNode([BlockNode()])
 	empty_block = SelfObject({
+		"l " : SelfSlot("l ", SelfLobby.get_lobby(), True),
 		"value" : SelfSlot("value", SelfObject(parent_slots={
 				"" : SelfSlot("", SelfObject(parent_slots={"self" : SelfSlot("self", SelfLobby.get_lobby(), is_immutable=True)}), is_immutable=True)
 			}, code=CodeNode([RegularObjectNode()])), is_immutable=True)
@@ -38,6 +39,7 @@ def test_interprets_code_block():
 
 	code_block_node = CodeNode([BlockNode(code=CodeNode([IntegerNode(1), IntegerNode(2)]))])
 	code_block = SelfObject({
+		"l " : SelfSlot("l ", SelfLobby.get_lobby(), True),
 		"value" : SelfSlot("value", SelfObject(parent_slots={
 				"" : SelfSlot("", SelfObject(parent_slots={"self" : SelfSlot("self", SelfLobby.get_lobby(), is_immutable=True)}), is_immutable=True)
 			}, code=CodeNode([IntegerNode(1), IntegerNode(2)])), is_immutable=True)
@@ -58,6 +60,7 @@ def test_interprets_code_args_block():
 	code_block_node = CodeNode([BlockNode(slots, CodeNode([IntegerNode(1), IntegerNode(2)]))])
 
 	code_block = SelfObject({
+		"l " : SelfSlot("l ", SelfLobby.get_lobby(), True),
 		"value:" : SelfSlot("value:", SelfObject(
 			slots={
 				"a" : SelfSlot("a", SelfInteger(2), True)
@@ -95,6 +98,7 @@ def test_interprets_block_with_more_than_one_argument():
 	keyword_message_node = KeywordMessageNode(block_node, ["value:", "With:", "With:"], [IntegerNode(1), IntegerNode(2), IntegerNode(3)])
 
 	code_block = SelfObject({
+		"l " : SelfSlot("l ", SelfLobby.get_lobby(), True),
 		"value:With:With:" : SelfSlot("value:With:With:", SelfObject(
 			arg_slots={
 				"a" : SelfSlot("a"),

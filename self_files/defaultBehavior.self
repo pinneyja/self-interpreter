@@ -357,6 +357,11 @@ way its printString may be truncated.\x7fModuleInfo: Module: defaultBehavior Ini
             r size  <=  s ifTrue:  r  False: [namePrintString]).
         } | ) 
 
+  bootstrap addSlotsTo: bootstrap stub -> 'defaultBehavior' -> () From: ( | 
+         error: message = ( | |
+             _ThrowError: message. )
+          |)
+
  bootstrap addSlotsTo: bootstrap stub -> 'defaultBehavior' -> () From: ( | {
          'Category: error handling\x7fComment: same as error: except does not print to the Self shell.\x7fModuleInfo: Module: defaultBehavior InitialContents: FollowSlot\x7fVisibility: public'
         

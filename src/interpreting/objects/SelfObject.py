@@ -5,7 +5,7 @@ from interpreting.objects.SelfException import SelfException
 import copy
 
 class SelfObject:
-	def __init__(self, slots = None, arg_slots = None, parent_slots = None, code = None, annotation = None, code_string = None, alt_string = None):
+	def __init__(self, slots = None, arg_slots = None, parent_slots = None, code = None, annotation = None, code_string = None, alt_string = None, declared_ctx = None):
 		if slots is None:
 			slots = OrderedDict()
 		
@@ -28,6 +28,7 @@ class SelfObject:
 		self.alt_string = alt_string
 		self.gui_representation = None
 		self.name = None
+		self.declared_ctx:SelfObject = declared_ctx
 
 	def __str__(self):
 		output  = f"SelfObject:{{ '{self.annotation}' Slots = ["
@@ -82,9 +83,16 @@ class SelfObject:
 		if self in V:
 			return set()
 		else:
+			declared_ctx = self
+			if "l " in declared_ctx.slots:
+				declared_ctx = declared_ctx.slots["l "].value
+
 			if (sel in self.slots):
+				self.slots[sel].declared_ctx = declared_ctx
 				return {self.slots[sel]}
 			elif (sel in self.parent_slots):
+				
+				self.parent_slots[sel].declared_ctx = declared_ctx
 				return {self.parent_slots[sel]}
 			else:
 				return self.parent_lookup(sel, V)
@@ -106,24 +114,26 @@ class SelfObject:
 		self.nonlocal_return = nonlocal_return
 
 	def undirected_resend(self, sel, arg_list=None):
-		M = self.parent_lookup(sel, set())
+		run_ctx = self.get_non_block_parent()
+		M = self.declared_ctx.parent_lookup(sel, set())
 		if len(M) == 0:
 			raise SelfException(Messages.LOOKUP_ERROR_NO_SLOT.value.format(sel))
 		elif len(M) == 1:
 			matching_slot = M.pop()
-			return matching_slot.call_method(self, arg_list)
+			return matching_slot.call_method(run_ctx, arg_list)
 		else:
 			raise SelfException(Messages.LOOKUP_ERROR_MULTIPLE_SLOTS.value.format(sel))
 
 	def directed_resend(self, del_name, sel, arg_list=None):
-		if del_name not in self.slots and del_name not in self.parent_slots:
+		run_ctx = self.get_non_block_parent()
+		if del_name not in self.declared_ctx.slots and del_name not in self.declared_ctx.parent_slots:
 			raise SelfException(Messages.NO_DELEGATEE_SLOT.value.format(del_name))
 		
-		if del_name in self.slots:
-			matching_slot = self.slots[del_name].value.lookup(sel, set())
+		if del_name in self.declared_ctx.slots:
+			matching_slot = self.declared_ctx.slots[del_name].value.lookup(sel, set())
 		else:
-			matching_slot = self.parent_slots[del_name].value.lookup(sel, set())
-		return matching_slot.call_method(self, arg_list)
+			matching_slot = self.declared_ctx.parent_slots[del_name].value.lookup(sel, set())
+		return matching_slot.call_method(run_ctx, arg_list)
 	
 	def copy_slots_of(self, self_obj):
 		self.slots = self_obj.slots
@@ -159,6 +169,10 @@ class SelfObject:
 			all_slots["(parent)*"] = all_slots["*"]
 			all_slots.pop("*")
 
+		if "l " in all_slots:
+			all_slots["(lexicalParent)"] = all_slots["l "]
+			all_slots.pop("l ")
+
 		dict = {
 			'type' : self.__class__.__name__,
 			'annotation' : self.annotation,
@@ -177,3 +191,11 @@ class SelfObject:
 			return self.name
 		else:
 			return "a slots object"
+
+	def get_non_block_parent(self):
+		if "self" in self.parent_slots:
+			return self.parent_slots['self'].value
+		elif "" in self.parent_slots:
+			return self.parent_slots[""].value.get_non_block_parent()
+		else:
+			raise SelfException(Messages.LOOKUP_ERROR_NO_SLOT.value().format("self"))

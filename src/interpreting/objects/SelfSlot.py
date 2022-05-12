@@ -10,6 +10,7 @@ class SelfSlot:
 		self.is_immutable = is_immutable
 		self.keyword_list = keyword_list
 		self.annotations = [] + annotations
+		self.declared_ctx:SelfObject = None
 
 	def __str__(self):
 		return f"SelfSlot:{{name='{self.name}', value={{{self.value}}}, is_immutable='{self.is_immutable}', keyword_list='{self.keyword_list}', annotations='{'-'.join(self.annotations)}'}}"
@@ -24,6 +25,8 @@ class SelfSlot:
 				clone.parent_slots["self"] = SelfSlot("self", receiver, True)
 			for i, key in enumerate(clone.arg_slots):
 				clone.slots[key] = SelfSlot(key, args[i])
+			clone.declared_ctx = self.declared_ctx
+			clone.code = None
 			result = self.value.code.interpret(clone)
 			clone.has_returned = True
 			return result
