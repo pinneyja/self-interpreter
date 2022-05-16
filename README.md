@@ -41,7 +41,7 @@
             <li><a href="#code-snippits">Code Snippits</a></li>
         </ul>
     </li>
-    <li><a href="#video-demo">Video Demo</a></li>
+    <li><a href="#video-demos">Video Demos</a></li>
     <li><a href="#license">License</a></li>
   </ol>
 </details>
@@ -52,7 +52,9 @@
 
 As of the time of writing, the Self virtual machine is incapable of running directly on most modern operating systems such as Windows. To get working on an OS such as Windows, it requires users to set up a virtual machine that instead emulates older, 32-bit versions of Linux. For those who are interested in Self or adjacent languages like Smalltalk, this can be an unfortunate barrier of entry. This system, designed to parse and interpret Self inputs in a similar manner to the Self environment and virtual machine, is meant to address this problem. The project is built in Python, which is compatible with most modern platforms (e.g. Windows, Linux, macOS).
 
-The Self Interpreter project is an interpreter for the Self language, built as a senior design project at the Rose-Hulman Institute of Technology. Its main purpose is to serve as an educational tool to inform computer science students of alternative programming paradigms but can also be used for most of your Self needs. The system is capable of reading in Self files from the existing Self implementation which is how most key objects (e.g. numbers, booleans, vectors, sets, dictionaries, etc) are built up.</p>
+The Self Interpreter project is an interpreter for the Self language, built as a senior design project at the Rose-Hulman Institute of Technology. Its main purpose is to serve as an educational tool to inform computer science students of alternative programming paradigms but can also be used for most of your Self needs. The system is capable of reading in Self files from the existing Self implementation which is how most key objects (e.g. numbers, booleans, vectors, sets, dictionaries, etc) are built up.
+
+If you are looking for a brief introduction to the project that does not require installing anything, then check out our video demos down below - <a href="#video-demos">Video Demos</a>.</p>
 
 ### Authors
 <div id="authors"></div>
@@ -102,7 +104,6 @@ We have implemented support for the following features:
 <div id="known-issues"></div>
 
 This project is a work in progress. As a result, you may experience some issues when working with the following:
-* Resends in blocks
 * Error handling functions
 * Methods defined outside of objects (i.e. only using parentheses to define a method)
 
@@ -188,10 +189,11 @@ The following must be installed with the given minimum versions.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
-## Video Demo
-<div id="video-demo"></div>
+## Video Demos
+<div id="video-demos"></div>
 
-Coming soon!
+* [Self Interpreter System Overview](https://www.youtube.com/watch?v=I8sciM3a8Y0)
+* [Self Interpreter Custom Graphical Interface](https://www.youtube.com/watch?v=FCLnCht6LT8)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

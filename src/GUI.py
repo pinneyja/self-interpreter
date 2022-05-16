@@ -19,7 +19,6 @@ class SelfGUIApp(App):
 		self.interpreter = Interpreter()
 		self.printer = SelfObjectPrinter.instance()
 		SelfObjectPrinter.set_color(False)
-		bootstrap_failed = False
 
 		try:
 			self.interpreter.initializeBootstrap()
@@ -27,39 +26,21 @@ class SelfGUIApp(App):
 			traceback.print_exc()
 			print(selfError)
 			print(Messages.BOOTSTRAP_FAILED.value)
-			bootstrap_failed = True
 		except Exception:
 			traceback.print_exc()
 			print(Messages.BOOTSTRAP_FAILED.value)
-			bootstrap_failed = True
 
-		self.replContainer = BoxLayout(size_hint=(1, 0.25), pos_hint={'x':0, 'y':0.75})
-
-		self.textBox = TextInput(text='canvas addOutliner: (|x<-1. m1: x M2: y = (| local. | x + y). m3:M4: = (| :x. :y. local. | x + y). ** x = (| local. | x * x). m = (| | 1 + 2). p*=1.|)')
-		self.replContainer.add_widget(self.textBox)
-
-		b = Button(text="Do It", size_hint_x=0.15)
+		b = Button(text="Get Lobby", size_hint_x=0.1, size_hint_y=0.1, pos_hint={"x": 0, "y": 0.9})
 		b.bind(on_press = self.callback)
-		self.replContainer.add_widget(b)
-
-		self.output = TextInput(text=Messages.BOOTSTRAP_FAILED.value if bootstrap_failed else '')
-		self.replContainer.add_widget(self.output)
 
 		self.layout = self.interpreter.interpret(self.parser.parse("canvas")).kivy_widget
-		self.layout.add_widget(self.replContainer)
+		self.layout.add_widget(b)
+		self.interpreter.interpret(self.parser.parse("canvas addOutliner: lobby"))
 
 		return self.layout
 
 	def callback(self, event):
-		try:
-			obj = self.interpreter.interpret(self.parser.parse(self.textBox.text))
-			res = self.printer.get_object_string(obj)
-		except Exception as e:
-			traceback.print_exc()
-			res = str(e)	
-
-		self.output.text = res
-		self.output.cursor = (0, 0)
+		self.interpreter.interpret(self.parser.parse("canvas addOutliner: lobby"))
 
 def main():
 	app = SelfGUIApp()
